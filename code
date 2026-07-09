@@ -2037,7 +2037,7 @@ function renderText() {
     const b = document.createElement("button");
     b.className = "lang-btn" + (S.lang === lang ? " on" : "");
     b.textContent = lang.toUpperCase();
-    b.addEventListener("click", () => { S.lang = lang; save(); render(); });
+    b.addEventListener("click", () => { S.lang = lang; update(); });
     langs.appendChild(b);
   });
 }
@@ -2116,7 +2116,7 @@ function renderToolbar() {
     const b = document.createElement("button");
     b.className = "btn" + (S.tool === tool ? " active" : "");
     b.textContent = I18N[S.lang].tools[i];
-    b.addEventListener("click", () => { S.tool = tool; save(); render(); });
+    b.addEventListener("click", () => { S.tool = tool; update(); });
     bar.appendChild(b);
   });
 }
@@ -2134,7 +2134,7 @@ function renderShop() {
       '<div class="s2">' + cropName(key) + '</div>' +
       '<div class="s3">' + c.cost + ' / ' + c.sell + '🪙</div>' +
       '<div class="s3">⏱' + fmtSec(c.grow) + '</div>';
-    el.addEventListener("click", () => { S.seed = key; S.tool = "plant"; save(); render(); });
+    el.addEventListener("click", () => { S.seed = key; S.tool = "plant"; update(); });
     shop.appendChild(el);
   });
 }
@@ -2160,7 +2160,7 @@ function renderFriends() {
         '<div style="font-size:21px">' + p.avatar + '</div>' +
         '<div class="friend-main"><div class="friend-name">' + p.name + '</div><div class="friend-sub">Lv.' + levelInfo(p.xp).level + ' · ' + p.gold + '🪙</div></div>' +
         '<div style="font-size:11px">🌟' + friendReady(p) + '</div>';
-      row.addEventListener("click", () => { S.viewId = S.viewId === p.id ? null : p.id; save(); render(); });
+      row.addEventListener("click", () => { S.viewId = S.viewId === p.id ? null : p.id; update(); });
       box.appendChild(row);
     });
 }
@@ -2394,7 +2394,7 @@ function bindUI() {
     notice(tr("userAuthSetOk"), "info");
   });
 
-  document.getElementById("tabMine").addEventListener("click", () => { S.viewId = null; save(); render(); });
+  document.getElementById("tabMine").addEventListener("click", () => { S.viewId = null; update(); });
   document.getElementById("tabVisit").addEventListener("click", () => {
     const ids = Object.keys(S.players).filter((id) => id !== S.currentId);
     S.viewId = ids[0] || null;
