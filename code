@@ -1175,7 +1175,7 @@ function renderBattleBar() {
 }
 
 function renderBattleTrack(battle, stepIndex) {
-  const path = generateBattlePath(battle.seed);
+  battleRuntime.path = generateBattlePath(battle.seed);
   const grid = document.getElementById("battleGrid");
   if (!grid) return;
   grid.innerHTML = "";
@@ -1251,7 +1251,7 @@ function battleTryMove(dir) {
   if (!battleRuntime) return;
   const battle = S.battles[battleRuntime.battleId];
   if (!battle || battle.resolved) { closeBattleModal(); return; }
-  const path = generateBattlePath(battle.seed);
+  battleRuntime.path = generateBattlePath(battle.seed);
   const expected = path.moves[battleRuntime.stepIndex];
   if (dir === expected) {
     battleRuntime.stepIndex++;
