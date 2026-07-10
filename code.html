@@ -2512,108 +2512,7 @@ async function boot() {
 }
 
 boot();
-</script>
-<!-- SIMPLE STANDALONE SLOT MACHINE -->
-
-<style>
-#slotButton {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  font-size: 18px;
-  border-radius: 12px;
-  cursor: pointer;
-  z-index:9999;
-}
-
-#slot-machine {
-  display:none;
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  color:black;
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  z-index:10000;
-  box-shadow:0 0 40px rgba(0,0,0,.5);
-  font-family:Arial;
-}
-
-#slot-machine h2,
-#slot-machine h3,
-#slot-machine p {
-  color:black;
-}
-
-.slots {
-  display:flex;
-  gap:15px;
-  justify-content:center;
-  margin:20px;
-}
-
-.reel {
-  width:80px;
-  height:80px;
-  background:#eee;
-  border-radius:15px;
-  font-size:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.slotBtn {
-  padding:10px 20px;
-  margin:5px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:18px;
-}
-</style>
-
-
-<button id="slotButton">
-🎰 Slot Machine
-</button>
-
-
-<div id="slotBox">
-
-<h2>🎰 Slot Machine</h2>
-
-<h3>
-Coins: <span id="slotCoins">1000</span>
-</h3>
-
-<div class="slots">
-<div class="reel" id="r1">❔</div>
-<div class="reel" id="r2">❔</div>
-<div class="reel" id="r3">❔</div>
-</div>
-
-<p id="slotText">
-Spin for 50 coins!
-</p>
-
-<button class="slotBtn" onclick="spinSlots()">
-SPIN
-</button>
-
-<button class="slotBtn" onclick="closeSlots()">
-CLOSE
-</button>
-
-</div>
-
-
 <script>
-
-let slotCoins = 1000;
 
 const symbols=[
 "🍒",
@@ -2630,6 +2529,8 @@ document
 
 document.getElementById("slotBox").style.display="block";
 
+updateSlotGold();
+
 };
 
 
@@ -2637,6 +2538,29 @@ document.getElementById("slotBox").style.display="block";
 function closeSlots(){
 
 document.getElementById("slotBox").style.display="none";
+
+}
+
+
+
+function getPlayer(){
+
+return S.players[S.currentId];
+
+}
+
+
+
+function updateSlotGold(){
+
+let player=getPlayer();
+
+if(player){
+
+document.getElementById("slotCoins").innerHTML=
+player.gold;
+
+}
 
 }
 
@@ -2654,17 +2578,34 @@ Math.floor(Math.random()*symbols.length)
 
 function spinSlots(){
 
-if(slotCoins < 50){
+let player=getPlayer();
 
-document.getElementById("slotText").innerHTML=
-"Not enough coins!";
+
+if(!player){
+
+alert("Player not found");
 
 return;
 
 }
 
 
-slotCoins-=50;
+
+let cost=50;
+
+
+if(player.gold < cost){
+
+document.getElementById("slotText").innerHTML=
+"Not enough gold!";
+
+return;
+
+}
+
+
+// take bet
+player.gold-=cost;
 
 
 let reels=[
@@ -2679,23 +2620,87 @@ let count=0;
 
 let animation=setInterval(()=>{
 
+
 reels.forEach(r=>{
 r.innerHTML=randomSymbol();
 });
+
 
 count++;
 
 
 if(count>=15){
 
+
 clearInterval(animation);
 
 
-let result=[
+
+let result;
+
+
+// 30% WIN CHANCE
+if(Math.random()<0.30){
+
+
+let winType=Math.random();
+
+
+if(winType<0.85){
+
+// small win
+let symbol=randomSymbol();
+
+result=[
+symbol,
+symbol,
+randomSymbol()
+];
+
+
+}else{
+
+// rare big win
+let symbol=randomSymbol();
+
+result=[
+symbol,
+symbol,
+symbol
+];
+
+}
+
+
+}else{
+
+
+// LOSS
+result=[
 randomSymbol(),
 randomSymbol(),
 randomSymbol()
 ];
+
+
+// prevent accidental wins
+while(
+result[0]===result[1] ||
+result[1]===result[2] ||
+result[0]===result[2]
+){
+
+result=[
+randomSymbol(),
+randomSymbol(),
+randomSymbol()
+];
+
+}
+
+
+}
+
 
 
 reels[0].innerHTML=result[0];
@@ -2703,8 +2708,12 @@ reels[1].innerHTML=result[1];
 reels[2].innerHTML=result[2];
 
 
+
 let win=0;
 
+
+
+// payouts
 
 if(
 result[0]==="💎" &&
@@ -2712,7 +2721,8 @@ result[1]==="💎" &&
 result[2]==="💎"
 ){
 
-win=5000;
+win=2500;
+
 
 }
 
@@ -2723,6 +2733,7 @@ result[1]===result[2]
 
 win=500;
 
+
 }
 
 else if(
@@ -2731,23 +2742,33 @@ result[1]===result[2] ||
 result[0]===result[2]
 ){
 
-win=100;
+win=75;
+
 
 }
 
 
 
-slotCoins+=win;
+player.gold += win;
 
 
-document.getElementById("slotText").innerHTML=
-win>0 ?
-"🎉 You won "+win+" coins!" :
+
+document.getElementById("slotText").innerHTML =
+win>0
+?
+"🎉 You won "+win+" gold!"
+:
 "😢 You lost";
 
 
-document.getElementById("slotCoins").innerHTML=
-slotCoins;
+updateSlotGold();
+
+
+// save if your game has save function
+if(typeof saveGame==="function"){
+saveGame();
+}
+
 
 
 }
@@ -2757,7 +2778,6 @@ slotCoins;
 
 
 }
-
 
 </script>
 </body>
