@@ -507,7 +507,7 @@ const I18N = {
     cloudSave: "云端保存", cloudLoad: "云端读取", cloudTest: "连接测试", cloudCfg: "云端设置", cloudTitle: "Google Sheets 云端设置",
     cloudCfgSaved: "云端配置已保存", cloudNeedUrl: "请先配置云端 URL", cloudSaveOk: "云端保存成功", cloudLoadOk: "云端读取成功", cloudNoData: "云端暂无存档", cloudPingOk: "云连接正常", cloudFail: "云端请求失败", cloudBadUrl: "云端 URL 无效", cloudUnauthorized: "云端令牌无效或无权限", cloudBadResp: "云端返回格式异常", cloudFileMode: "请通过 http://localhost 打开游戏，不要使用 file://",
     admin: "管理", adminTitle: "管理员面板", adminPlayer: "玩家", adminGold: "金币", adminXp: "经验",
-    adminApply: "应用数值", adminBoost: "加500金币+经验", adminFillReady: "全部成熟", adminClear: "清空地块",
+    adminApply: "应用数值", adminBoost: "加500金币+经验", adminFillReady: "全部成熟", adminClear: "清空地",
     adminWeatherSunny: "天气: 晴", adminWeatherRain: "天气: 雨", adminWeatherHeat: "天气: 热", adminWeatherCold: "天气: 寒",
     adminCloudTitle: "云端配置", adminCloudUrl: "云端URL", adminCloudGameId: "游戏ID", adminCloudToken: "写入令牌（保存时必需）", adminCloudSave: "保存云端配置",
     adminDone: "管理操作已执行",
@@ -2362,6 +2362,126 @@ function openAdmin() {
 }
 function closeAdmin() { document.getElementById("adminModal").classList.remove("show"); }
 
+// --- SLOT MACHINE ---
+// The slot machine now uses the in-game gold currency (player.gold)
+const SLOT_SYMBOLS = ["🍒", "🍋", "🍀", "⭐", "💎"];
+
+function getSlotPlayer() {
+  return S.players[S.currentId];
+}
+
+function spinSlots() {
+  const player = getSlotPlayer();
+  if (!player) {
+    notice("Please login first!", "err");
+    return;
+  }
+
+  const SPIN_COST = 50;
+  
+  if (player.gold < SPIN_COST) {
+    notice(tr("noGold"), "err");
+    updateSlotDisplay();
+    return;
+  }
+
+  // Deduct spin cost
+  player.gold -= SPIN_COST;
+
+  const reels = [
+    document.getElementById("r1"),
+    document.getElementById("r2"),
+    document.getElementById("r3")
+  ];
+
+  let count = 0;
+  const animation = setInterval(() => {
+    reels.forEach(r => {
+      r.textContent = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+    });
+    count++;
+
+    if (count >= 15) {
+      clearInterval(animation);
+
+      const result = [
+        SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)],
+        SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)],
+        SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)]
+      ];
+
+      reels[0].textContent = result[0];
+      reels[1].textContent = result[1];
+      reels[2].textContent = result[2];
+
+      let win = 0;
+
+      // Jackpot: Three 💎
+      if (result[0] === "💎" && result[1] === "💎" && result[2] === "💎") {
+        win = 5000;
+      }
+      // Three of a kind
+      else if (result[0] === result[1] && result[1] === result[2]) {
+        win = 500;
+      }
+      // Two of a kind
+      else if (result[0] === result[1] || result[1] === result[2] || result[0] === result[2]) {
+        win = 100;
+      }
+
+      // Add winnings
+      player.gold += win;
+      player.updatedAt = Date.now();
+
+      // Save and update
+      save();
+      render();
+      updateSlotDisplay();
+
+      const slotText = document.getElementById("slotText");
+      if (win > 0) {
+        slotText.textContent = "🎉 You won " + win + " gold!";
+        addLog("🎰 Slot: won " + win + " gold");
+        notice("🎉 Won " + win + " gold!", "info");
+      } else {
+        slotText.textContent = "😢 You lost";
+        addLog("🎰 Slot: lost 50 gold");
+      }
+    }
+  }, 100);
+}
+
+function updateSlotDisplay() {
+  const player = getSlotPlayer();
+  const coinsDisplay = document.getElementById("slotCoins");
+  const slotText = document.getElementById("slotText");
+  if (player) {
+    coinsDisplay.textContent = player.gold;
+    if (player.gold < 50) {
+      slotText.textContent = "Not enough gold! Need 50 to spin.";
+    } else {
+      slotText.textContent = "Spin for 50 gold!";
+    }
+  } else {
+    coinsDisplay.textContent = "0";
+    slotText.textContent = "Login to play slots!";
+  }
+}
+
+function openSlots() {
+  const player = getSlotPlayer();
+  if (!player) {
+    notice("Please login first!", "err");
+    return;
+  }
+  document.getElementById("slotBox").style.display = "block";
+  updateSlotDisplay();
+}
+
+function closeSlots() {
+  document.getElementById("slotBox").style.display = "none";
+}
+
 function bindUI() {
   document.getElementById("playerBtn").addEventListener("click", openSwitch);
   document.getElementById("switchClose").addEventListener("click", closeSwitch);
@@ -2391,6 +2511,7 @@ function bindUI() {
     save();
     saveAuthSnapshotToCloud();
     render();
+    updateSlotDisplay();
     notice(tr("userAuthSetOk"), "info");
   });
 
@@ -2475,6 +2596,9 @@ function bindUI() {
 
   document.getElementById("battleGiveUp").addEventListener("click", closeBattleModal);
   document.getElementById("battleModal").addEventListener("click", (e) => { if (e.target.id === "battleModal") closeBattleModal(); });
+
+  // Slot machine bindings
+  document.getElementById("slotButton").addEventListener("click", openSlots);
 }
 
 function loop() {
@@ -2488,6 +2612,10 @@ function loop() {
   renderGrid();
   renderFriends();
   renderBattleBar();
+  // Update slot display if open
+  if (document.getElementById("slotBox").style.display === "block") {
+    updateSlotDisplay();
+  }
   const heartbeatDue = S.currentId && now - lastHeartbeatPush > BATTLE_HEARTBEAT_MS;
   if (heartbeatDue) lastHeartbeatPush = now;
   save(heartbeatDue);
@@ -2506,6 +2634,7 @@ async function boot() {
     await loadFromCloud();
   }
   render();
+  updateSlotDisplay();
   openLoginPage();
   setInterval(loop, 1000);
   scheduleCloudPoll();
@@ -2513,8 +2642,8 @@ async function boot() {
 
 boot();
 </script>
-<!-- SIMPLE STANDALONE SLOT MACHINE -->
 
+<!-- Slot Machine Styles and HTML -->
 <style>
 #slotButton {
   position: fixed;
@@ -2524,241 +2653,111 @@ boot();
   font-size: 18px;
   border-radius: 12px;
   cursor: pointer;
-  z-index:9999;
+  z-index: 9999;
+  background: linear-gradient(140deg, #f5cb3e, #d4a020);
+  border: 2px solid rgba(255,255,255,.3);
+  color: #1f5b30;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0,0,0,.3);
 }
-
-#slot-machine {
-  display:none;
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  color:black;
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  z-index:10000;
-  box-shadow:0 0 40px rgba(0,0,0,.5);
-  font-family:Arial;
+#slotButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(0,0,0,.4);
 }
-
-#slot-machine h2,
-#slot-machine h3,
-#slot-machine p {
-  color:black;
+#slotBox {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(150deg, #244d2f, #376c41);
+  color: #fff8e9;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 10000;
+  box-shadow: 0 0 60px rgba(0,0,0,.7);
+  border: 2px solid rgba(255,255,255,.3);
+  min-width: 300px;
 }
-
+#slotBox h2 {
+  color: #f5cb3e;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+#slotBox h3 {
+  color: #fff8e9;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+#slotBox p {
+  color: #fff8e9;
+  margin: 10px 0;
+  font-size: 14px;
+}
 .slots {
-  display:flex;
-  gap:15px;
-  justify-content:center;
-  margin:20px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 20px 0;
 }
-
 .reel {
-  width:80px;
-  height:80px;
-  background:#eee;
-  border-radius:15px;
-  font-size:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,.1);
+  border-radius: 15px;
+  font-size: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255,255,255,.2);
+  box-shadow: inset 0 0 20px rgba(0,0,0,.2);
 }
-
 .slotBtn {
-  padding:10px 20px;
-  margin:5px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:18px;
+  padding: 10px 25px;
+  margin: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  transition: transform .1s;
+}
+.slotBtn:hover {
+  transform: scale(1.05);
+}
+.slotBtn:active {
+  transform: scale(0.95);
+}
+.slotBtn.spin {
+  background: linear-gradient(140deg, #f5cb3e, #d4a020);
+  color: #1f5b30;
+}
+.slotBtn.close {
+  background: rgba(255,255,255,.2);
+  color: #fff8e9;
 }
 </style>
 
-
-<button id="slotButton">
-🎰 Slot Machine
-</button>
-
-
 <div id="slotBox">
-
-<h2>🎰 Slot Machine</h2>
-
-<h3>
-Coins: <span id="slotCoins">1000</span>
-</h3>
-
-<div class="slots">
-<div class="reel" id="r1">❔</div>
-<div class="reel" id="r2">❔</div>
-<div class="reel" id="r3">❔</div>
+  <h2>🎰 Slot Machine</h2>
+  <h3>🪙 Gold: <span id="slotCoins">0</span></h3>
+  <div class="slots">
+    <div class="reel" id="r1">❔</div>
+    <div class="reel" id="r2">❔</div>
+    <div class="reel" id="r3">❔</div>
+  </div>
+  <p id="slotText">Spin for 50 gold!</p>
+  <div>
+    <button class="slotBtn spin" onclick="spinSlots()">🎰 SPIN</button>
+    <button class="slotBtn close" onclick="closeSlots()">✕ CLOSE</button>
+  </div>
+  <div style="font-size:11px;margin-top:8px;opacity:.7;">
+    💎💎💎 = 5000 gold | Three same = 500 | Two same = 100
+  </div>
 </div>
 
-<p id="slotText">
-Spin for 50 coins!
-</p>
+<button id="slotButton">🎰 Slot Machine</button>
 
-<button class="slotBtn" onclick="spinSlots()">
-SPIN
-</button>
-
-<button class="slotBtn" onclick="closeSlots()">
-CLOSE
-</button>
-
-</div>
-
-
-<script>
-
-let slotCoins = 1000;
-
-const symbols=[
-"🍒",
-"🍋",
-"🍀",
-"⭐",
-"💎"
-];
-
-
-document
-.getElementById("slotButton")
-.onclick=function(){
-
-document.getElementById("slotBox").style.display="block";
-
-};
-
-
-
-function closeSlots(){
-
-document.getElementById("slotBox").style.display="none";
-
-}
-
-
-
-function randomSymbol(){
-
-return symbols[
-Math.floor(Math.random()*symbols.length)
-];
-
-}
-
-
-
-function spinSlots(){
-
-if(slotCoins < 50){
-
-document.getElementById("slotText").innerHTML=
-"Not enough coins!";
-
-return;
-
-}
-
-
-slotCoins-=50;
-
-
-let reels=[
-document.getElementById("r1"),
-document.getElementById("r2"),
-document.getElementById("r3")
-];
-
-
-let count=0;
-
-
-let animation=setInterval(()=>{
-
-reels.forEach(r=>{
-r.innerHTML=randomSymbol();
-});
-
-count++;
-
-
-if(count>=15){
-
-clearInterval(animation);
-
-
-let result=[
-randomSymbol(),
-randomSymbol(),
-randomSymbol()
-];
-
-
-reels[0].innerHTML=result[0];
-reels[1].innerHTML=result[1];
-reels[2].innerHTML=result[2];
-
-
-let win=0;
-
-
-if(
-result[0]==="💎" &&
-result[1]==="💎" &&
-result[2]==="💎"
-){
-
-win=5000;
-
-}
-
-else if(
-result[0]===result[1] &&
-result[1]===result[2]
-){
-
-win=500;
-
-}
-
-else if(
-result[0]===result[1] ||
-result[1]===result[2] ||
-result[0]===result[2]
-){
-
-win=100;
-
-}
-
-
-
-slotCoins+=win;
-
-
-document.getElementById("slotText").innerHTML=
-win>0 ?
-"🎉 You won "+win+" coins!" :
-"😢 You lost";
-
-
-document.getElementById("slotCoins").innerHTML=
-slotCoins;
-
-
-}
-
-
-},100);
-
-
-}
-
-
-</script>
 </body>
 </html>
