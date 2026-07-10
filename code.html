@@ -2512,6 +2512,105 @@ async function boot() {
 }
 
 boot();
+</script>
+<!-- SIMPLE STANDALONE SLOT MACHINE -->
+
+<style>
+#slotButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  z-index:9999;
+}
+
+#slot-machine {
+  display:none;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  color:black;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  z-index:10000;
+  box-shadow:0 0 40px rgba(0,0,0,.5);
+  font-family:Arial;
+}
+
+#slot-machine h2,
+#slot-machine h3,
+#slot-machine p {
+  color:black;
+}
+
+.slots {
+  display:flex;
+  gap:15px;
+  justify-content:center;
+  margin:20px;
+}
+
+.reel {
+  width:80px;
+  height:80px;
+  background:#eee;
+  border-radius:15px;
+  font-size:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.slotBtn {
+  padding:10px 20px;
+  margin:5px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:18px;
+}
+</style>
+
+
+<button id="slotButton">
+🎰 Slot Machine
+</button>
+
+
+<div id="slotBox">
+
+<h2>🎰 Slot Machine</h2>
+
+<h3>
+Coins: <span id="slotCoins">1000</span>
+</h3>
+
+<div class="slots">
+<div class="reel" id="r1">❔</div>
+<div class="reel" id="r2">❔</div>
+<div class="reel" id="r3">❔</div>
+</div>
+
+<p id="slotText">
+Spin for 50 coins!
+</p>
+
+<button class="slotBtn" onclick="spinSlots()">
+SPIN
+</button>
+
+<button class="slotBtn" onclick="closeSlots()">
+CLOSE
+</button>
+
+</div>
+
+
 <script>
 
 let slotCoins = 1000;
@@ -2525,26 +2624,39 @@ const symbols=[
 ];
 
 
-document.getElementById("slotButton").onclick=function(){
-  document.getElementById("slotBox").style.display="block";
+document
+.getElementById("slotButton")
+.onclick=function(){
+
+document.getElementById("slotBox").style.display="block";
+
 };
 
 
+
 function closeSlots(){
-  document.getElementById("slotBox").style.display="none";
+
+document.getElementById("slotBox").style.display="none";
+
 }
+
 
 
 function randomSymbol(){
-  return symbols[Math.floor(Math.random()*symbols.length)];
+
+return symbols[
+Math.floor(Math.random()*symbols.length)
+];
+
 }
+
 
 
 function spinSlots(){
 
 if(slotCoins < 50){
 
-document.getElementById("slotText").innerHTML =
+document.getElementById("slotText").innerHTML=
 "Not enough coins!";
 
 return;
@@ -2552,7 +2664,7 @@ return;
 }
 
 
-slotCoins -= 50;
+slotCoins-=50;
 
 
 let reels=[
@@ -2570,7 +2682,6 @@ let animation=setInterval(()=>{
 reels.forEach(r=>{
 r.innerHTML=randomSymbol();
 });
-
 
 count++;
 
@@ -2595,45 +2706,58 @@ reels[2].innerHTML=result[2];
 let win=0;
 
 
-// 30% win chance
-if(Math.random()<0.30){
+if(
+result[0]==="💎" &&
+result[1]==="💎" &&
+result[2]==="💎"
+){
 
+win=5000;
 
-if(result[0]===result[1] &&
-result[1]===result[2]){
+}
+
+else if(
+result[0]===result[1] &&
+result[1]===result[2]
+){
 
 win=500;
 
 }
 
-else{
+else if(
+result[0]===result[1] ||
+result[1]===result[2] ||
+result[0]===result[2]
+){
 
-win=75;
+win=100;
 
 }
 
-}
 
 
+slotCoins+=win;
 
-slotCoins += win;
 
-
-document.getElementById("slotText").innerHTML =
+document.getElementById("slotText").innerHTML=
 win>0 ?
 "🎉 You won "+win+" coins!" :
 "😢 You lost";
 
 
-document.getElementById("slotCoins").innerHTML =
+document.getElementById("slotCoins").innerHTML=
 slotCoins;
 
 
 }
 
+
 },100);
 
+
 }
+
 
 </script>
 </body>
