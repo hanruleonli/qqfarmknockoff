@@ -2362,7 +2362,37 @@ function openAdmin() {
 }
 function closeAdmin() { document.getElementById("adminModal").classList.remove("show"); }
 
-function bindUI() {
+function bindUI() {document.getElementById("slotClose")?.addEventListener(
+  "click",
+  closeSlots
+);
+
+document.getElementById("slotSpin")?.addEventListener(
+  "click",
+  spinSlots
+);
+
+document.getElementById("slotBetUp")?.addEventListener(
+  "click",
+  ()=>{
+    slotData.bet = Math.min(
+      slotData.bet + 25,
+      500
+    );
+    updateSlotUI();
+  }
+);
+
+document.getElementById("slotBetDown")?.addEventListener(
+  "click",
+  ()=>{
+    slotData.bet = Math.max(
+      slotData.bet - 25,
+      25
+    );
+    updateSlotUI();
+  }
+);
   document.getElementById("playerBtn").addEventListener("click", openSwitch);
   document.getElementById("switchClose").addEventListener("click", closeSwitch);
   document.getElementById("switchModal").addEventListener("click", (e) => { if (e.target.id === "switchModal") closeSwitch(); });
@@ -2492,7 +2522,202 @@ function loop() {
   if (heartbeatDue) lastHeartbeatPush = now;
   save(heartbeatDue);
 }
+/* =========================
+   SLOT MACHINE ENGINE
+========================= */
 
+const SLOT_SYMBOLS = ["🍒","🍋","🍀","⭐","💎"];
+
+let slotData = {
+  bet: 25,
+  spins: 0,
+  wins: 0,
+  jackpot: 1000,
+  biggestWin: 0
+};
+
+function openSlots() {
+  document.getElementById("slotModal").style.display = "flex";
+  updateSlotUI();
+}
+
+function closeSlots() {
+  document.getElementById("slotModal").style.display = "none";
+}
+
+function updateSlotUI() {
+  document.getElementById("slotBet").textContent = slotData.bet;
+  document.getElementById("slotSpins").textContent = slotData.spins;
+  document.getElementById("slotWins").textContent = slotData.wins;
+  document.getElementById("slotJackpot").textContent = slotData.jackpot;
+}
+
+
+function spinSlots() {
+
+  let player = S.players[S.currentId];
+
+  if (!player) return;
+
+  if (player.coins < slotData.bet) {
+    document.getElementById("slotMessage").textContent =
+      "Not enough coins!";
+    return;
+  }
+
+
+  player.coins -= slotData.bet;
+  slotData.spins++;
+
+
+  let reels = document.querySelectorAll(".slot-reel");
+
+
+  // spinning animation
+  let spins = 10;
+  let interval = setInterval(()=>{
+
+    reels.forEach(r=>{
+      r.textContent =
+        SLOT_SYMBOLS[
+          Math.floor(Math.random()*SLOT_SYMBOLS.length)
+        ];
+    });
+
+    spins--;
+
+    if(spins <= 0){
+
+      clearInterval(interval);
+
+      let result = [
+        randomSlotSymbol(),
+        randomSlotSymbol(),
+        randomSlotSymbol()
+      ];
+
+
+      reels.forEach((r,i)=>{
+        r.textContent=result[i];
+      });
+
+
+      let payout = calculateSlotPayout(result);
+
+
+      if(payout > 0){
+
+        player.coins += payout;
+
+        slotData.wins++;
+
+        if(payout > slotData.biggestWin)
+          slotData.biggestWin = payout;
+
+
+        document.getElementById("slotMessage")
+          .textContent =
+          "🎉 You won "+payout+" coins!";
+
+
+        reels.forEach(r=>{
+          r.classList.add("slot-win");
+        });
+
+        setTimeout(()=>{
+          reels.forEach(r=>{
+            r.classList.remove("slot-win");
+          });
+        },1500);
+
+
+      } else {
+
+        slotData.jackpot += slotData.bet;
+
+        document.getElementById("slotMessage")
+          .textContent =
+          "😢 No match. Jackpot increased!";
+
+      }
+
+
+      updateSlotUI();
+
+      if(typeof saveGame === "function")
+        saveGame();
+
+    }
+
+  },100);
+
+}
+
+
+
+function randomSlotSymbol(){
+
+  return SLOT_SYMBOLS[
+    Math.floor(Math.random()*SLOT_SYMBOLS.length)
+  ];
+
+}
+
+
+
+function calculateSlotPayout(result){
+
+  let bet = slotData.bet;
+
+
+  // jackpot
+  if(
+    result[0]=="💎" &&
+    result[1]=="💎" &&
+    result[2]=="💎"
+  ){
+
+    let prize = slotData.jackpot;
+
+    slotData.jackpot=1000;
+
+    return prize;
+
+  }
+
+
+  // triple matches
+  if(result[0]===result[1] &&
+     result[1]===result[2]){
+
+    if(result[0]=="⭐")
+      return bet*40;
+
+    if(result[0]=="🍀")
+      return bet*20;
+
+    if(result[0]=="🍒")
+      return bet*10;
+
+    if(result[0]=="🍋")
+      return bet*5;
+
+  }
+
+
+  // two matching
+  if(result[0]===result[1] ||
+     result[1]===result[2] ||
+     result[0]===result[2]){
+
+    return bet*2;
+
+  }
+
+
+  return 0;
+
+}
 async function boot() {
   load();
   S.lang = "en";
@@ -2513,5 +2738,95 @@ async function boot() {
 
 boot();
 </script>
+<!-- SLOT MACHINE -->
+<div id="slotModal" class="modal">
+  <div class="modal-card slot-card">
+    <h2>🎰 Slot Machine</h2>
+
+    <div id="slotReels" class="slot-reels">
+      <div class="slot-reel">❔</div>
+      <div class="slot-reel">❔</div>
+      <div class="slot-reel">❔</div>
+    </div>
+
+    <div id="slotMessage" class="slot-message">
+      Spin to win!
+    </div>
+
+    <div class="slot-bet-row">
+      <button class="btn" id="slotBetDown">−</button>
+      <span id="slotBet">25</span> 🪙
+      <button class="btn" id="slotBetUp">+</button>
+    </div>
+
+    <button class="btn active" id="slotSpin">
+      🎰 Spin
+    </button>
+
+    <button class="btn" id="slotClose">
+      Close
+    </button>
+
+    <div class="slot-stats">
+      <div>Spins: <span id="slotSpins">0</span></div>
+      <div>Wins: <span id="slotWins">0</span></div>
+      <div>Jackpot: <span id="slotJackpot">1000</span> 🪙</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.slot-card {
+  text-align:center;
+  max-width:420px;
+}
+
+.slot-reels {
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:20px;
+}
+
+.slot-reel {
+  width:80px;
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  background:#eee;
+  border-radius:15px;
+}
+
+.slot-message {
+  min-height:25px;
+  margin:10px;
+  font-weight:bold;
+}
+
+.slot-bet-row {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:15px;
+  margin:15px;
+  font-size:20px;
+}
+
+.slot-stats {
+  margin-top:20px;
+  font-size:14px;
+}
+
+.slot-win {
+  animation:slotFlash .4s infinite alternate;
+}
+
+@keyframes slotFlash {
+  from {transform:scale(1);}
+  to {transform:scale(1.1);}
+}
+</style>
 </body>
 </html>
