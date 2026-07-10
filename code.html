@@ -2527,19 +2527,26 @@ boot();
   z-index:9999;
 }
 
-#slotBox {
+#slot-machine {
   display:none;
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
   background:white;
+  color:black;
   padding:25px;
   border-radius:20px;
-  box-shadow:0 0 30px #0005;
   text-align:center;
   z-index:10000;
+  box-shadow:0 0 40px rgba(0,0,0,.5);
   font-family:Arial;
+}
+
+#slot-machine h2,
+#slot-machine h3,
+#slot-machine p {
+  color:black;
 }
 
 .slots {
