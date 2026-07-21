@@ -491,6 +491,132 @@ body {
 
 <script src="config.js"></script>
 <script>
+// ============================================================
+// 🎵 SOUND CONFIGURATION - Paste your YouTube URLs below
+// ============================================================
+const SOUND_CONFIG = {
+  // Background music - plays continuously (loop enabled)
+  backgroundMusic: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE",
+  // Sound when interacting with crops (plant, water, harvest, etc.)
+  cropInteraction: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE"
+};
+// ============================================================
+
+// Simple audio system using YouTube iframe API
+let audioCtx = null;
+let bgAudioElement = null;
+let sfxAudioElement = null;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  // Create background audio element
+  if (!bgAudioElement) {
+    bgAudioElement = document.createElement('audio');
+    bgAudioElement.loop = true;
+    bgAudioElement.volume = 0.5;
+    document.body.appendChild(bgAudioElement);
+  }
+  // Create SFX audio element
+  if (!sfxAudioElement) {
+    sfxAudioElement = document.createElement('audio');
+    sfxAudioElement.volume = 0.7;
+    document.body.appendChild(sfxAudioElement);
+  }
+}
+
+function playBackgroundMusic() {
+  if (!SOUND_CONFIG.backgroundMusic) return;
+  initAudio();
+  const url = extractVideoUrl(SOUND_CONFIG.backgroundMusic);
+  if (url && bgAudioElement) {
+    bgAudioElement.src = url;
+    bgAudioElement.play().catch(() => {});
+  }
+}
+
+function playCropSound() {
+  if (!SOUND_CONFIG.cropInteraction) return;
+  initAudio();
+  const url = extractVideoUrl(SOUND_CONFIG.cropInteraction);
+  if (url && sfxAudioElement) {
+    sfxAudioElement.src = url;
+    sfxAudioElement.currentTime = 0;
+    sfxAudioElement.play().catch(() => {});
+  }
+}
+
+function extractVideoUrl(input) {
+  // Simple extractor - handles direct YouTube URLs or just video IDs
+  input = input.trim();
+  if (!input) return null;
+  // If it's already a direct audio URL or embed URL, use it
+  if (input.startsWith('http') && (input.includes('.mp3') || input.includes('.wav') || input.includes('.ogg'))) {
+    return input;
+  }
+  // Try to extract video ID from youtube URL
+  const patterns = [
+    /youtube\.com\/watch\?v=([^&]+)/,
+    /youtu\.be\/([^?]+)/,
+    /youtube\.com\/embed\/([^?]+)/
+  ];
+  for (const p of patterns) {
+    const match = input.match(p);
+    if (match) {
+      return `https://www.youtube.com/embed/${match[1]}?autoplay=1&loop=1&playlist=${match[1]}`;
+    }
+  }
+  // If input looks like a video ID (11 chars), use it
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) {
+    return `https://www.youtube.com/embed/${input}?autoplay=1&loop=1&playlist=${input}`;
+  }
+  return null;
+}
+
+// Override original audio context functions
+const originalNotice = notice;
+notice = function(msg, type) {
+  originalNotice(msg, type);
+  // Play crop sound on certain actions
+  if (type !== 'err' && msg && (
+    msg.includes('planted') || 
+    msg.includes('watered') || 
+    msg.includes('fertilized') || 
+    msg.includes('harvested') ||
+    msg.includes('stolen')
+  )) {
+    playCropSound();
+  }
+};
+
+// Override addLog to trigger sound
+const originalAddLog = addLog;
+addLog = function(txt) {
+  originalAddLog(txt);
+  if (txt && (txt.includes('🌱') || txt.includes('💧') || txt.includes('🧪') || txt.includes('🌾') || txt.includes('🦊'))) {
+    playCropSound();
+  }
+};
+
+// Start background music on first user interaction
+document.addEventListener('click', () => {
+  if (!bgAudioElement || bgAudioElement.paused) {
+    playBackgroundMusic();
+  }
+}, { once: true });
+
+// Also start on keydown for keyboard-only users
+document.addEventListener('keydown', () => {
+  if (!bgAudioElement || bgAudioElement.paused) {
+    playBackgroundMusic();
+  }
+}, { once: true });
+
+// ============================================================
+// END SOUND CONFIGURATION
+// ============================================================
+
 const I18N = {
   zh: {
     title: "🌱 QQ农场", tabMine: "我的农场", tabVisit: "拜访好友", bt: "蓝牙控制",
@@ -502,7 +628,7 @@ const I18N = {
     planted: "种下", watered: "浇水成功", fertilized: "施肥成功", harvested: "收获成功", stolen: "偷菜成功",
     topRank: "排行榜第一",
     topUsers: "玩家排行",
-    controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
+    controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具, 0打开老虎机。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
     btUnsup: "浏览器不支持 Web Bluetooth", btConn: "蓝牙连接中...", btOk: "蓝牙已连接", btFail: "蓝牙连接失败", btDisc: "蓝牙已断开",
     cloudSave: "云端保存", cloudLoad: "云端读取", cloudTest: "连接测试", cloudCfg: "云端设置", cloudTitle: "Google Sheets 云端设置",
     cloudCfgSaved: "云端配置已保存", cloudNeedUrl: "请先配置云端 URL", cloudSaveOk: "云端保存成功", cloudLoadOk: "云端读取成功", cloudNoData: "云端暂无存档", cloudPingOk: "云连接正常", cloudFail: "云端请求失败", cloudBadUrl: "云端 URL 无效", cloudUnauthorized: "云端令牌无效或无权限", cloudBadResp: "云端返回格式异常", cloudFileMode: "请通过 http://localhost 打开游戏，不要使用 file://",
@@ -537,7 +663,7 @@ const I18N = {
     planted: "Planted", watered: "Watered", fertilized: "Fertilized", harvested: "Harvested", stolen: "Stolen",
     topRank: "Top Ranked",
     topUsers: "Leaderboard",
-    controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools. Bluetooth command text: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 0 open slots. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth not supported", btConn: "Connecting Bluetooth...", btOk: "Bluetooth connected", btFail: "Bluetooth failed", btDisc: "Bluetooth disconnected",
     cloudSave: "Cloud Save", cloudLoad: "Cloud Load", cloudTest: "Test Connection", cloudCfg: "Cloud Setup", cloudTitle: "Google Sheets Cloud Settings",
     cloudCfgSaved: "Cloud config saved", cloudNeedUrl: "Set cloud URL first", cloudSaveOk: "Cloud save success", cloudLoadOk: "Cloud load success", cloudNoData: "No cloud save found yet", cloudPingOk: "Cloud connection OK", cloudFail: "Cloud request failed", cloudBadUrl: "Invalid cloud URL", cloudUnauthorized: "Cloud token invalid or unauthorized", cloudBadResp: "Unexpected cloud response format", cloudFileMode: "Open the game via http://localhost, not file://",
@@ -572,7 +698,7 @@ const I18N = {
     planted: "植えた", watered: "水やり成功", fertilized: "肥料成功", harvested: "収穫成功", stolen: "盗み成功",
     topRank: "ランキング1位",
     topUsers: "ランキング",
-    controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
+    controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替、0でスロット。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
     btUnsup: "Web Bluetooth未対応", btConn: "Bluetooth接続中...", btOk: "Bluetooth接続済み", btFail: "Bluetooth接続失敗", btDisc: "Bluetooth切断",
     cloudSave: "クラウド保存", cloudLoad: "クラウド読込", cloudTest: "接続テスト", cloudCfg: "クラウド設定", cloudTitle: "Google Sheets クラウド設定",
     cloudCfgSaved: "クラウド設定を保存", cloudNeedUrl: "先にURLを設定してください", cloudSaveOk: "クラウド保存成功", cloudLoadOk: "クラウド読込成功", cloudNoData: "クラウドに保存データがありません", cloudPingOk: "クラウド接続OK", cloudFail: "クラウド通信失敗", cloudBadUrl: "クラウドURLが無効です", cloudUnauthorized: "トークン無効または権限がありません", cloudBadResp: "クラウド応答形式が不正です", cloudFileMode: "file:// ではなく http://localhost で開いてください",
@@ -606,7 +732,7 @@ const I18N = {
     empty: "Toca una parcela vacia", ready: "Listo", withered: "Marchito", noGold: "No hay oro suficiente",
     planted: "Plantado", watered: "Regado", fertilized: "Fertilizado", harvested: "Cosechado", stolen: "Robado",
     topUsers: "Clasificacion",
-    controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas, 0 slots. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth no compatible", btConn: "Conectando Bluetooth...", btOk: "Bluetooth conectado", btFail: "Fallo de Bluetooth", btDisc: "Bluetooth desconectado",
     cloudSave: "Guardar en Nube", cloudLoad: "Cargar de Nube", cloudTest: "Probar Conexion", cloudCfg: "Configurar Nube", cloudTitle: "Configuracion de Google Sheets",
     cloudCfgSaved: "Configuracion guardada", cloudNeedUrl: "Primero configura la URL", cloudSaveOk: "Guardado en nube exitoso", cloudLoadOk: "Carga en nube exitosa", cloudNoData: "Aun no hay guardado en nube", cloudPingOk: "Conexion de nube correcta", cloudFail: "Fallo de solicitud en nube", cloudBadUrl: "URL de nube invalida", cloudUnauthorized: "Token invalido o sin permisos", cloudBadResp: "Formato de respuesta inesperado", cloudFileMode: "Abre el juego con http://localhost, no con file://",
@@ -640,7 +766,7 @@ const I18N = {
     empty: "Нажмите на пустой участок", ready: "Готово", withered: "Завяло", noGold: "Недостаточно монет",
     planted: "Посажено", watered: "Полив выполнен", fertilized: "Удобрено", harvested: "Собрано", stolen: "Украдено",
     topUsers: "Рейтинг",
-    controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты, 0 - слоты. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth не поддерживается", btConn: "Подключение Bluetooth...", btOk: "Bluetooth подключен", btFail: "Ошибка Bluetooth", btDisc: "Bluetooth отключен",
     cloudSave: "Сохранить в облако", cloudLoad: "Загрузить из облака", cloudTest: "Проверить связь", cloudCfg: "Облако", cloudTitle: "Настройки Google Sheets",
     cloudCfgSaved: "Настройки облака сохранены", cloudNeedUrl: "Сначала укажите URL", cloudSaveOk: "Сохранено в облаке", cloudLoadOk: "Загружено из облака", cloudNoData: "В облаке пока нет сохранения", cloudPingOk: "Облачное соединение ОК", cloudFail: "Ошибка запроса к облаку", cloudBadUrl: "Некорректный URL облака", cloudUnauthorized: "Неверный токен или нет доступа", cloudBadResp: "Некорректный формат ответа облака", cloudFileMode: "Откройте игру через http://localhost, а не file://",
@@ -2470,6 +2596,11 @@ function bindUI() {
       if (k === "2") setToolByIndex(1);
       if (k === "3") setToolByIndex(2);
       if (k === "4") setToolByIndex(3);
+      if (k === "0") {
+        e.preventDefault();
+        const btn = document.getElementById("slotButton");
+        if (btn) btn.click();
+      }
     }
   });
 
@@ -2591,8 +2722,8 @@ boot();
   justify-content: center;
   box-shadow: inset 0 2px 6px rgba(0,0,0,.5);
 }
-.reel.spinning { animation: reelPulse .12s ease infinite alternate; }
-@keyframes reelPulse { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+.reel.spinning { animation: reelPulse .08s ease infinite alternate; }
+@keyframes reelPulse { from { transform: translateY(0); } to { transform: translateY(-4px); } }
 
 .slot-text {
   font-size: 12px;
@@ -2622,7 +2753,7 @@ boot();
 .slot-spin:disabled { opacity: .55; cursor: not-allowed; }
 </style>
 
-<button id="slotButton" class="slot-fab" title="Slot Machine">🎰</button>
+<button id="slotButton" class="slot-fab" title="Slot Machine (Press 0)">🎰</button>
 
 <div id="slotOverlay" class="overlay">
   <div class="modal slot-modal">
@@ -2636,7 +2767,7 @@ boot();
       <div class="reel" id="r2">❔</div>
       <div class="reel" id="r3">❔</div>
     </div>
-    <div id="slotText" class="slot-text">Match all 3 reels to win. The house keeps an edge — play for fun, not for farm funding.</div>
+    <div id="slotText" class="slot-text">Match all 3 reels to win. Good luck!</div>
     <div id="slotPaytable" class="slot-paytable"></div>
     <div class="slot-actions">
       <button id="spinBtn" class="btn slot-spin">SPIN (50 🪙)</button>
@@ -2735,32 +2866,36 @@ boot();
     textEl.textContent = "Spinning...";
     reelEls.forEach((r) => r.classList.add("spinning"));
 
-    // Longer animation (18 ticks) with near-miss tease
+    // More addictive: longer animation with rapid, flashy changes
     let ticks = 0;
-    // Pre-generate the final result early, but don't show it yet
+    // Pre-generate the final result early
     const finalResult = [weightedSymbol(), weightedSymbol(), weightedSymbol()];
-    // Determine if we want a near-miss (two matching, third off by one)
+    // Near-miss: two matching, third different (keep the effect, remove the message)
     const nearMiss = (Math.random() < 0.45) && !(finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym);
-    let nearMissSymbol = null;
     if (nearMiss) {
-      // Make first two match, third different
       const matchSym = finalResult[0].sym;
       const diffSymbols = SLOT_SYMBOLS.filter(s => s.sym !== matchSym);
       if (diffSymbols.length > 0) {
-        finalResult[1] = { ...finalResult[0] }; // copy the symbol
+        finalResult[1] = { ...finalResult[0] };
         finalResult[2] = diffSymbols[Math.floor(Math.random() * diffSymbols.length)];
-        nearMissSymbol = matchSym;
       }
     }
 
     const anim = setInterval(() => {
-      // Show random symbols during spin
+      // Faster, more intense flashing
       reelEls.forEach((r) => { r.textContent = randomCosmeticSymbol(); });
       ticks++;
-      if (ticks >= 18) {
+      if (ticks >= 22) {
         clearInterval(anim);
-        // Final reveal
-        reelEls.forEach((r, i) => { r.textContent = finalResult[i].sym; r.classList.remove("spinning"); });
+        // Final reveal with a slight delay for dramatic effect
+        reelEls.forEach((r, i) => { 
+          r.textContent = finalResult[i].sym; 
+          r.classList.remove("spinning");
+          // Add a subtle pop effect
+          r.style.transition = 'transform 0.1s ease';
+          r.style.transform = 'scale(1.15)';
+          setTimeout(() => { r.style.transform = 'scale(1)'; }, 150);
+        });
         
         let win = 0;
         let symbolWon = null;
@@ -2775,7 +2910,8 @@ boot();
           if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + win + "🪙 on the slots");
           if (typeof notice === "function") notice("You won " + win + " 🪙!", "");
         } else if (nearMiss) {
-          textEl.textContent = "😅 So close! " + nearMissSymbol + nearMissSymbol + "??  Almost had it!";
+          // Keep the near-miss effect but remove the explicit "so close" message
+          textEl.textContent = "😅 " + nearMiss + nearMiss + "??  Try again!";
           if (typeof addLog === "function") addLog("🎰 " + p.name + " had a near-miss on the slots");
         } else {
           textEl.textContent = "😢 No match. Try again!";
@@ -2787,7 +2923,7 @@ boot();
         spinBtn.disabled = false;
         spinning = false;
       }
-    }, 100);
+    }, 80);
   }
 
   document.getElementById("slotButton").addEventListener("click", openSlots);
