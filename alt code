@@ -2151,6 +2151,7 @@ function renderFriends() {
   const box = document.getElementById("friends");
   box.innerHTML = "";
   if (!S.currentId) return;
+  // Show all other players as friends
   Object.values(S.players)
     .filter((p) => p.id !== S.currentId)
     .forEach((p) => {
@@ -2160,7 +2161,11 @@ function renderFriends() {
         '<div style="font-size:21px">' + p.avatar + '</div>' +
         '<div class="friend-main"><div class="friend-name">' + p.name + '</div><div class="friend-sub">Lv.' + levelInfo(p.xp).level + ' · ' + p.gold + '🪙</div></div>' +
         '<div style="font-size:11px">🌟' + friendReady(p) + '</div>';
-      row.addEventListener("click", () => { S.viewId = S.viewId === p.id ? null : p.id; update(); });
+      row.addEventListener("click", () => { 
+        S.viewId = S.viewId === p.id ? null : p.id; 
+        save();
+        render(); 
+      });
       box.appendChild(row);
     });
 }
@@ -2394,10 +2399,16 @@ function bindUI() {
     notice(tr("userAuthSetOk"), "info");
   });
 
-  document.getElementById("tabMine").addEventListener("click", () => { S.viewId = null; update(); });
+  document.getElementById("tabMine").addEventListener("click", () => { S.viewId = null; save(); render(); });
   document.getElementById("tabVisit").addEventListener("click", () => {
+    // Find first other player to visit
     const ids = Object.keys(S.players).filter((id) => id !== S.currentId);
-    S.viewId = ids[0] || null;
+    if (ids.length > 0) {
+      S.viewId = ids[0];
+    } else {
+      // If no other players, stay on own farm
+      S.viewId = null;
+    }
     save();
     render();
   });
@@ -2513,252 +2524,278 @@ async function boot() {
 
 boot();
 </script>
-<!-- SIMPLE STANDALONE SLOT MACHINE -->
-
+<!-- SLOT MACHINE (uses in-game gold, integrated with player state) -->
 <style>
-#slotButton {
+.slot-fab {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 20px;
-  font-size: 18px;
-  border-radius: 12px;
+  bottom: 16px;
+  right: 16px;
+  z-index: 90;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(140deg, #d9903d, #b7642b);
+  box-shadow: 0 4px 14px rgba(0,0,0,.4), 0 0 0 2px rgba(255,255,255,.18) inset;
+}
+.slot-fab:active { transform: scale(.94); }
+@media (max-width: 780px) { .slot-fab { bottom: calc(95px + env(safe-area-inset-bottom, 0)); } }
+
+.slot-modal {
+  width: min(92vw, 380px);
+  text-align: center;
+  background: linear-gradient(150deg, #2b2110, #4a331a);
+  border: 2px solid rgba(245,203,62,.55);
+}
+.slot-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.slot-modal h2 { font-size: 17px; color: var(--gold); }
+.slot-close {
+  border: none;
+  background: rgba(255,255,255,.12);
+  color: var(--txt);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
   cursor: pointer;
-  z-index:9999;
+  font-size: 13px;
+  line-height: 1;
 }
-
-#slot-machine {
-  display:none;
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  color:black;
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  z-index:10000;
-  box-shadow:0 0 40px rgba(0,0,0,.5);
-  font-family:Arial;
+.slot-balance {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(0,0,0,.25);
+  border-radius: 999px;
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 6px 0 4px;
 }
-
-#slot-machine h2,
-#slot-machine h3,
-#slot-machine p {
-  color:black;
-}
-
-.slots {
-  display:flex;
-  gap:15px;
-  justify-content:center;
-  margin:20px;
-}
-
+.slots { display: flex; gap: 10px; justify-content: center; margin: 14px 0; }
 .reel {
-  width:80px;
-  height:80px;
-  background:#eee;
-  border-radius:15px;
-  font-size:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  width: 74px;
+  height: 74px;
+  background: rgba(0,0,0,.32);
+  border: 2px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  font-size: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.5);
 }
+.reel.spinning { animation: reelPulse .12s ease infinite alternate; }
+@keyframes reelPulse { from { transform: translateY(0); } to { transform: translateY(-3px); } }
 
-.slotBtn {
-  padding:10px 20px;
-  margin:5px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:18px;
+.slot-text {
+  font-size: 12px;
+  min-height: 32px;
+  opacity: .92;
+  padding: 0 4px;
+  margin-bottom: 8px;
 }
+.slot-paytable {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  font-size: 10px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 6px;
+  margin-bottom: 10px;
+}
+.slot-paytable div { padding: 2px 0; }
+.slot-actions { display: flex; gap: 8px; justify-content: center; }
+.slot-spin {
+  background: linear-gradient(140deg, #f5cb3e, #d9a017);
+  color: #2b2110;
+  min-width: 130px;
+}
+.slot-spin:disabled { opacity: .55; cursor: not-allowed; }
 </style>
 
+<button id="slotButton" class="slot-fab" title="Slot Machine">🎰</button>
 
-<button id="slotButton">
-🎰 Slot Machine
-</button>
-
-
-<div id="slotBox">
-
-<h2>🎰 Slot Machine</h2>
-
-<h3>
-Coins: <span id="slotCoins">1000</span>
-</h3>
-
-<div class="slots">
-<div class="reel" id="r1">❔</div>
-<div class="reel" id="r2">❔</div>
-<div class="reel" id="r3">❔</div>
+<div id="slotOverlay" class="overlay">
+  <div class="modal slot-modal">
+    <div class="slot-modal-head">
+      <h2>🎰 Lucky Harvest Slots</h2>
+      <button id="slotCloseX" class="slot-close" aria-label="Close">✕</button>
+    </div>
+    <div class="slot-balance">🪙 <span id="slotGoldDisplay">0</span></div>
+    <div class="slots">
+      <div class="reel" id="r1">❔</div>
+      <div class="reel" id="r2">❔</div>
+      <div class="reel" id="r3">❔</div>
+    </div>
+    <div id="slotText" class="slot-text">Match all 3 reels to win. The house keeps an edge — play for fun, not for farm funding.</div>
+    <div id="slotPaytable" class="slot-paytable"></div>
+    <div class="slot-actions">
+      <button id="spinBtn" class="btn slot-spin">SPIN (50 🪙)</button>
+      <button id="slotCloseBtn" class="btn">CLOSE</button>
+    </div>
+  </div>
 </div>
-
-<p id="slotText">
-Spin for 50 coins!
-</p>
-
-<button class="slotBtn" onclick="spinSlots()">
-SPIN
-</button>
-
-<button class="slotBtn" onclick="closeSlots()">
-CLOSE
-</button>
-
-</div>
-
 
 <script>
-
-let slotCoins = 1000;
-
-const symbols=[
-"🍒",
-"🍋",
-"🍀",
-"⭐",
-"💎"
-];
-
-
-document
-.getElementById("slotButton")
-.onclick=function(){
-
-document.getElementById("slotBox").style.display="block";
-
-};
-
-
-
-function closeSlots(){
-
-document.getElementById("slotBox").style.display="none";
-
-}
-
-
-
-function randomSymbol(){
-
-return symbols[
-Math.floor(Math.random()*symbols.length)
-];
-
-}
-
-
-
-function spinSlots(){
-
-if(slotCoins < 50){
-
-document.getElementById("slotText").innerHTML=
-"Not enough coins!";
-
-return;
-
-}
-
-
-slotCoins-=50;
-
-
-let reels=[
-document.getElementById("r1"),
-document.getElementById("r2"),
-document.getElementById("r3")
-];
-
-
-let count=0;
-
-
-let animation=setInterval(()=>{
-
-reels.forEach(r=>{
-r.innerHTML=randomSymbol();
-});
-
-count++;
-
-
-if(count>=15){
-
-clearInterval(animation);
-
-
-let result=[
-randomSymbol(),
-randomSymbol(),
-randomSymbol()
-];
-
-
-reels[0].innerHTML=result[0];
-reels[1].innerHTML=result[1];
-reels[2].innerHTML=result[2];
-
-
-let win=0;
-
-
-if(
-result[0]==="💎" &&
-result[1]==="💎" &&
-result[2]==="💎"
-){
-
-win=5000;
-
-}
-
-else if(
-result[0]===result[1] &&
-result[1]===result[2]
-){
-
-win=500;
-
-}
-
-else if(
-result[0]===result[1] ||
-result[1]===result[2] ||
-result[0]===result[2]
-){
-
-win=100;
-
-}
-
-
-
-slotCoins+=win;
-
-
-document.getElementById("slotText").innerHTML=
-win>0 ?
-"🎉 You won "+win+" coins!" :
-"😢 You lost";
-
-
-document.getElementById("slotCoins").innerHTML=
-slotCoins;
-
-
-}
-
-
-},100);
-
-
-}
-
-
+(function () {
+  const SLOT_COST = 50;
+
+  // Easier to win: adjusted weights and multipliers for a more forgiving experience
+  const SLOT_SYMBOLS = [
+    { sym: "🍒", weight: 22, mult: 6 },
+    { sym: "🍋", weight: 20, mult: 10 },
+    { sym: "🍀", weight: 18, mult: 18 },
+    { sym: "⭐", weight: 14, mult: 35 },
+    { sym: "💎", weight: 10, mult: 80 },
+    { sym: "7️⃣", weight: 6, mult: 250 }
+  ];
+  const TOTAL_WEIGHT = SLOT_SYMBOLS.reduce((sum, s) => sum + s.weight, 0);
+
+  function weightedSymbol() {
+    let roll = Math.random() * TOTAL_WEIGHT;
+    for (const s of SLOT_SYMBOLS) {
+      if (roll < s.weight) return s;
+      roll -= s.weight;
+    }
+    return SLOT_SYMBOLS[0];
+  }
+
+  function randomCosmeticSymbol() {
+    return SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)].sym;
+  }
+
+  function me() {
+    return (typeof S !== "undefined" && S.currentId) ? S.players[S.currentId] : null;
+  }
+
+  const overlay = document.getElementById("slotOverlay");
+  const reelEls = [document.getElementById("r1"), document.getElementById("r2"), document.getElementById("r3")];
+  const textEl = document.getElementById("slotText");
+  const goldEl = document.getElementById("slotGoldDisplay");
+  const spinBtn = document.getElementById("spinBtn");
+  let spinning = false;
+
+  function renderPaytable() {
+    const box = document.getElementById("slotPaytable");
+    box.innerHTML = SLOT_SYMBOLS.map((s) =>
+      "<div>" + s.sym + s.sym + s.sym + " ×" + s.mult + "</div>"
+    ).join("");
+  }
+
+  function syncGoldDisplay() {
+    const p = me();
+    goldEl.textContent = p ? p.gold : 0;
+    if (typeof renderHeader === "function") renderHeader();
+  }
+
+  function openSlots() {
+    const p = me();
+    if (!p) {
+      if (typeof notice === "function") notice("Log in to play", "err");
+      return;
+    }
+    renderPaytable();
+    syncGoldDisplay();
+    textEl.textContent = "Match all 3 reels to win. Good luck!";
+    overlay.classList.add("show");
+  }
+
+  function closeSlots() {
+    if (spinning) return;
+    overlay.classList.remove("show");
+  }
+
+  function spinSlots() {
+    if (spinning) return;
+    const p = me();
+    if (!p) {
+      if (typeof notice === "function") notice("Log in to play", "err");
+      return;
+    }
+    if (p.gold < SLOT_COST) {
+      textEl.textContent = "Not enough gold — need " + SLOT_COST + " 🪙.";
+      if (typeof notice === "function") notice(typeof tr === "function" ? tr("noGold") : "Not enough gold", "err");
+      return;
+    }
+
+    spinning = true;
+    spinBtn.disabled = true;
+    p.gold -= SLOT_COST;
+    syncGoldDisplay();
+    if (typeof save === "function") save();
+    textEl.textContent = "Spinning...";
+    reelEls.forEach((r) => r.classList.add("spinning"));
+
+    // Longer animation (18 ticks) with near-miss tease
+    let ticks = 0;
+    // Pre-generate the final result early, but don't show it yet
+    const finalResult = [weightedSymbol(), weightedSymbol(), weightedSymbol()];
+    // Determine if we want a near-miss (two matching, third off by one)
+    const nearMiss = (Math.random() < 0.45) && !(finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym);
+    let nearMissSymbol = null;
+    if (nearMiss) {
+      // Make first two match, third different
+      const matchSym = finalResult[0].sym;
+      const diffSymbols = SLOT_SYMBOLS.filter(s => s.sym !== matchSym);
+      if (diffSymbols.length > 0) {
+        finalResult[1] = { ...finalResult[0] }; // copy the symbol
+        finalResult[2] = diffSymbols[Math.floor(Math.random() * diffSymbols.length)];
+        nearMissSymbol = matchSym;
+      }
+    }
+
+    const anim = setInterval(() => {
+      // Show random symbols during spin
+      reelEls.forEach((r) => { r.textContent = randomCosmeticSymbol(); });
+      ticks++;
+      if (ticks >= 18) {
+        clearInterval(anim);
+        // Final reveal
+        reelEls.forEach((r, i) => { r.textContent = finalResult[i].sym; r.classList.remove("spinning"); });
+        
+        let win = 0;
+        let symbolWon = null;
+        if (finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym) {
+          symbolWon = finalResult[0];
+          win = SLOT_COST * symbolWon.mult;
+        }
+
+        if (win > 0) {
+          p.gold += win;
+          textEl.textContent = "🎉 Triple " + symbolWon.sym + "! You won " + win + " 🪙!";
+          if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + win + "🪙 on the slots");
+          if (typeof notice === "function") notice("You won " + win + " 🪙!", "");
+        } else if (nearMiss) {
+          textEl.textContent = "😅 So close! " + nearMissSymbol + nearMissSymbol + "??  Almost had it!";
+          if (typeof addLog === "function") addLog("🎰 " + p.name + " had a near-miss on the slots");
+        } else {
+          textEl.textContent = "😢 No match. Try again!";
+          if (typeof addLog === "function") addLog("🎰 " + p.name + " spent " + SLOT_COST + "🪙 on the slots");
+        }
+
+        if (typeof save === "function") save();
+        syncGoldDisplay();
+        spinBtn.disabled = false;
+        spinning = false;
+      }
+    }, 100);
+  }
+
+  document.getElementById("slotButton").addEventListener("click", openSlots);
+  document.getElementById("slotCloseBtn").addEventListener("click", closeSlots);
+  document.getElementById("slotCloseX").addEventListener("click", closeSlots);
+  document.getElementById("spinBtn").addEventListener("click", spinSlots);
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) closeSlots(); });
+})();
 </script>
 </body>
 </html>
