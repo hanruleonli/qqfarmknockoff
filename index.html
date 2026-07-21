@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -286,6 +287,19 @@ body {
 </style>
 </head>
 <body>
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const bgMusic = document.getElementById("bgMusic");
+bgMusic.volume = 0.3;
+
+document.addEventListener("click", function startMusic() {
+    bgMusic.play();
+    document.removeEventListener("click", startMusic);
+});
+</script>
 <div id="notice" class="notice"></div>
 <div class="shell">
   <div class="header">
