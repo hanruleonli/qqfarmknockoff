@@ -288,18 +288,11 @@ body {
 </head>
 <body>
 
-<audio id="bgMusic" loop>
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
+<audio id="bgMusic" src="music.mp3" loop></audio>
 
-<script>
-const bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0.3;
-
-document.addEventListener("click", function startMusic() {
-    bgMusic.play();
-    document.removeEventListener("click", startMusic);
-});
+<button onclick="document.getElementById('bgMusic').play()">
+    Play Music
+</button>
 </script>
 <div id="notice" class="notice"></div>
 <div class="shell">
