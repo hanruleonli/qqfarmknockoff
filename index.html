@@ -81,6 +81,12 @@
     <button class="pad-btn" data-act="down">▼</button>
     <button class="pad-btn" data-act="right">▶</button>
   </div>
+  <div class="pad-tools">
+    <button class="pad-btn" data-act="tool1">1</button>
+    <button class="pad-btn" data-act="tool2">2</button>
+    <button class="pad-btn" data-act="tool3">3</button>
+    <button class="pad-btn" data-act="tool4">4</button>
+  </div>
 </div>
 
 <div id="switchModal" class="overlay">
@@ -164,6 +170,14 @@
         <button id="adminCloudLoadAction" class="btn cloud"></button>
       </div>
       <button id="adminCloudTestAction" class="btn cloud"></button>
+      <div style="height:6px"></div>
+      <label id="adminServerUrlLabel"></label>
+      <input id="adminServerUrl">
+      <div class="admin-row">
+        <button id="adminServerSave" class="btn active"></button>
+        <button id="adminServerConnect" class="btn cloud"></button>
+      </div>
+      <div id="adminServerStatus" style="font-size:12px;opacity:.86;"></div>
     </div>
     <div class="modal-actions">
       <button id="adminClose" class="btn"></button>
