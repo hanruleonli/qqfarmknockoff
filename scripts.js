@@ -516,6 +516,12 @@ function load() {
   } catch (_) {}
   S.cloud.url = S.cloud.url || DEFAULT_CLOUD_URL;
   S.cloud.token = S.cloud.token || DEFAULT_CLOUD_WRITE_TOKEN;
+  if (typeof window !== "undefined" && window.location && window.location.protocol !== "file:") {
+    const host = window.location.hostname || "localhost";
+    const port = window.location.port || "8080";
+    const defaultServerUrl = "ws://" + host + ":" + port;
+    if (!S.server.url) S.server.url = defaultServerUrl;
+  }
   loadAdminAuthLocal();
   normalizeState();
 }
@@ -1754,7 +1760,11 @@ function renderText() {
     const b = document.createElement("button");
     b.className = "lang-btn" + (S.lang === lang ? " on" : "");
     b.textContent = lang.toUpperCase();
-    b.addEventListener("click", () => { S.lang = lang; update(); });
+    b.addEventListener("click", () => {
+      S.lang = lang;
+      save();
+      render();
+    });
     langs.appendChild(b);
   });
 }
@@ -1834,7 +1844,11 @@ function renderToolbar() {
     const b = document.createElement("button");
     b.className = "btn" + (S.tool === tool ? " active" : "");
     b.textContent = I18N[S.lang].tools[i];
-    b.addEventListener("click", () => { S.tool = tool; update(); });
+    b.addEventListener("click", () => {
+      S.tool = tool;
+      save();
+      render();
+    });
     bar.appendChild(b);
   });
 }
@@ -1853,7 +1867,12 @@ function renderShop() {
       '<div class="s2">' + cropName(key) + '</div>' +
       '<div class="s3">' + c.cost + ' / ' + c.sell + '🪙</div>' +
       '<div class="s3">⏱' + fmtSec(c.grow) + '</div>';
-    el.addEventListener("click", () => { S.seed = key; S.tool = "plant"; update(); });
+    el.addEventListener("click", () => {
+      S.seed = key;
+      S.tool = "plant";
+      save();
+      render();
+    });
     shop.appendChild(el);
   });
 }
@@ -1939,12 +1958,19 @@ function renderGrid() {
 
 function renderSelector() {
   const sel = document.getElementById("selector");
-  const cols = window.innerWidth <= 780 ? 4 : 5;
-  const row = Math.floor(S.cursor / cols);
-  const col = S.cursor % cols;
-  const x = col * (sel.offsetWidth + 8);
-  const y = row * (sel.offsetHeight + 8);
-  sel.style.transform = "translate(" + x + "px," + y + "px)";
+  const gridWrap = document.querySelector(".grid-wrap");
+  const grid = document.getElementById("grid");
+  if (!sel || !gridWrap || !grid || !grid.children.length) return;
+  const idx = Math.min(Math.max(0, Number(S.cursor) || 0), Math.min(MAX_PLOTS - 1, grid.children.length - 1));
+  const target = grid.children[idx];
+  if (!target) return;
+  const wrapRect = gridWrap.getBoundingClientRect();
+  const cellRect = target.getBoundingClientRect();
+  sel.style.width = Math.max(0, cellRect.width) + "px";
+  sel.style.height = Math.max(0, cellRect.height) + "px";
+  sel.style.left = Math.max(0, cellRect.left - wrapRect.left) + "px";
+  sel.style.top = Math.max(0, cellRect.top - wrapRect.top) + "px";
+  sel.style.transform = "none";
 }
 
 function renderSwitchList() {
@@ -1966,6 +1992,11 @@ function renderSwitchList() {
     });
     box.appendChild(b);
   });
+}
+
+function update() {
+  save();
+  render();
 }
 
 function render() {
