@@ -17,6 +17,14 @@ body {
     linear-gradient(150deg, var(--bg1), var(--bg2));
   touch-action: manipulation;
 }
+button {
+  font: inherit;
+  color: inherit;
+}
+button:focus-visible {
+  outline: 2px solid rgba(245,203,62,.9);
+  outline-offset: 3px;
+}
 .shell { max-width: 1200px; margin: 0 auto; padding: 18px 16px 12px; }
 .header {
   display: flex;
@@ -40,14 +48,13 @@ body {
   align-items: center;
   gap: 7px;
 }
-.player-chip { cursor: pointer; }
+.player-chip { cursor: default; }
 .actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
 .btn {
   border: none;
   border-radius: 14px;
   padding: 10px 14px;
   font-weight: 700;
-  cursor: pointer;
   color: var(--txt);
   background: rgba(255,255,255,.13);
   transition: transform .16s ease, background .2s ease, box-shadow .2s ease;
@@ -60,7 +67,7 @@ body {
 .btn.cloud { background: linear-gradient(140deg, #8a6be0, #5b45b7); }
 .btn.admin { background: linear-gradient(140deg, #d9903d, #b7642b); }
 .langs { display: flex; gap: 6px; }
-.lang-btn { border: none; border-radius: 8px; padding: 6px 8px; background: rgba(255,255,255,.16); color: var(--txt); cursor: pointer; }
+.lang-btn { border: none; border-radius: 8px; padding: 6px 8px; background: rgba(255,255,255,.16); color: var(--txt); }
 .lang-btn.on { background: rgba(245,203,62,.27); outline: 1px solid rgba(245,203,62,.9); }
 .main { margin-top: 12px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 12px; }
 .panel {
@@ -101,7 +108,6 @@ body {
   padding: 8px 10px;
   background: rgba(0,0,0,.18);
   border: 1px solid rgba(255,255,255,.14);
-  cursor: pointer;
   transition: transform .18s ease, background .18s ease, border-color .18s ease;
 }
 .leader-row:hover { transform: translateY(-1px); background: rgba(255,255,255,.08); }
@@ -136,7 +142,6 @@ body {
   border-radius: 16px;
   border: 1px solid transparent;
   position: relative;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,7 +174,7 @@ body {
 .card { border: 1px solid rgba(255,255,255,.14); border-radius: 16px; background: rgba(255,255,255,.04); padding: 14px; }
 .card h3 { font-size: 13px; margin-bottom: 10px; letter-spacing: .02em; }
 .shop { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-.seed { border: 1px solid transparent; border-radius: 10px; background: rgba(255,255,255,.14); padding: 6px; text-align: center; cursor: pointer; }
+.seed { border: 1px solid transparent; border-radius: 10px; background: rgba(255,255,255,.14); padding: 6px; text-align: center; }
 .seed.on { border-color: rgba(245,203,62,.9); background: rgba(245,203,62,.2); }
 .seed .s1 { font-size: 23px; }
 .seed .s2 { font-size: 11px; font-weight: 700; }
@@ -237,6 +242,7 @@ body {
   backdrop-filter: blur(6px);
 }
 .pad-inner { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.pad-tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
 .pad-btn { border: none; border-radius: 9px; min-height: 42px; background: rgba(255,255,255,.18); color: var(--txt); font-weight: 700; }
 .battle-bar {
   display: flex;
