@@ -1,0 +1,12 @@
+{
+  "name": "qqfarmknockoff",
+  "version": "1.0.0",
+  "description": "QQ Farm knockoff with multiplayer WebSocket server support",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.13.0"
+  }
+}
