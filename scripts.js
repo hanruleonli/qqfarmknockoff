@@ -10,10 +10,11 @@ const I18N = {
     planted: "种下", watered: "浇水成功", fertilized: "施肥成功", harvested: "收获成功", stolen: "偷菜成功",
     topRank: "排行榜第一",
     topUsers: "玩家排行",
-    controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具, 0打开老虎机。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
+    controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具, 5-9选择种子, 0打开老虎机。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
     btUnsup: "浏览器不支持 Web Bluetooth", btConn: "蓝牙连接中...", btOk: "蓝牙已连接", btFail: "蓝牙连接失败", btDisc: "蓝牙已断开",
     cloudSave: "云端保存", cloudLoad: "云端读取", cloudTest: "连接测试", cloudCfg: "云端设置", cloudTitle: "Google Sheets 云端设置",
     cloudCfgSaved: "云端配置已保存", cloudNeedUrl: "请先配置云端 URL", cloudSaveOk: "云端保存成功", cloudLoadOk: "云端读取成功", cloudNoData: "云端暂无存档", cloudPingOk: "云连接正常", cloudFail: "云端请求失败", cloudBadUrl: "云端 URL 无效", cloudUnauthorized: "云端令牌无效或无权限", cloudBadResp: "云端返回格式异常", cloudFileMode: "请通过 http://localhost 打开游戏，不要使用 file://",
+    serverUrl: "服务器 URL", serverSave: "保存服务器", serverConnect: "连接服务器", serverConnected: "服务器已连接", serverDisconnected: "服务器已断开", serverNoUrl: "请先配置服务器 URL", serverUnsup: "当前浏览器不支持 WebSocket",
     admin: "管理", adminTitle: "管理员面板", adminPlayer: "玩家", adminGold: "金币", adminXp: "经验",
     adminApply: "应用数值", adminBoost: "加500金币+经验", adminFillReady: "全部成熟", adminClear: "清空地块",
     adminWeatherSunny: "天气: 晴", adminWeatherRain: "天气: 雨", adminWeatherHeat: "天气: 热", adminWeatherCold: "天气: 寒",
@@ -45,10 +46,11 @@ const I18N = {
     planted: "Planted", watered: "Watered", fertilized: "Fertilized", harvested: "Harvested", stolen: "Stolen",
     topRank: "Top Ranked",
     topUsers: "Leaderboard",
-    controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 0 open slots. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 5-9 choose seed, 0 open slots. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth not supported", btConn: "Connecting Bluetooth...", btOk: "Bluetooth connected", btFail: "Bluetooth failed", btDisc: "Bluetooth disconnected",
     cloudSave: "Cloud Save", cloudLoad: "Cloud Load", cloudTest: "Test Connection", cloudCfg: "Cloud Setup", cloudTitle: "Google Sheets Cloud Settings",
     cloudCfgSaved: "Cloud config saved", cloudNeedUrl: "Set cloud URL first", cloudSaveOk: "Cloud save success", cloudLoadOk: "Cloud load success", cloudNoData: "No cloud save found yet", cloudPingOk: "Cloud connection OK", cloudFail: "Cloud request failed", cloudBadUrl: "Invalid cloud URL", cloudUnauthorized: "Cloud token invalid or unauthorized", cloudBadResp: "Unexpected cloud response format", cloudFileMode: "Open the game via http://localhost, not file://",
+    serverUrl: "Server URL", serverSave: "Save Server", serverConnect: "Connect Server", serverConnected: "Server connected", serverDisconnected: "Server disconnected", serverNoUrl: "Set server URL first", serverUnsup: "WebSocket not supported by this browser",
     admin: "Admin", adminTitle: "Admin Panel", adminPlayer: "Player", adminGold: "Gold", adminXp: "XP",
     adminApply: "Apply Stats", adminBoost: "+500 Gold + XP", adminFillReady: "Fill Ready Crops", adminClear: "Clear Plots",
     adminWeatherSunny: "Weather: Sunny", adminWeatherRain: "Weather: Rain", adminWeatherHeat: "Weather: Hot", adminWeatherCold: "Weather: Cold",
@@ -80,10 +82,11 @@ const I18N = {
     planted: "植えた", watered: "水やり成功", fertilized: "肥料成功", harvested: "収穫成功", stolen: "盗み成功",
     topRank: "ランキング1位",
     topUsers: "ランキング",
-    controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替、0でスロット。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
+    controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替、5-9で種選択、0でスロット。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
     btUnsup: "Web Bluetooth未対応", btConn: "Bluetooth接続中...", btOk: "Bluetooth接続済み", btFail: "Bluetooth接続失敗", btDisc: "Bluetooth切断",
     cloudSave: "クラウド保存", cloudLoad: "クラウド読込", cloudTest: "接続テスト", cloudCfg: "クラウド設定", cloudTitle: "Google Sheets クラウド設定",
     cloudCfgSaved: "クラウド設定を保存", cloudNeedUrl: "先にURLを設定してください", cloudSaveOk: "クラウド保存成功", cloudLoadOk: "クラウド読込成功", cloudNoData: "クラウドに保存データがありません", cloudPingOk: "クラウド接続OK", cloudFail: "クラウド通信失敗", cloudBadUrl: "クラウドURLが無効です", cloudUnauthorized: "トークン無効または権限がありません", cloudBadResp: "クラウド応答形式が不正です", cloudFileMode: "file:// ではなく http://localhost で開いてください",
+    serverUrl: "サーバー URL", serverSave: "サーバーを保存", serverConnect: "サーバーに接続", serverConnected: "サーバーに接続しました", serverDisconnected: "サーバーから切断されました", serverNoUrl: "先にサーバー URL を設定してください", serverUnsup: "このブラウザは WebSocket をサポートしていません",
     admin: "管理", adminTitle: "管理パネル", adminPlayer: "プレイヤー", adminGold: "コイン", adminXp: "経験値",
     adminApply: "数値を反映", adminBoost: "コイン+500 / XP+500", adminFillReady: "全作物を成熟", adminClear: "畑をクリア",
     adminWeatherSunny: "天気: 晴", adminWeatherRain: "天気: 雨", adminWeatherHeat: "天気: 猛暑", adminWeatherCold: "天気: 寒波",
@@ -114,10 +117,11 @@ const I18N = {
     empty: "Toca una parcela vacia", ready: "Listo", withered: "Marchito", noGold: "No hay oro suficiente",
     planted: "Plantado", watered: "Regado", fertilized: "Fertilizado", harvested: "Cosechado", stolen: "Robado",
     topUsers: "Clasificacion",
-    controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas, 0 slots. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas, 5-9 elegir semilla, 0 slots. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth no compatible", btConn: "Conectando Bluetooth...", btOk: "Bluetooth conectado", btFail: "Fallo de Bluetooth", btDisc: "Bluetooth desconectado",
     cloudSave: "Guardar en Nube", cloudLoad: "Cargar de Nube", cloudTest: "Probar Conexion", cloudCfg: "Configurar Nube", cloudTitle: "Configuracion de Google Sheets",
     cloudCfgSaved: "Configuracion guardada", cloudNeedUrl: "Primero configura la URL", cloudSaveOk: "Guardado en nube exitoso", cloudLoadOk: "Carga en nube exitosa", cloudNoData: "Aun no hay guardado en nube", cloudPingOk: "Conexion de nube correcta", cloudFail: "Fallo de solicitud en nube", cloudBadUrl: "URL de nube invalida", cloudUnauthorized: "Token invalido o sin permisos", cloudBadResp: "Formato de respuesta inesperado", cloudFileMode: "Abre el juego con http://localhost, no con file://",
+    serverUrl: "URL del servidor", serverSave: "Guardar servidor", serverConnect: "Conectar servidor", serverConnected: "Servidor conectado", serverDisconnected: "Servidor desconectado", serverNoUrl: "Primero configura la URL del servidor", serverUnsup: "WebSocket no compatible con este navegador",
     admin: "Admin", adminTitle: "Panel de Admin", adminPlayer: "Jugador", adminGold: "Oro", adminXp: "XP",
     adminApply: "Aplicar valores", adminBoost: "+500 Oro + XP", adminFillReady: "Llenar cultivos listos", adminClear: "Limpiar parcelas",
     adminWeatherSunny: "Clima: Sol", adminWeatherRain: "Clima: Lluvia", adminWeatherHeat: "Clima: Calor", adminWeatherCold: "Clima: Frio",
@@ -148,10 +152,11 @@ const I18N = {
     empty: "Нажмите на пустой участок", ready: "Готово", withered: "Завяло", noGold: "Недостаточно монет",
     planted: "Посажено", watered: "Полив выполнен", fertilized: "Удобрено", harvested: "Собрано", stolen: "Украдено",
     topUsers: "Рейтинг",
-    controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты, 0 - слоты. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты, 5-9 - выбрать семена, 0 - слоты. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth не поддерживается", btConn: "Подключение Bluetooth...", btOk: "Bluetooth подключен", btFail: "Ошибка Bluetooth", btDisc: "Bluetooth отключен",
     cloudSave: "Сохранить в облако", cloudLoad: "Загрузить из облака", cloudTest: "Проверить связь", cloudCfg: "Облако", cloudTitle: "Настройки Google Sheets",
     cloudCfgSaved: "Настройки облака сохранены", cloudNeedUrl: "Сначала укажите URL", cloudSaveOk: "Сохранено в облаке", cloudLoadOk: "Загружено из облака", cloudNoData: "В облаке пока нет сохранения", cloudPingOk: "Облачное соединение ОК", cloudFail: "Ошибка запроса к облаку", cloudBadUrl: "Некорректный URL облака", cloudUnauthorized: "Неверный токен или нет доступа", cloudBadResp: "Некорректный формат ответа облака", cloudFileMode: "Откройте игру через http://localhost, а не file://",
+    serverUrl: "URL сервера", serverSave: "Сохранить сервер", serverConnect: "Подключиться к серверу", serverConnected: "Сервер подключен", serverDisconnected: "Сервер отключен", serverNoUrl: "Сначала укажите URL сервера", serverUnsup: "WebSocket не поддерживается этим браузером",
     admin: "Админ", adminTitle: "Панель админа", adminPlayer: "Игрок", adminGold: "Монеты", adminXp: "Опыт",
     adminApply: "Применить", adminBoost: "+500 монет + опыта", adminFillReady: "Заполнить готовыми", adminClear: "Очистить участки",
     adminWeatherSunny: "Погода: Солнце", adminWeatherRain: "Погода: Дождь", adminWeatherHeat: "Погода: Жара", adminWeatherCold: "Погода: Холод",
@@ -236,6 +241,10 @@ let S = {
     gameId: DEFAULT_CLOUD_GAME_ID,
     token: DEFAULT_CLOUD_WRITE_TOKEN
   },
+  server: {
+    url: "",
+    gameId: DEFAULT_CLOUD_GAME_ID
+  },
   admin: {
     tokenHash: "",
     adminId: "",
@@ -254,6 +263,9 @@ let userUnlockedId = null;
 let autoCloudTimer = null;
 let autoCloudDirty = false;
 let autoCloudInFlight = false;
+let serverSocket = null;
+let serverSyncTimer = null;
+let serverInboundUpdate = false;
 let lastHeartbeatPush = 0;
 let battleRuntime = null;
 let battleTickTimer = null;
@@ -286,9 +298,47 @@ async function flushAutoCloudSave() {
   }
 }
 
+function serverStatePayload() {
+  return {
+    players: S.players,
+    steals: S.steals,
+    battles: S.battles,
+    userAuth: { userHashes: S.userAuth.userHashes },
+    admin: { pendingSignups: S.admin.pendingSignups, adminId: S.admin.adminId },
+    weather: S.weather
+  };
+}
+
+function scheduleServerSync() {
+  if (!serverSocket || serverSocket.readyState !== WebSocket.OPEN) return;
+  if (serverSyncTimer) return;
+  serverSyncTimer = setTimeout(() => {
+    serverSyncTimer = null;
+    if (!serverSocket || serverSocket.readyState !== WebSocket.OPEN) return;
+    if (serverInboundUpdate) {
+      scheduleServerSync();
+      return;
+    }
+    const payload = {
+      type: "update",
+      gameId: S.cloud.gameId || S.server.gameId || DEFAULT_CLOUD_GAME_ID,
+      state: serverStatePayload()
+    };
+    try {
+      serverSocket.send(JSON.stringify(payload));
+    } catch (e) {
+      console.error("server send failed", e);
+      scheduleServerSync();
+    }
+  }, 700);
+}
+
 function save(markCloudDirty = true) {
   localStorage.setItem(GAME_STATE_KEY, JSON.stringify(S));
-  if (markCloudDirty) scheduleAutoCloudSave();
+  if (markCloudDirty) {
+    scheduleAutoCloudSave();
+    scheduleServerSync();
+  }
 }
 
 function saveAdminAuthLocal() {
@@ -312,6 +362,127 @@ function loadAdminAuthLocal() {
       S.admin.adminId = auth.adminId;
     }
   } catch (_) {}
+}
+
+function handleServerMessage(event) {
+  if (!event || !event.data) return;
+  let data;
+  try {
+    data = JSON.parse(event.data);
+  } catch (_) {
+    return;
+  }
+  if (!data || typeof data !== "object") return;
+  if (data.type !== "state" || data.gameId !== (S.cloud.gameId || S.server.gameId || DEFAULT_CLOUD_GAME_ID)) return;
+  if (!data.state || typeof data.state !== "object") return;
+
+  serverInboundUpdate = true;
+  try {
+    mergeCloudStateIn(data.state);
+    resolveRelevantBattles();
+    save(false);
+    render();
+    const statusEl = document.getElementById("adminServerStatus");
+    if (statusEl) statusEl.textContent = tr("serverConnected");
+    notice(tr("serverConnected"), "info");
+  } finally {
+    serverInboundUpdate = false;
+  }
+}
+
+function connectServer() {
+  const url = (S.server.url || "").trim();
+  if (!url) return notice(tr("serverNoUrl"), "err");
+  if (!window.WebSocket) return notice(tr("serverUnsup"), "err");
+  if (serverSocket) {
+    serverSocket.close();
+  }
+  try {
+    serverSocket = new WebSocket(url);
+    serverSocket.addEventListener("open", () => {
+      serverSocket.send(JSON.stringify({ type: "hello", gameId: S.cloud.gameId || S.server.gameId || DEFAULT_CLOUD_GAME_ID }));
+      notice(tr("serverConnected"), "info");
+      const statusEl = document.getElementById("adminServerStatus");
+      if (statusEl) statusEl.textContent = tr("serverConnected");
+      render();
+      scheduleServerSync();
+    });
+    serverSocket.addEventListener("message", handleServerMessage);
+    serverSocket.addEventListener("close", () => {
+      serverSocket = null;
+      const statusEl = document.getElementById("adminServerStatus");
+      if (statusEl) statusEl.textContent = tr("serverDisconnected");
+      notice(tr("serverDisconnected"), "err");
+      render();
+    });
+    serverSocket.addEventListener("error", (error) => {
+      console.error(error);
+      const statusEl = document.getElementById("adminServerStatus");
+      if (statusEl) statusEl.textContent = tr("serverDisconnected");
+      notice(tr("serverDisconnected"), "err");
+      render();
+    });
+  } catch (e) {
+    console.error(e);
+    const statusEl = document.getElementById("adminServerStatus");
+    if (statusEl) statusEl.textContent = tr("serverDisconnected");
+    notice(tr("serverDisconnected"), "err");
+  }
+}
+
+function adminReadServerFields() {
+  const urlEl = document.getElementById("adminServerUrl");
+  if (!urlEl) return;
+  S.server.url = urlEl.value.trim();
+}
+
+function adminSyncServerFields() {
+  const urlEl = document.getElementById("adminServerUrl");
+  if (!urlEl) return;
+  urlEl.value = S.server.url || "";
+}
+
+function normalizeTimestamp(value) {
+  const num = Number(value) || 0;
+  if (num > 0 && num < 1e12) return num * 1000;
+  return num;
+}
+
+function normalizePlot(plot) {
+  plot.plantedAt = normalizeTimestamp(plot.plantedAt);
+  plot.wateredAt = normalizeTimestamp(plot.wateredAt);
+  plot.fertilizedAt = normalizeTimestamp(plot.fertilizedAt);
+  if (plot.plantedAt > Date.now()) plot.plantedAt = Date.now();
+  if (plot.wateredAt && plot.wateredAt < plot.plantedAt) plot.wateredAt = 0;
+  if (plot.fertilizedAt && plot.fertilizedAt < plot.plantedAt) plot.fertilizedAt = 0;
+  if (plot.crop === "carrot") {
+    plot.crop = "radish";
+  }
+  if (plot.crop && !CROPS[plot.crop]) {
+    clearPlot(plot);
+  }
+}
+
+function normalizeState() {
+  const now = Date.now();
+  if (S.currentId && !S.players[S.currentId]) S.currentId = null;
+  if (S.viewId && !S.players[S.viewId]) S.viewId = null;
+  if (!Number.isInteger(S.cursor) || S.cursor < 0 || S.cursor >= MAX_PLOTS) S.cursor = 0;
+  Object.values(S.players).forEach((player) => {
+    if (!Array.isArray(player.plots)) {
+      player.plots = Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0 }));
+    }
+    player.plots.forEach(normalizePlot);
+    player.updatedAt = normalizeTimestamp(player.updatedAt) || now;
+    player.lastActiveAt = normalizeTimestamp(player.lastActiveAt) || now;
+  });
+  if (!S.weather || typeof S.weather !== "object") S.weather = { ...WEATHER[0], until: now + 120000, setAt: now };
+  S.weather.until = normalizeTimestamp(S.weather.until) || now + 120000;
+  S.weather.setAt = normalizeTimestamp(S.weather.setAt) || now;
+  if (typeof S.weather.mult !== "number" || S.weather.mult <= 0) S.weather.mult = 1;
+  if (!S.server || typeof S.server !== "object") S.server = { url: "", gameId: DEFAULT_CLOUD_GAME_ID };
+  S.server.url = String(S.server.url || "").trim();
+  S.server.gameId = String(S.server.gameId || DEFAULT_CLOUD_GAME_ID).trim() || DEFAULT_CLOUD_GAME_ID;
 }
 
 function load() {
@@ -346,6 +517,7 @@ function load() {
   S.cloud.url = S.cloud.url || DEFAULT_CLOUD_URL;
   S.cloud.token = S.cloud.token || DEFAULT_CLOUD_WRITE_TOKEN;
   loadAdminAuthLocal();
+  normalizeState();
 }
 
 async function sha256Hex(text) {
@@ -374,16 +546,17 @@ function weatherTick(now) {
 function growTime(plot) {
   const c = CROPS[plot.crop];
   if (!c) return 0;
-  let t = c.grow / (S.weather.mult || 1);
+  const mult = Number(S.weather.mult) || 1;
+  let t = c.grow / mult;
   if (plot.wateredAt > plot.plantedAt) t *= 0.8;
   if (plot.fertilizedAt > plot.plantedAt) t *= 0.62;
-  return t;
+  return Math.max(t, 1);
 }
 
 function pState(plot, now) {
   if (!plot.crop) return "empty";
-  const e = (now - plot.plantedAt) / 1000;
   const g = growTime(plot);
+  const e = Math.max(0, (now - plot.plantedAt) / 1000);
   if (e >= g + 240) return "withered";
   if (e >= g) return "ready";
   return "growing";
@@ -391,11 +564,14 @@ function pState(plot, now) {
 
 function pProgress(plot, now) {
   if (!plot.crop) return 0;
-  return Math.min(((now - plot.plantedAt) / 1000) / growTime(plot), 1);
+  const grow = growTime(plot);
+  if (!grow) return 0;
+  return Math.min(Math.max(0, ((now - plot.plantedAt) / 1000) / grow), 1);
 }
 
 function fmtSec(s) {
-  const n = Math.max(0, Math.ceil(s));
+  if (!Number.isFinite(s) || s <= 0) return "0s";
+  const n = Math.ceil(s);
   if (n < 60) return n + "s";
   const m = Math.floor(n / 60);
   const r = n % 60;
@@ -909,8 +1085,8 @@ function mergeBattles(localBattles, cloudBattles) {
 function mergeCloudStateIn(cloudState) {
   if (!cloudState || typeof cloudState !== "object") return;
   S.players = mergePlayers(S.players, cloudState.players || {});
-  S.steals = mergeSteals(S.steals, cloudState.steals || {});
-  S.battles = mergeBattles(S.battles, cloudState.battles || {});
+  S.steals = mergeSteals(S.steals || {}, cloudState.steals || {});
+  S.battles = mergeBattles(S.battles || {}, cloudState.battles || {});
   S.userAuth.userHashes = { ...((cloudState.userAuth && cloudState.userAuth.userHashes) || {}), ...S.userAuth.userHashes };
   S.admin.pendingSignups = mergePendingSignups(S.admin.pendingSignups, (cloudState.admin && cloudState.admin.pendingSignups) || []);
   if (!S.admin.adminId && cloudState.admin && cloudState.admin.adminId) {
@@ -919,6 +1095,8 @@ function mergeCloudStateIn(cloudState) {
   if (cloudState.weather && (cloudState.weather.setAt || 0) > (S.weather.setAt || 0)) {
     S.weather = cloudState.weather;
   }
+
+  normalizeState();
 
   // Ensure any queued challenges become active if the owner is free.
   Object.values(S.battles).forEach((battle) => {
@@ -1529,6 +1707,10 @@ function renderText() {
   document.getElementById("adminCloudSaveAction").textContent = tr("cloudSave");
   document.getElementById("adminCloudLoadAction").textContent = tr("cloudLoad");
   document.getElementById("adminCloudTestAction").textContent = tr("cloudTest");
+  document.getElementById("adminServerUrlLabel").textContent = tr("serverUrl");
+  document.getElementById("adminServerUrl").placeholder = tr("serverUrl");
+  document.getElementById("adminServerSave").textContent = tr("serverSave");
+  document.getElementById("adminServerConnect").textContent = tr("serverConnect");
   document.getElementById("adminClose").textContent = tr("close");
   document.getElementById("adminAuthTitle").textContent = tr("adminAuthTitle");
   document.getElementById("adminAuthCancel").textContent = tr("cancel");
@@ -1612,7 +1794,8 @@ function renderHeader() {
   const allPlayers = Object.values(S.players)
     .sort((a, b) => (b.xp - a.xp) || (b.gold - a.gold) || a.name.localeCompare(b.name));
   allPlayers.forEach((player, idx) => {
-    const row = document.createElement("div");
+    const row = document.createElement("button");
+    row.type = "button";
     const isViewed = (S.viewId || S.currentId) === player.id;
     row.className = "leader-row" + (isViewed ? " on" : "");
     row.innerHTML =
@@ -1662,7 +1845,8 @@ function renderShop() {
   if (!S.currentId) return;
   Object.keys(CROPS).forEach((key) => {
     const c = CROPS[key];
-    const el = document.createElement("div");
+    const el = document.createElement("button");
+    el.type = "button";
     el.className = "seed" + (S.seed === key ? " on" : "");
     el.innerHTML =
       '<div class="s1">' + c.icon + '</div>' +
@@ -1690,7 +1874,8 @@ function renderFriends() {
   Object.values(S.players)
     .filter((p) => p.id !== S.currentId)
     .forEach((p) => {
-      const row = document.createElement("div");
+      const row = document.createElement("button");
+      row.type = "button";
       row.className = "friend" + (S.viewId === p.id ? " on" : "");
       row.innerHTML =
         '<div style="font-size:21px">' + p.avatar + '</div>' +
@@ -1811,6 +1996,15 @@ function setToolByIndex(i) {
   render();
 }
 
+function setSeedByIndex(i) {
+  const seedKeys = Object.keys(CROPS);
+  if (i < 0 || i >= seedKeys.length) return;
+  S.seed = seedKeys[i];
+  S.tool = "plant";
+  save();
+  render();
+}
+
 function handleCmd(cmdRaw) {
   const cmd = String(cmdRaw || "").trim().toUpperCase();
   if (!cmd) return;
@@ -1897,6 +2091,7 @@ function openAdmin() {
   adminRefreshPlayerOptions();
   adminSyncFields();
   adminSyncCloudFields();
+  adminSyncServerFields();
   renderAdminPending();
   document.getElementById("adminModal").classList.add("show");
 }
@@ -1980,6 +2175,15 @@ function bindUI() {
     adminReadCloudFields();
     testCloudConnection();
   });
+  document.getElementById("adminServerSave").addEventListener("click", () => {
+    adminReadServerFields();
+    save();
+    notice(tr("serverSave"), "info");
+  });
+  document.getElementById("adminServerConnect").addEventListener("click", () => {
+    adminReadServerFields();
+    connectServer();
+  });
 
   document.getElementById("adminAuthCancel").addEventListener("click", closeAdminAuth);
   document.getElementById("adminAuthModal").addEventListener("click", (e) => { if (e.target.id === "adminAuthModal") closeAdminAuth(); });
@@ -2005,6 +2209,11 @@ function bindUI() {
       if (k === "2") setToolByIndex(1);
       if (k === "3") setToolByIndex(2);
       if (k === "4") setToolByIndex(3);
+      if (k === "5") setSeedByIndex(0);
+      if (k === "6") setSeedByIndex(1);
+      if (k === "7") setSeedByIndex(2);
+      if (k === "8") setSeedByIndex(3);
+      if (k === "9") setSeedByIndex(4);
       if (k === "0") {
         e.preventDefault();
         const btn = document.getElementById("slotButton");
@@ -2013,16 +2222,33 @@ function bindUI() {
     }
   });
 
-  document.getElementById("pad").addEventListener("click", (e) => {
-    const b = e.target.closest(".pad-btn");
-    if (!b) return;
-    const act = b.getAttribute("data-act");
+  const pad = document.getElementById("pad");
+  const handlePadAct = (act) => {
     if (act === "left") dirInput("left");
-    if (act === "right") dirInput("right");
-    if (act === "up") dirInput("up");
-    if (act === "down") dirInput("down");
-    if (act === "action") actInput();
-  });
+    else if (act === "right") dirInput("right");
+    else if (act === "up") dirInput("up");
+    else if (act === "down") dirInput("down");
+    else if (act === "action") actInput();
+    else if (act === "tool1") setToolByIndex(0);
+    else if (act === "tool2") setToolByIndex(1);
+    else if (act === "tool3") setToolByIndex(2);
+    else if (act === "tool4") setToolByIndex(3);
+  };
+  if (pad) {
+    pad.addEventListener("click", (e) => {
+      const b = e.target.closest(".pad-btn");
+      if (!b) return;
+      const act = b.getAttribute("data-act");
+      handlePadAct(act);
+    });
+    pad.addEventListener("touchstart", (e) => {
+      const b = e.target.closest(".pad-btn");
+      if (!b) return;
+      e.preventDefault();
+      const act = b.getAttribute("data-act");
+      handlePadAct(act);
+    }, { passive: false });
+  }
 
   document.getElementById("battleGiveUp").addEventListener("click", closeBattleModal);
   document.getElementById("battleModal").addEventListener("click", (e) => { if (e.target.id === "battleModal") closeBattleModal(); });
@@ -2055,6 +2281,9 @@ async function boot() {
   bindUI();
   if ((S.cloud.url || "").trim()) {
     await loadFromCloud();
+  }
+  if ((S.server.url || "").trim()) {
+    connectServer();
   }
   render();
   openLoginPage();
