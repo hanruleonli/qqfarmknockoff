@@ -64,7 +64,7 @@ const I18N = {
     userTokenConfirmPh: "Re-enter player token", userSetupHint: "First login for this player: set token (SHA-256 hash only)",
     userUnlockHint: "Enter player token to login", userAuthBad: "Invalid player token", userAuthOk: "Login success", userAuthSetOk: "Player token configured",
     userNeedLogin: "Please login as player first", loginPageTitle: "Login",
-    battleTitle: "Steal Duel", battleVs: "vs", battleFight: "Battle!", battleQueuePos: "You're #{n} in line to battle {name}",
+    battleTitle: "Steal Duel", battleVs: "vs", battleFight: "Battle!", battleQueuePos: "You're {n} in line to battle {name}",
     battleIncoming: "{name} challenges you for your {crop}!", battleChallenge: "Battle {name} to steal their {crop}!", battleWaitingOpponent: "Waiting for {name} to finish...",
     battleStarted: "Battle started! Trace the path to win.", battleQueued: "Challenge queued — waiting for your turn.", battleAlreadyQueued: "You already have a pending challenge for this plot.",
     battleWon: "You won the trace race!", battleLost: "You lost the trace race.", battleSubmitted: "Attempt submitted, waiting for result.",
@@ -133,7 +133,7 @@ const I18N = {
     userTokenConfirmPh: "Repite el token", userSetupHint: "Primer acceso de este jugador: configura token (solo hash SHA-256)",
     userUnlockHint: "Ingresa token para entrar", userAuthBad: "Token de jugador invalido", userAuthOk: "Inicio exitoso", userAuthSetOk: "Token de jugador configurado",
     userNeedLogin: "Primero inicia sesion como jugador", loginPageTitle: "Iniciar sesion",
-    battleTitle: "Duelo de robo", battleVs: "vs", battleFight: "¡Batalla!", battleQueuePos: "Eres el #{n} en la fila para enfrentar a {name}",
+    battleTitle: "Duelo de robo", battleVs: "vs", battleFight: "¡Batalla!", battleQueuePos: "Eres el {n} en la fila para enfrentar a {name}",
     battleIncoming: "¡{name} te desafía por tu {crop}!", battleChallenge: "¡Desafía a {name} para robar su {crop}!", battleWaitingOpponent: "Esperando a que {name} termine...",
     battleStarted: "¡Batalla iniciada! Traza el camino para ganar.", battleQueued: "Desafío en cola, espera tu turno.", battleAlreadyQueued: "Ya tienes un desafío pendiente para esta parcela.",
     battleWon: "¡Ganaste el duelo!", battleLost: "Perdiste el duelo.", battleSubmitted: "Intento enviado, esperando resultado.",
@@ -661,7 +661,7 @@ function renderBattleBar() {
     const queue = battlesForOwner(battle.ownerId).filter((b) => b.status === "queued" && !b.resolved)
       .sort((a, b) => a.queuedAt - b.queuedAt);
     const pos = queue.findIndex((b) => b.id === battle.id) + 1;
-    text = tr("battleQueuePos").replace("{n}", pos).replace("{name}", oppName);
+    text = tr("battleQueuePos").replace("{n}", pos).replace("#{n}", pos).replace("{name}", oppName);
   } else if (battle.status === "active" && !battle.scores[S.currentId]) {
     if (!isOwner && !battle.scores[battle.ownerId]) {
       text = tr("battleWaitingOpponent").replace("{name}", oppName);
@@ -675,7 +675,7 @@ function renderBattleBar() {
 
   bar.innerHTML = "";
   const span = document.createElement("span");
-  span.textContent = text;
+  span.textContent = "⚔️ " + text;
   bar.appendChild(span);
   if (showBtn) {
     const btn = document.createElement("button");
@@ -919,6 +919,12 @@ function mergeCloudStateIn(cloudState) {
   if (cloudState.weather && (cloudState.weather.setAt || 0) > (S.weather.setAt || 0)) {
     S.weather = cloudState.weather;
   }
+
+  // Ensure any queued challenges become active if the owner is free.
+  Object.values(S.battles).forEach((battle) => {
+    activateNextQueuedBattle(battle.ownerId);
+  });
+
   pruneOldBattles();
 }
 
