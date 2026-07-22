@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 const PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
 const INDEX_PATH = path.join(__dirname, 'index.html');
 const STATIC_DIR = __dirname;
+const STATE_FILE = path.join(__dirname, 'server-state.json');
 
 const server = http.createServer((req, res) => {
   try {
@@ -32,9 +33,51 @@ const server = http.createServer((req, res) => {
 });
 
 const wss = new WebSocket.Server({ server });
-// Shared state in memory. All clients connected here can sync.
+// Shared state is persisted to disk so the same game room stays available
+// across device reconnects and server restarts.
 let sharedState = {};
 const clientByGame = new Map();
+
+function getDefaultGameState() {
+  return {
+    players: {},
+    steals: {},
+    battles: {},
+    userAuth: { userHashes: {} },
+    admin: { pendingSignups: [], adminId: '' },
+    weather: { setAt: Date.now() }
+  };
+}
+
+function loadPersistedState() {
+  try {
+    if (!fs.existsSync(STATE_FILE)) return {};
+    const raw = fs.readFileSync(STATE_FILE, 'utf8');
+    if (!raw.trim()) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    return parsed;
+  } catch (_) {
+    return {};
+  }
+}
+
+function persistSharedState() {
+  try {
+    fs.writeFileSync(STATE_FILE, JSON.stringify(sharedState, null, 2));
+  } catch (err) {
+    console.error('Failed to persist shared state:', err);
+  }
+}
+
+sharedState = loadPersistedState();
+
+function ensureGameState(gameId) {
+  if (!sharedState[gameId]) {
+    sharedState[gameId] = getDefaultGameState();
+  }
+  return sharedState[gameId];
+}
 
 function mergeState(localState, incomingState) {
   if (!incomingState || typeof incomingState !== 'object') return localState;
@@ -60,6 +103,17 @@ function sendToClient(ws, data) {
   }
 }
 
+function broadcastGameState(gameId) {
+  const state = ensureGameState(gameId);
+  wss.clients.forEach((client) => {
+    if (client.readyState !== WebSocket.OPEN) return;
+    const clientGameId = clientByGame.get(client);
+    if (clientGameId === gameId) {
+      sendToClient(client, { type: 'state', gameId, state });
+    }
+  });
+}
+
 wss.on('connection', (ws) => {
   let subscribedGameId = null;
 
@@ -70,24 +124,14 @@ wss.on('connection', (ws) => {
     if (data.type === 'hello' && data.gameId) {
       subscribedGameId = data.gameId;
       clientByGame.set(ws, subscribedGameId);
-      if (!sharedState[subscribedGameId]) {
-        sharedState[subscribedGameId] = { players: {}, steals: {}, battles: {}, userAuth: { userHashes: {} }, admin: { pendingSignups: [], adminId: '' }, weather: { setAt: Date.now() } };
-      }
-      sendToClient(ws, { type: 'state', gameId: subscribedGameId, state: sharedState[subscribedGameId] });
+      const gameState = ensureGameState(subscribedGameId);
+      sendToClient(ws, { type: 'state', gameId: subscribedGameId, state: gameState });
     } else if (data.type === 'update' && data.gameId) {
       const gameId = data.gameId;
-      if (!sharedState[gameId]) {
-        sharedState[gameId] = { players: {}, steals: {}, battles: {}, userAuth: { userHashes: {} }, admin: { pendingSignups: [], adminId: '' }, weather: { setAt: Date.now() } };
-      }
-      sharedState[gameId] = mergeState(sharedState[gameId], data.state || {});
-      // broadcast updated state to all clients in the same game room
-      wss.clients.forEach((client) => {
-        if (client.readyState !== WebSocket.OPEN) return;
-        const clientGameId = clientByGame.get(client);
-        if (clientGameId === gameId) {
-          sendToClient(client, { type: 'state', gameId, state: sharedState[gameId] });
-        }
-      });
+      const gameState = ensureGameState(gameId);
+      sharedState[gameId] = mergeState(gameState, data.state || {});
+      persistSharedState();
+      broadcastGameState(gameId);
     }
   });
 
