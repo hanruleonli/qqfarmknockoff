@@ -20,6 +20,10 @@ body {
 button {
   font: inherit;
   color: inherit;
+  cursor: pointer;
+}
+.btn, .plot, .seed, .friend, .leader-row, .lang-btn, .pad-btn {
+  cursor: pointer;
 }
 button:focus-visible {
   outline: 2px solid rgba(245,203,62,.9);
@@ -57,6 +61,7 @@ button:focus-visible {
   font-weight: 700;
   color: var(--txt);
   background: rgba(255,255,255,.13);
+  cursor: pointer;
   transition: transform .16s ease, background .2s ease, box-shadow .2s ease;
 }
 .btn:hover { background: rgba(255,255,255,.22); transform: translateY(-1px); }
@@ -161,8 +166,8 @@ button:focus-visible {
 .progress > span { display: block; height: 100%; background: linear-gradient(90deg, #8ddd90, #c7f0b5); }
 .selector {
   position: absolute;
-  width: calc((100% - 32px) / 5);
-  height: calc((100% - 32px) / 4);
+  width: 0;
+  height: 0;
   border: 2px solid #fbe066;
   border-radius: 11px;
   pointer-events: none;
