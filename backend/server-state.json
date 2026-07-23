@@ -1,0 +1,17 @@
+{
+  "qqfarm_default": {
+    "players": {},
+    "steals": {},
+    "battles": {},
+    "userAuth": {
+      "userHashes": {}
+    },
+    "admin": {
+      "pendingSignups": [],
+      "adminId": ""
+    },
+    "weather": {
+      "setAt": 1784822161225
+    }
+  }
+}
