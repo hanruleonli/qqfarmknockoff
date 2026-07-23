@@ -2324,167 +2324,166 @@ async function boot() {
 
 boot();
 
-(function () {
-  const SLOT_COST = 50;
+(function spinSlots() {
+  if (spinning) return;
 
-  // Easier to win: adjusted weights and multipliers for a more forgiving experience
-  const SLOT_SYMBOLS = [
-    { sym: "🍒", weight: 22, mult: 6 },
-    { sym: "🍋", weight: 20, mult: 10 },
-    { sym: "🍀", weight: 18, mult: 18 },
-    { sym: "⭐", weight: 14, mult: 35 },
-    { sym: "💎", weight: 10, mult: 80 },
-    { sym: "7️⃣", weight: 6, mult: 250 }
+  const p = me();
+
+  if (!p) {
+    if (typeof notice === "function") notice("Log in to play", "err");
+    return;
+  }
+
+  if (p.gold < SLOT_COST) {
+    textEl.textContent = "Not enough gold — need " + SLOT_COST + " 🪙.";
+    return;
+  }
+
+  spinning = true;
+  spinBtn.disabled = true;
+
+  p.gold -= SLOT_COST;
+  syncGoldDisplay();
+
+  if (typeof save === "function") save();
+
+  textEl.textContent = "🎰 Spinning...";
+  
+  const finalResult = [
+    weightedSymbol(),
+    weightedSymbol(),
+    weightedSymbol()
   ];
-  const TOTAL_WEIGHT = SLOT_SYMBOLS.reduce((sum, s) => sum + s.weight, 0);
 
-  function weightedSymbol() {
-    let roll = Math.random() * TOTAL_WEIGHT;
-    for (const s of SLOT_SYMBOLS) {
-      if (roll < s.weight) return s;
-      roll -= s.weight;
+  const nearMiss = (Math.random() < 0.45) &&
+    !(finalResult[0].sym === finalResult[1].sym &&
+      finalResult[1].sym === finalResult[2].sym);
+
+  if (nearMiss) {
+    const matchSym = finalResult[0].sym;
+    const diff = SLOT_SYMBOLS.filter(s => s.sym !== matchSym);
+
+    if (diff.length) {
+      finalResult[1] = {...finalResult[0]};
+      finalResult[2] = diff[Math.floor(Math.random() * diff.length)];
     }
-    return SLOT_SYMBOLS[0];
   }
 
-  function randomCosmeticSymbol() {
-    return SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)].sym;
-  }
 
-  function me() {
-    return (typeof S !== "undefined" && S.currentId) ? S.players[S.currentId] : null;
-  }
+  function spinReel(index, duration, callback) {
 
-  const overlay = document.getElementById("slotOverlay");
-  const reelEls = [document.getElementById("r1"), document.getElementById("r2"), document.getElementById("r3")];
-  const textEl = document.getElementById("slotText");
-  const goldEl = document.getElementById("slotGoldDisplay");
-  const spinBtn = document.getElementById("spinBtn");
-  let spinning = false;
+    const reel = reelEls[index];
 
-  function renderPaytable() {
-    const box = document.getElementById("slotPaytable");
-    box.innerHTML = SLOT_SYMBOLS.map((s) =>
-      "<div>" + s.sym + s.sym + s.sym + " ×" + s.mult + "</div>"
-    ).join("");
-  }
+    reel.classList.add("spinning");
 
-  function syncGoldDisplay() {
-    const p = me();
-    goldEl.textContent = p ? p.gold : 0;
-    if (typeof renderHeader === "function") renderHeader();
-  }
+    let elapsed = 0;
 
-  function openSlots() {
-    const p = me();
-    if (!p) {
-      if (typeof notice === "function") notice("Log in to play", "err");
-      return;
-    }
-    renderPaytable();
-    syncGoldDisplay();
-    textEl.textContent = "Match all 3 reels to win. Good luck!";
-    overlay.classList.add("show");
-  }
+    const interval = setInterval(() => {
 
-  function closeSlots() {
-    if (spinning) return;
-    overlay.classList.remove("show");
-  }
+      reel.textContent = randomCosmeticSymbol();
 
-  function spinSlots() {
-    if (spinning) return;
-    const p = me();
-    if (!p) {
-      if (typeof notice === "function") notice("Log in to play", "err");
-      return;
-    }
-    if (p.gold < SLOT_COST) {
-      textEl.textContent = "Not enough gold — need " + SLOT_COST + " 🪙.";
-      if (typeof notice === "function") notice(typeof tr === "function" ? tr("noGold") : "Not enough gold", "err");
-      return;
-    }
+      elapsed += 100;
 
-    spinning = true;
-    spinBtn.disabled = true;
-    p.gold -= SLOT_COST;
-    syncGoldDisplay();
-    if (typeof save === "function") save();
-    textEl.textContent = "Spinning...";
-    reelEls.forEach((r) => r.classList.add("spinning"));
+      if (elapsed >= duration) {
 
-    // More addictive: longer animation with rapid, flashy changes
-    let ticks = 0;
-    // Pre-generate the final result early
-    const finalResult = [weightedSymbol(), weightedSymbol(), weightedSymbol()];
-    // Near-miss: two matching, third different (keep the effect, remove the message)
-    const nearMiss = (Math.random() < 0.45) && !(finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym);
-    if (nearMiss) {
-      const matchSym = finalResult[0].sym;
-      const diffSymbols = SLOT_SYMBOLS.filter(s => s.sym !== matchSym);
-      if (diffSymbols.length > 0) {
-        finalResult[1] = { ...finalResult[0] };
-        finalResult[2] = diffSymbols[Math.floor(Math.random() * diffSymbols.length)];
+        clearInterval(interval);
+
+        reel.textContent = finalResult[index].sym;
+
+        reel.classList.remove("spinning");
+
+        reel.style.transform = "scale(1.15)";
+
+        setTimeout(() => {
+          reel.style.transform = "scale(1)";
+        }, 150);
+
+        callback();
+
       }
-    }
 
-    const anim = setInterval(() => {
-      // Faster, more intense flashing
-      reelEls.forEach((r) => { r.textContent = randomCosmeticSymbol(); });
-      ticks++;
-      if (ticks >= 22) {
-        clearInterval(anim);
-        // Final reveal with a slight delay for dramatic effect
-        reelEls.forEach((r, i) => { 
-          r.textContent = finalResult[i].sym; 
-          r.classList.remove("spinning");
-          // Add a subtle pop effect
-          r.style.transition = 'transform 0.1s ease';
-          r.style.transform = 'scale(1.15)';
-          setTimeout(() => { r.style.transform = 'scale(1)'; }, 150);
-        });
-        
-        let win = 0;
-        let symbolWon = null;
-        if (finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym) {
-          symbolWon = finalResult[0];
-          win = SLOT_COST * symbolWon.mult;
-        }
-
-        if (win > 0) {
-          p.gold += win;
-          textEl.textContent = "🎉 Triple " + symbolWon.sym + "! You won " + win + " 🪙!";
-          if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + win + "🪙 on the slots");
-          if (typeof notice === "function") notice("You won " + win + " 🪙!", "");
-        } else if (nearMiss) {
-          // Keep the near-miss effect but remove the explicit "so close" message
-          textEl.textContent = "😅 " + nearMiss + nearMiss + "??  Try again!";
-          if (typeof addLog === "function") addLog("🎰 " + p.name + " had a near-miss on the slots");
-        } else {
-          textEl.textContent = "😢 No match. Try again!";
-          if (typeof addLog === "function") addLog("🎰 " + p.name + " spent " + SLOT_COST + "🪙 on the slots");
-        }
-
-        if (typeof save === "function") save();
-        syncGoldDisplay();
-        spinBtn.disabled = false;
-        spinning = false;
-      }
-    }, 80);
+    }, 120);
   }
 
-  document.getElementById("slotButton").addEventListener("click", openSlots);
-  document.getElementById("slotCloseBtn").addEventListener("click", closeSlots);
-  document.getElementById("slotCloseX").addEventListener("click", closeSlots);
-  document.getElementById("spinBtn").addEventListener("click", spinSlots);
-  overlay.addEventListener("click", (e) => { if (e.target === overlay) closeSlots(); });
-})();
+
+  // Spin one at a time
+  spinReel(0, 2500, () => {
+
+    setTimeout(() => {
+
+      spinReel(1, 3000, () => {
+
+        setTimeout(() => {
+
+          spinReel(2, 3500, () => {
 
 
-const playMusicBtn = document.getElementById("playMusicBtn");
-if (playMusicBtn) {
-  playMusicBtn.addEventListener("click", () => {
-    const bgMusic = document.getElementById("bgMusic");
-    if (bgMusic) bgMusic.play();
+            let win = 0;
+            let symbolWon = null;
+
+
+            if (
+              finalResult[0].sym === finalResult[1].sym &&
+              finalResult[1].sym === finalResult[2].sym
+            ) {
+
+              symbolWon = finalResult[0];
+              win = SLOT_COST * symbolWon.mult;
+
+            }
+
+
+            if (win > 0) {
+
+              p.gold += win;
+
+              textEl.textContent =
+                "🎉 Triple " +
+                symbolWon.sym +
+                "! You won " +
+                win +
+                " 🪙!";
+
+              if (typeof addLog === "function") {
+                addLog(
+                  "🎰 " +
+                  p.name +
+                  " won " +
+                  win +
+                  "🪙 on the slots"
+                );
+              }
+
+
+            } else if (nearMiss) {
+
+              textEl.textContent =
+                "😅 So close! Try again!";
+
+            } else {
+
+              textEl.textContent =
+                "😢 No match. Try again!";
+
+            }
+
+
+            if (typeof save === "function") save();
+
+            syncGoldDisplay();
+
+            spinBtn.disabled = false;
+            spinning = false;
+
+
+          });
+
+        }, 400);
+
+      });
+
+    }, 400);
+
   });
+
 }
