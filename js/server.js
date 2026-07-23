@@ -86,13 +86,24 @@ function mergeState(localState, incomingState) {
   merged.steals = { ...localState.steals, ...incomingState.steals };
   merged.battles = { ...localState.battles, ...incomingState.battles };
   merged.userAuth = { userHashes: { ...(localState.userAuth && localState.userAuth.userHashes ? localState.userAuth.userHashes : {}), ...(incomingState.userAuth && incomingState.userAuth.userHashes ? incomingState.userAuth.userHashes : {}) } };
-  merged.admin = { pendingSignups: Array.isArray(localState.admin && localState.admin.pendingSignups ? localState.admin.pendingSignups : []) };
-  if (Array.isArray(incomingState.admin && incomingState.admin.pendingSignups ? incomingState.admin.pendingSignups : [])) {
-    incomingState.admin.pendingSignups.forEach((item) => {
+
+  // FIX: the parens around Array.isArray(...) previously wrapped the whole
+  // ternary, so this evaluated to a boolean (true/false) instead of an
+  // array. That made `merged.admin.pendingSignups.some(...)` below throw
+  // "not a function", crashing the server on any update carrying admin
+  // signup data. Now Array.isArray() only checks the local value, and the
+  // ternary picks the array (or falls back to []).
+  const localPendingSignups = localState.admin && localState.admin.pendingSignups;
+  merged.admin = { pendingSignups: Array.isArray(localPendingSignups) ? localPendingSignups : [] };
+
+  const incomingPendingSignups = incomingState.admin && incomingState.admin.pendingSignups;
+  if (Array.isArray(incomingPendingSignups)) {
+    incomingPendingSignups.forEach((item) => {
       if (!merged.admin.pendingSignups.some((r) => r.id === item.id)) merged.admin.pendingSignups.push(item);
     });
   }
-  merged.admin.adminId = incomingState.admin && incomingState.admin.adminId ? incomingState.admin.adminId : localState.admin && localState.admin.adminId;
+
+  merged.admin.adminId = (incomingState.admin && incomingState.admin.adminId) ? incomingState.admin.adminId : (localState.admin && localState.admin.adminId);
   merged.weather = (incomingState.weather && incomingState.weather.setAt > (localState.weather && localState.weather.setAt ? localState.weather.setAt : 0)) ? incomingState.weather : localState.weather;
   return merged;
 }
@@ -118,26 +129,48 @@ wss.on('connection', (ws) => {
   let subscribedGameId = null;
 
   ws.on('message', (message) => {
-    let data;
-    try { data = JSON.parse(message); } catch (_) { return; }
-    if (!data || typeof data !== 'object') return;
-    if (data.type === 'hello' && data.gameId) {
-      subscribedGameId = data.gameId;
-      clientByGame.set(ws, subscribedGameId);
-      const gameState = ensureGameState(subscribedGameId);
-      sendToClient(ws, { type: 'state', gameId: subscribedGameId, state: gameState });
-    } else if (data.type === 'update' && data.gameId) {
-      const gameId = data.gameId;
-      const gameState = ensureGameState(gameId);
-      sharedState[gameId] = mergeState(gameState, data.state || {});
-      persistSharedState();
-      broadcastGameState(gameId);
+    try {
+      let data;
+      try { data = JSON.parse(message); } catch (_) { return; }
+      if (!data || typeof data !== 'object') return;
+      if (data.type === 'hello' && data.gameId) {
+        subscribedGameId = data.gameId;
+        clientByGame.set(ws, subscribedGameId);
+        const gameState = ensureGameState(subscribedGameId);
+        sendToClient(ws, { type: 'state', gameId: subscribedGameId, state: gameState });
+      } else if (data.type === 'update' && data.gameId) {
+        const gameId = data.gameId;
+        const gameState = ensureGameState(gameId);
+        sharedState[gameId] = mergeState(gameState, data.state || {});
+        persistSharedState();
+        broadcastGameState(gameId);
+      }
+    } catch (err) {
+      // FIX: mergeState (and anything else in this handler) was previously
+      // unguarded. A synchronous throw in a ws 'message' handler is an
+      // uncaught exception that kills the whole Node process, taking down
+      // every connected player, not just the one that sent the bad message.
+      console.error('Error handling message:', err);
     }
   });
 
   ws.on('close', () => {
     clientByGame.delete(ws);
   });
+
+  ws.on('error', (err) => {
+    console.error('WebSocket client error:', err);
+  });
+});
+
+// FIX: without these, any uncaught error/rejection anywhere in the process
+// (not just inside a ws handler) crashes the server outright and disconnects
+// every player in every game room.
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err);
+});
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection:', err);
 });
 
 server.listen(PORT, () => {
