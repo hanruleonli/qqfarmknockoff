@@ -4,8 +4,9 @@ const fs = require('fs');
 const WebSocket = require('ws');
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
-const INDEX_PATH = path.join(__dirname, 'index.html');
-const STATIC_DIR = __dirname;
+const ROOT_DIR = path.join(__dirname, '..');
+const INDEX_PATH = path.join(ROOT_DIR, 'index.html');
+const STATIC_DIR = ROOT_DIR;
 const STATE_FILE = path.join(__dirname, 'server-state.json');
 
 const server = http.createServer((req, res) => {
