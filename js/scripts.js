@@ -2324,7 +2324,7 @@ async function boot() {
 
 boot();
 
-(function spinSlots() {
+function spinSlots() {
   if (spinning) return;
 
   const p = me();
@@ -2486,4 +2486,4 @@ boot();
 
   });
 
-})();
+}
