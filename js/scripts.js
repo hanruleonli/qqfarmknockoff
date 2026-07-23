@@ -439,7 +439,7 @@ function adminReadServerFields() {
 function adminSyncServerFields() {
   const urlEl = document.getElementById("adminServerUrl");
   if (!urlEl) return;
-  urlEl.value = S.server.url || "";
+    urlEl.value = S.server.url || "ws://10.108.31.7:8080";
 }
 
 function normalizeTimestamp(value) {
