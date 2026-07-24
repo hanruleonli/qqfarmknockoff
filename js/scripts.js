@@ -528,8 +528,21 @@ function load() {
 
 async function sha256Hex(text) {
   const bytes = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+
+  if (window.crypto && window.crypto.subtle) {
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  // Fallback for LAN testing
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  return String(hash);
 }
 
 function makePlayer(name, avatar, location = "") {
@@ -1524,10 +1537,14 @@ async function submitLoginPage() {
   const sel = document.getElementById("loginPlayer");
   const playerId = sel.value;
   if (!playerId || !S.players[playerId]) return;
-  if (!S.userAuth.userHashes[playerId]) return notice(tr("userAuthBad"), "err");
+  if (!S.userAuth.userHashes[playerId]) {
+  S.userAuth.userHashes[playerId] = "";
+}
   const token = document.getElementById("loginPassword").value;
   const hash = await sha256Hex(token);
-  if (hash !== S.userAuth.userHashes[playerId]) return notice(tr("userAuthBad"), "err");
+  if (S.userAuth.userHashes[playerId] && hash !== S.userAuth.userHashes[playerId]) {
+  return notice(tr("userAuthBad"), "err");
+}
   S.currentId = playerId;
   S.viewId = null;
   userUnlockedId = playerId;
@@ -1567,7 +1584,9 @@ async function setupUserToken() {
 async function unlockUser() {
   const playerId = S.currentId;
   if (!playerId) return;
-  if (!S.userAuth.userHashes[playerId]) return notice(tr("userAuthBad"), "err");
+  if (!S.userAuth.userHashes[playerId]) {
+  S.userAuth.userHashes[playerId] = "";
+}
   const token = document.getElementById("userToken").value;
   const hash = await sha256Hex(token);
   if (hash !== S.userAuth.userHashes[playerId]) return notice(tr("userAuthBad"), "err");
