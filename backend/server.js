@@ -148,6 +148,8 @@ wss.on('connection', (ws) => {
         const gameState = ensureGameState(subscribedGameId);
         sendToClient(ws, { type: 'state', gameId: subscribedGameId, state: gameState });
       } else if (data.type === 'update' && data.gameId) {
+        console.log("UPDATE RECEIVED PLAYERS:", Object.keys(data.state?.players || {}));
+console.log("CURRENT SERVER PLAYERS:", Object.keys(ensureGameState(data.gameId).players || {}));
         const gameId = data.gameId;
         const gameState = ensureGameState(gameId);
         sharedState[gameId] = mergeState(gameState, data.state || {});
