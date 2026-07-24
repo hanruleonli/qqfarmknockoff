@@ -516,12 +516,12 @@ function load() {
   } catch (_) {}
   S.cloud.url = S.cloud.url || DEFAULT_CLOUD_URL;
   S.cloud.token = S.cloud.token || DEFAULT_CLOUD_WRITE_TOKEN;
-  if (typeof window !== "undefined") {
-  const defaultServerUrl = "wss://qqfarmknockoff.onrender.com";
-  if (!S.server.url) {
-    S.server.url = defaultServerUrl;
+  if (typeof window !== "undefined" && window.location && window.location.protocol !== "file:") {
+    const host = window.location.hostname || "localhost";
+    const port = window.location.port || "8080";
+    const defaultServerUrl = "ws://" + host + ":" + port;
+    if (!S.server.url) S.server.url = defaultServerUrl;
   }
-}
   loadAdminAuthLocal();
   normalizeState();
 }
