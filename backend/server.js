@@ -129,6 +129,7 @@ function broadcastGameState(gameId) {
 
 wss.on('connection', (ws) => {
   console.log("WebSocket client connected");
+  console.log("WebSocket client connected");
   let subscribedGameId = null;
 
   ws.on('message', (message) => {
