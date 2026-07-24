@@ -518,9 +518,15 @@ function load() {
   S.cloud.token = S.cloud.token || DEFAULT_CLOUD_WRITE_TOKEN;
   if (typeof window !== "undefined") {
   const defaultServerUrl = "wss://qqfarmknockoff.onrender.com";
-  if (!S.server.url) {
-    S.server.url = defaultServerUrl;
-  }
+
+// Always upgrade old URLs
+if (
+  !S.server.url ||
+  S.server.url === "ws://qqfarmknockoff.onrender.com:8080" ||
+  S.server.url.startsWith("ws://")
+) {
+  S.server.url = defaultServerUrl;
+}
 }
   loadAdminAuthLocal();
   normalizeState();
