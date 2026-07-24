@@ -74,6 +74,11 @@ function persistSharedState() {
 
 sharedState = loadPersistedState();
 
+if (process.env.RESET_GAME === "true") {
+  sharedState = {};
+  persistSharedState();
+  console.log("GAME RESET - CLEARED STATE");
+}
 function ensureGameState(gameId) {
   if (!sharedState[gameId]) {
     sharedState[gameId] = getDefaultGameState();
