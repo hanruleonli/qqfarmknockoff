@@ -76,6 +76,7 @@ sharedState = loadPersistedState();
 
 if (process.env.RESET_GAME === "true") {
   sharedState = {};
+  sharedState.__reset = true;
   persistSharedState();
   console.log("GAME RESET - CLEARED STATE");
 }

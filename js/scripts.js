@@ -378,7 +378,12 @@ function handleServerMessage(event) {
 
   serverInboundUpdate = true;
   try {
-    mergeCloudStateIn(data.state);
+    if (data.state.__reset) {
+  S.players = {};
+  delete data.state.__reset;
+}
+
+mergeCloudStateIn(data.state);
     resolveRelevantBattles();
     save(false);
     render();
