@@ -177,6 +177,12 @@ process.on('unhandledRejection', (err) => {
   console.error('Unhandled rejection:', err);
 });
 
+if (process.env.RESET_GAME === "true") {
+  sharedState = {};
+  persistSharedState();
+  console.log("GAME RESET");
+}
+
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
