@@ -9,7 +9,7 @@
         "gold": 120,
         "xp": 0,
         "updatedAt": 1784827713869,
-        "lastActiveAt": 1784829083913,
+        "lastActiveAt": 1784917055027,
         "plots": [
           {
             "crop": null,
@@ -946,8 +946,8 @@
       "key": "wsunny",
       "icon": "☀️",
       "mult": 1,
-      "until": 1784829332718,
-      "setAt": 1784829212718
+      "until": 1784917144855,
+      "setAt": 1784917024855
     }
   }
 }
