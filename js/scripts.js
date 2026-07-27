@@ -3,7 +3,7 @@ const I18N = {
   zh: {
     title: "🌱 QQ农场", tabMine: "我的农场", tabVisit: "拜访好友", bt: "蓝牙控制",
     shop: "种子商店", friends: "好友农场", add: "添加玩家", log: "农场日志",
-    switchP: "切换玩家", close: "关闭", logout: "退出登录", newP: "创建玩家", cancel: "取消", create: "创建", namePh: "输入昵称（最多10字）", locPh: "输入地区（如: 上海）", passPh: "设置登录密码（至少4位）",
+    switchP: "切换玩家", close: "关闭", logout: "退出登录", deleteAccount: "删除账户", newP: "创建玩家", cancel: "取消", ok: "确定", create: "创建", namePh: "输入昵称（最多10字）", locPh: "输入地区（如: 上海）", passPh: "设置登录密码（至少4位）",
     farmMine: "的农场", farmVisit: "正在拜访", tools: ["🌱 种植", "💧 浇水", "🌾 收获", "🧪 施肥"],
     weather: "天气", wsunny: "晴天", wrain: "下雨（加速）", wheat: "炎热（减速）", wcold: "寒潮（减速）",
     empty: "点击空地种植", ready: "可收获", withered: "枯萎", noGold: "金币不足",
@@ -24,7 +24,7 @@ const I18N = {
     signupSubmitted: "注册申请已提交，等待管理员审批", signupNameExists: "昵称已存在或待审批中", adminOnly: "仅管理员可操作",
     adminAuthTitle: "管理员验证", adminAuthUnlock: "解锁", adminAuthSetup: "设置口令", adminTokenPh: "输入管理员口令",
     adminTokenConfirmPh: "再次输入口令", adminSetupHint: "首次使用：设置管理员口令（仅保存SHA-256哈希）",
-    adminUnlockHint: "输入管理员口令以解锁", adminFixedHint: "管理员口令固定为: admin（仅存储SHA-256哈希）", adminTokenTooShort: "口令至少 4 位", adminTokenMismatch: "两次口令不一致",
+    adminUnlockHint: "输入管理员口令以解锁", adminFixedHint: "管理员口令固定为: 128560（仅存储SHA-256哈希）", adminTokenTooShort: "口令至少 4 位", adminTokenMismatch: "两次口令不一致",
     adminAuthBad: "管理员口令错误", adminAuthOk: "管理员已解锁", adminAuthSetOk: "管理员口令已设置",
     userAuthTitle: "玩家登录", userAuthUnlock: "登录", userAuthSetup: "设置玩家口令", userTokenPh: "输入玩家口令",
     userTokenConfirmPh: "再次输入玩家口令", userSetupHint: "首次登录此玩家：请设置口令（仅保存SHA-256哈希）",
@@ -39,7 +39,7 @@ const I18N = {
   en: {
     title: "🌱 QQ Farm", tabMine: "My Farm", tabVisit: "Visit Friend", bt: "Bluetooth",
     shop: "Seed Shop", friends: "Friends", add: "Add Player", log: "Farm Log",
-    switchP: "Switch Player", close: "Close", logout: "Logout", newP: "Create Player", cancel: "Cancel", create: "Create", namePh: "Nickname (max 10)", locPh: "Location (e.g. Tokyo)", passPh: "Set login password (min 4)",
+    switchP: "Switch Player", close: "Close", logout: "Logout", deleteAccount: "Delete Account", newP: "Create Player", cancel: "Cancel", ok: "OK", create: "Create", namePh: "Nickname (max 10)", locPh: "Location (e.g. Tokyo)", passPh: "Set login password (min 4)",
     farmMine: "'s Farm", farmVisit: "Visiting", tools: ["🌱 Plant", "💧 Water", "🌾 Harvest", "🧪 Fertilize"],
     weather: "Weather", wsunny: "Sunny", wrain: "Rain (+speed)", wheat: "Hot (-speed)", wcold: "Cold wave (-speed)",
     empty: "Tap empty plot", ready: "Ready", withered: "Withered", noGold: "Not enough gold",
@@ -60,7 +60,7 @@ const I18N = {
     signupSubmitted: "Signup submitted and waiting for admin approval", signupNameExists: "Name already exists or pending", adminOnly: "Admin only",
     adminAuthTitle: "Admin Access", adminAuthUnlock: "Unlock", adminAuthSetup: "Set Token", adminTokenPh: "Enter admin token",
     adminTokenConfirmPh: "Re-enter token", adminSetupHint: "First use: set admin token (only SHA-256 hash is stored)",
-    adminUnlockHint: "Enter admin token to unlock", adminFixedHint: "Admin password is fixed: admin (SHA-256 hash stored only)", adminTokenTooShort: "Token must be at least 4 chars", adminTokenMismatch: "Tokens do not match",
+    adminUnlockHint: "Enter admin token to unlock", adminFixedHint: "Admin password is fixed: 128560 (SHA-256 hash stored only)", adminTokenTooShort: "Token must be at least 4 chars", adminTokenMismatch: "Tokens do not match",
     adminAuthBad: "Invalid admin token", adminAuthOk: "Admin unlocked", adminAuthSetOk: "Admin token configured",
     userAuthTitle: "Player Login", userAuthUnlock: "Login", userAuthSetup: "Set Player Token", userTokenPh: "Enter player token",
     userTokenConfirmPh: "Re-enter player token", userSetupHint: "First login for this player: set token (SHA-256 hash only)",
@@ -75,7 +75,7 @@ const I18N = {
   ja: {
     title: "🌱 QQファーム", tabMine: "自分の農場", tabVisit: "友だち訪問", bt: "Bluetooth",
     shop: "種ショップ", friends: "友だち農場", add: "プレイヤー追加", log: "農場ログ",
-    switchP: "プレイヤー切替", close: "閉じる", logout: "ログアウト", newP: "新規プレイヤー", cancel: "キャンセル", create: "作成", namePh: "ニックネーム（最大10）", locPh: "地域を入力（例: 東京）", passPh: "ログイン用パスワード（4文字以上）",
+    switchP: "プレイヤー切替", close: "閉じる", logout: "ログアウト", deleteAccount: "アカウント削除", newP: "新規プレイヤー", cancel: "キャンセル", ok: "OK", create: "作成", namePh: "ニックネーム（最大10）", locPh: "地域を入力（例: 東京）", passPh: "ログイン用パスワード（4文字以上）",
     farmMine: "の農場", farmVisit: "訪問中", tools: ["🌱 植える", "💧 水やり", "🌾 収穫", "🧪 肥料"],
     weather: "天気", wsunny: "晴れ", wrain: "雨（加速）", wheat: "猛暑（減速）", wcold: "寒波（減速）",
     empty: "空き地をタップ", ready: "収穫可能", withered: "枯れ", noGold: "コイン不足",
@@ -96,7 +96,7 @@ const I18N = {
     signupSubmitted: "登録申請を送信しました（管理者承認待ち）", signupNameExists: "名前は既に存在するか承認待ちです", adminOnly: "管理者のみ操作できます",
     adminAuthTitle: "管理者認証", adminAuthUnlock: "解除", adminAuthSetup: "トークン設定", adminTokenPh: "管理者トークンを入力",
     adminTokenConfirmPh: "トークンを再入力", adminSetupHint: "初回: 管理者トークンを設定（SHA-256ハッシュのみ保存）",
-    adminUnlockHint: "管理者トークンを入力して解除", adminFixedHint: "管理者パスワードは固定: admin（SHA-256ハッシュのみ保存）", adminTokenTooShort: "トークンは4文字以上", adminTokenMismatch: "トークンが一致しません",
+    adminUnlockHint: "管理者トークンを入力して解除", adminFixedHint: "管理者パスワードは固定: 128560（SHA-256ハッシュのみ保存）", adminTokenTooShort: "トークンは4文字以上", adminTokenMismatch: "トークンが一致しません",
     adminAuthBad: "管理者トークンが無効", adminAuthOk: "管理者を解除しました", adminAuthSetOk: "管理者トークンを設定しました",
     userAuthTitle: "プレイヤーログイン", userAuthUnlock: "ログイン", userAuthSetup: "プレイヤートークン設定", userTokenPh: "プレイヤートークンを入力",
     userTokenConfirmPh: "トークンを再入力", userSetupHint: "このプレイヤー初回ログイン: トークン設定（SHA-256ハッシュのみ保存）",
@@ -111,7 +111,7 @@ const I18N = {
   es: {
     title: "🌱 Granja QQ", tabMine: "Mi Granja", tabVisit: "Visitar Amigo", bt: "Bluetooth",
     shop: "Tienda de Semillas", friends: "Amigos", add: "Agregar Jugador", log: "Registro",
-    switchP: "Cambiar Jugador", close: "Cerrar", logout: "Cerrar sesion", newP: "Crear Jugador", cancel: "Cancelar", create: "Crear", namePh: "Apodo (max 10)", locPh: "Ubicacion (ej. Madrid)", passPh: "Contrasena de acceso (min 4)",
+    switchP: "Cambiar Jugador", close: "Cerrar", logout: "Cerrar sesion", deleteAccount: "Eliminar Cuenta", newP: "Crear Jugador", cancel: "Cancelar", ok: "OK", create: "Crear", namePh: "Apodo (max 10)", locPh: "Ubicacion (ej. Madrid)", passPh: "Contrasena de acceso (min 4)",
     farmMine: " - granja", farmVisit: "Visitando", tools: ["🌱 Plantar", "💧 Regar", "🌾 Cosechar", "🧪 Fertilizar"],
     weather: "Clima", wsunny: "Soleado", wrain: "Lluvia (+velocidad)", wheat: "Calor (-velocidad)", wcold: "Ola fria (-velocidad)",
     empty: "Toca una parcela vacia", ready: "Listo", withered: "Marchito", noGold: "No hay oro suficiente",
@@ -131,7 +131,7 @@ const I18N = {
     signupSubmitted: "Solicitud enviada, esperando aprobacion del admin", signupNameExists: "El nombre ya existe o esta pendiente", adminOnly: "Solo admin",
     adminAuthTitle: "Acceso Admin", adminAuthUnlock: "Desbloquear", adminAuthSetup: "Configurar token", adminTokenPh: "Ingresa token admin",
     adminTokenConfirmPh: "Repite el token", adminSetupHint: "Primer uso: configura token admin (solo se guarda hash SHA-256)",
-    adminUnlockHint: "Ingresa token admin para desbloquear", adminFixedHint: "La clave admin es fija: admin (solo hash SHA-256)", adminTokenTooShort: "El token debe tener al menos 4 caracteres", adminTokenMismatch: "Los tokens no coinciden",
+    adminUnlockHint: "Ingresa token admin para desbloquear", adminFixedHint: "La clave admin es fija: 128560 (solo hash SHA-256)", adminTokenTooShort: "El token debe tener al menos 4 caracteres", adminTokenMismatch: "Los tokens no coinciden",
     adminAuthBad: "Token admin invalido", adminAuthOk: "Admin desbloqueado", adminAuthSetOk: "Token admin configurado",
     userAuthTitle: "Inicio de Jugador", userAuthUnlock: "Entrar", userAuthSetup: "Configurar token", userTokenPh: "Ingresa token de jugador",
     userTokenConfirmPh: "Repite el token", userSetupHint: "Primer acceso de este jugador: configura token (solo hash SHA-256)",
@@ -146,7 +146,7 @@ const I18N = {
   ru: {
     title: "🌱 QQ Ферма", tabMine: "Моя ферма", tabVisit: "В гости", bt: "Bluetooth",
     shop: "Магазин семян", friends: "Друзья", add: "Добавить игрока", log: "Журнал",
-    switchP: "Сменить игрока", close: "Закрыть", logout: "Выйти", newP: "Создать игрока", cancel: "Отмена", create: "Создать", namePh: "Ник (до 10)", locPh: "Локация (напр. Москва)", passPh: "Пароль входа (мин. 4)",
+    switchP: "Сменить игрока", close: "Закрыть", logout: "Выйти", deleteAccount: "Удалить аккаунт", newP: "Создать игрока", cancel: "Отмена", ok: "OK", create: "Создать", namePh: "Ник (до 10)", locPh: "Локация (напр. Москва)", passPh: "Пароль входа (мин. 4)",
     farmMine: " ферма", farmVisit: "В гостях у", tools: ["🌱 Посадить", "💧 Полить", "🌾 Собрать", "🧪 Удобрить"],
     weather: "Погода", wsunny: "Солнечно", wrain: "Дождь (+скорость)", wheat: "Жара (-скорость)", wcold: "Холод (-скорость)",
     empty: "Нажмите на пустой участок", ready: "Готово", withered: "Завяло", noGold: "Недостаточно монет",
@@ -166,7 +166,7 @@ const I18N = {
     signupSubmitted: "Заявка отправлена и ждет одобрения админа", signupNameExists: "Имя уже существует или ожидает одобрения", adminOnly: "Только админ",
     adminAuthTitle: "Доступ админа", adminAuthUnlock: "Разблокировать", adminAuthSetup: "Задать токен", adminTokenPh: "Введите токен админа",
     adminTokenConfirmPh: "Повторите токен", adminSetupHint: "Первый запуск: задайте токен (сохраняется только SHA-256 хеш)",
-    adminUnlockHint: "Введите токен для разблокировки", adminFixedHint: "Пароль админа фиксирован: admin (хранится только SHA-256)", adminTokenTooShort: "Токен минимум 4 символа", adminTokenMismatch: "Токены не совпадают",
+    adminUnlockHint: "Введите токен для разблокировки", adminFixedHint: "Пароль админа фиксирован: 128560 (хранится только SHA-256)", adminTokenTooShort: "Токен минимум 4 символа", adminTokenMismatch: "Токены не совпадают",
     adminAuthBad: "Неверный токен админа", adminAuthOk: "Админ разблокирован", adminAuthSetOk: "Токен админа сохранен",
     userAuthTitle: "Вход игрока", userAuthUnlock: "Войти", userAuthSetup: "Задать токен", userTokenPh: "Введите токен игрока",
     userTokenConfirmPh: "Повторите токен", userSetupHint: "Первый вход игрока: задайте токен (только SHA-256 хеш)",
@@ -203,7 +203,7 @@ const AVATARS = ["👨‍🌾", "👩‍🌾", "🧑‍🌾", "🐱", "🐶", "�
 const GAME_STATE_KEY = "qqfarm_game_v5";
 const ADMIN_AUTH_KEY = "qqfarm_admin_auth_v1";
 const RESET_DONE_KEY = "qqfarm_reset_v1";
-const ADMIN_FIXED_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+const ADMIN_FIXED_HASH = "d2e1deebf088928120eec37a4277e13ff6826114a05c5bfa5df0395723596148";
 // Populated by config.js (gitignored locally, generated from repo secrets on
 // GitHub Pages deploy). Falls back to empty/disabled if config.js is absent.
 const CLOUD_CONFIG = (typeof window !== "undefined" && window.CLOUD_CONFIG) || {};
@@ -1550,6 +1550,7 @@ function openLoginPage() {
   document.getElementById("loginTitle").textContent = tr("loginPageTitle");
   document.getElementById("loginPassword").placeholder = tr("userTokenPh");
   document.getElementById("loginCreate").textContent = tr("newP");
+  document.getElementById("loginDelete").textContent = tr("deleteAccount");
   document.getElementById("loginSubmit").textContent = tr("userAuthUnlock");
   document.getElementById("loginPassword").value = "";
   document.getElementById("loginModal").classList.add("show");
@@ -1564,19 +1565,38 @@ async function submitLoginPage() {
   const playerId = sel.value;
   if (!playerId || !S.players[playerId]) return;
   if (!S.userAuth.userHashes[playerId]) {
-  S.userAuth.userHashes[playerId] = "";
-}
+    S.userAuth.userHashes[playerId] = "";
+  }
   const token = document.getElementById("loginPassword").value;
   const hash = await sha256Hex(token);
   if (S.userAuth.userHashes[playerId] && hash !== S.userAuth.userHashes[playerId]) {
-  return notice(tr("userAuthBad"), "err");
-}
+    return notice(tr("userAuthBad"), "err");
+  }
   S.currentId = playerId;
   S.viewId = null;
   userUnlockedId = playerId;
   closeLoginPage();
   render();
   notice(tr("userAuthOk"), "info");
+}
+
+function deleteLoginPlayer() {
+  const sel = document.getElementById("loginPlayer");
+  const playerId = sel.value;
+  if (!playerId || !S.players[playerId]) return;
+  if (!confirm(tr("deleteAccount") + "?") ) return;
+  const isCurrent = S.currentId === playerId;
+  delete S.players[playerId];
+  delete S.userAuth.userHashes[playerId];
+  if (isCurrent) {
+    userUnlockedId = null;
+    S.currentId = null;
+    S.viewId = null;
+  }
+  save();
+  saveAuthSnapshotToCloud();
+  syncLoginPlayers();
+  notice(tr("deleteAccount") + " " + tr("ok"), "info");
 }
 
 function logoutCurrentUser() {
@@ -2236,6 +2256,7 @@ function bindUI() {
   document.getElementById("logoutBtn").addEventListener("click", logoutCurrentUser);
 
   document.getElementById("loginCreate").addEventListener("click", openAdd);
+  document.getElementById("loginDelete").addEventListener("click", deleteLoginPlayer);
   document.getElementById("loginSubmit").addEventListener("click", submitLoginPage);
   document.getElementById("loginModal").addEventListener("click", (e) => { if (e.target.id === "loginModal") {} });
 
