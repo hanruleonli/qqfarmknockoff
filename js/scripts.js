@@ -202,6 +202,7 @@ const TOOLS = ["plant", "water", "harvest", "fertilize"];
 const AVATARS = ["👨‍🌾", "👩‍🌾", "🧑‍🌾", "🐱", "🐶", "🐼", "🦊", "🦝", "🧙"];
 const GAME_STATE_KEY = "qqfarm_game_v5";
 const ADMIN_AUTH_KEY = "qqfarm_admin_auth_v1";
+const RESET_DONE_KEY = "qqfarm_reset_v1";
 const ADMIN_FIXED_HASH = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
 // Populated by config.js (gitignored locally, generated from repo secrets on
 // GitHub Pages deploy). Falls back to empty/disabled if config.js is absent.
@@ -266,12 +267,19 @@ let autoCloudInFlight = false;
 let serverSocket = null;
 let serverSyncTimer = null;
 let serverInboundUpdate = false;
+let serverConnectedNoticed = false;
+let serverResetRequested = false;
+let serverResetSent = false;
 let lastHeartbeatPush = 0;
 let battleRuntime = null;
 let battleTickTimer = null;
 
 function tr(k) { return I18N[S.lang][k] || I18N.zh[k] || k; }
 function cropName(k) { return CROPS[k].name[S.lang] || CROPS[k].name.zh; }
+function clearSavedGameData() {
+  localStorage.removeItem(GAME_STATE_KEY);
+  localStorage.removeItem(ADMIN_AUTH_KEY);
+}
 function scheduleAutoCloudSave() {
   if (!(S.cloud.url || "").trim()) return;
   autoCloudDirty = true;
@@ -379,17 +387,16 @@ function handleServerMessage(event) {
   serverInboundUpdate = true;
   try {
     if (data.state.__reset) {
-  S.players = {};
-  delete data.state.__reset;
-}
+      S.players = {};
+      delete data.state.__reset;
+    }
 
-mergeCloudStateIn(data.state);
+    mergeCloudStateIn(data.state);
     resolveRelevantBattles();
     save(false);
     render();
     const statusEl = document.getElementById("adminServerStatus");
     if (statusEl) statusEl.textContent = tr("serverConnected");
-    notice(tr("serverConnected"), "info");
   } finally {
     serverInboundUpdate = false;
   }
@@ -406,10 +413,18 @@ function connectServer() {
     serverSocket = new WebSocket(url);
     serverSocket.addEventListener("open", () => {
       serverSocket.send(JSON.stringify({ type: "hello", gameId: S.cloud.gameId || S.server.gameId || DEFAULT_CLOUD_GAME_ID }));
-      notice(tr("serverConnected"), "info");
+      if (!serverConnectedNoticed) {
+        notice(tr("serverConnected"), "info");
+        serverConnectedNoticed = true;
+      }
       const statusEl = document.getElementById("adminServerStatus");
       if (statusEl) statusEl.textContent = tr("serverConnected");
       render();
+      if (serverResetRequested && !serverResetSent) {
+        serverSocket.send(JSON.stringify({ type: "reset", gameId: S.cloud.gameId || S.server.gameId || DEFAULT_CLOUD_GAME_ID }));
+        serverResetSent = true;
+        serverResetRequested = false;
+      }
       scheduleServerSync();
     });
     serverSocket.addEventListener("message", handleServerMessage);
@@ -2332,6 +2347,11 @@ function loop() {
 }
 
 async function boot() {
+  if (!localStorage.getItem(RESET_DONE_KEY)) {
+    clearSavedGameData();
+    localStorage.setItem(RESET_DONE_KEY, "1");
+    serverResetRequested = true;
+  }
   load();
   S.lang = "en";
   S.admin.tokenHash = ADMIN_FIXED_HASH;
@@ -2422,7 +2442,7 @@ boot();
     overlay.classList.remove("show");
   }
 
-  function spinSlots() {
+  async function spinSlots() {
     if (spinning) return;
     const p = me();
     if (!p) {
@@ -2441,13 +2461,8 @@ boot();
     syncGoldDisplay();
     if (typeof save === "function") save();
     textEl.textContent = "Spinning...";
-    reelEls.forEach((r) => r.classList.add("spinning"));
 
-    // More addictive: longer animation with rapid, flashy changes
-    let ticks = 0;
-    // Pre-generate the final result early
     const finalResult = [weightedSymbol(), weightedSymbol(), weightedSymbol()];
-    // Near-miss: two matching, third different (keep the effect, remove the message)
     const nearMiss = (Math.random() < 0.45) && !(finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym);
     if (nearMiss) {
       const matchSym = finalResult[0].sym;
@@ -2458,49 +2473,50 @@ boot();
       }
     }
 
-    const anim = setInterval(() => {
-      // Faster, more intense flashing
-      reelEls.forEach((r) => { r.textContent = randomCosmeticSymbol(); });
-      ticks++;
-      if (ticks >= 22) {
-        clearInterval(anim);
-        // Final reveal with a slight delay for dramatic effect
-        reelEls.forEach((r, i) => { 
-          r.textContent = finalResult[i].sym; 
-          r.classList.remove("spinning");
-          // Add a subtle pop effect
-          r.style.transition = 'transform 0.1s ease';
-          r.style.transform = 'scale(1.15)';
-          setTimeout(() => { r.style.transform = 'scale(1)'; }, 150);
-        });
-        
-        let win = 0;
-        let symbolWon = null;
-        if (finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym) {
-          symbolWon = finalResult[0];
-          win = SLOT_COST * symbolWon.mult;
-        }
+    const spinReel = (reelEl, finalSym, duration) => new Promise((resolve) => {
+      reelEl.classList.add("spinning");
+      const ticker = setInterval(() => {
+        reelEl.textContent = randomCosmeticSymbol();
+      }, 80);
+      setTimeout(() => {
+        clearInterval(ticker);
+        reelEl.textContent = finalSym;
+        reelEl.classList.remove("spinning");
+        reelEl.style.transition = "transform 0.1s ease";
+        reelEl.style.transform = "scale(1.15)";
+        setTimeout(() => { reelEl.style.transform = "scale(1)"; }, 150);
+        resolve();
+      }, duration);
+    });
 
-        if (win > 0) {
-          p.gold += win;
-          textEl.textContent = "🎉 Triple " + symbolWon.sym + "! You won " + win + " 🪙!";
-          if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + win + "🪙 on the slots");
-          if (typeof notice === "function") notice("You won " + win + " 🪙!", "");
-        } else if (nearMiss) {
-          // Keep the near-miss effect but remove the explicit "so close" message
-          textEl.textContent = "😅 " + nearMiss + nearMiss + "??  Try again!";
-          if (typeof addLog === "function") addLog("🎰 " + p.name + " had a near-miss on the slots");
-        } else {
-          textEl.textContent = "😢 No match. Try again!";
-          if (typeof addLog === "function") addLog("🎰 " + p.name + " spent " + SLOT_COST + "🪙 on the slots");
-        }
+    await spinReel(reelEls[0], finalResult[0].sym, 520);
+    await spinReel(reelEls[1], finalResult[1].sym, 520);
+    await spinReel(reelEls[2], finalResult[2].sym, 520);
 
-        if (typeof save === "function") save();
-        syncGoldDisplay();
-        spinBtn.disabled = false;
-        spinning = false;
-      }
-    }, 80);
+    let win = 0;
+    let symbolWon = null;
+    if (finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym) {
+      symbolWon = finalResult[0];
+      win = SLOT_COST * symbolWon.mult;
+    }
+
+    if (win > 0) {
+      p.gold += win;
+      textEl.textContent = "🎉 Triple " + symbolWon.sym + "! You won " + win + " 🪙!";
+      if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + win + "🪙 on the slots");
+      if (typeof notice === "function") notice("You won " + win + " 🪙!", "");
+    } else if (nearMiss) {
+      textEl.textContent = "😅 Almost had it! Try again!";
+      if (typeof addLog === "function") addLog("🎰 " + p.name + " had a near-miss on the slots");
+    } else {
+      textEl.textContent = "😢 No match. Try again!";
+      if (typeof addLog === "function") addLog("🎰 " + p.name + " spent " + SLOT_COST + "🪙 on the slots");
+    }
+
+    if (typeof save === "function") save();
+    syncGoldDisplay();
+    spinBtn.disabled = false;
+    spinning = false;
   }
 
   document.getElementById("slotButton").addEventListener("click", openSlots);

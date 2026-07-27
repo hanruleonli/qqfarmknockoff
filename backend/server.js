@@ -148,6 +148,11 @@ wss.on('connection', (ws) => {
         clientByGame.set(ws, subscribedGameId);
         const gameState = ensureGameState(subscribedGameId);
         sendToClient(ws, { type: 'state', gameId: subscribedGameId, state: gameState });
+      } else if (data.type === 'reset' && data.gameId) {
+        const gameId = data.gameId;
+        sharedState[gameId] = getDefaultGameState();
+        persistSharedState();
+        broadcastGameState(gameId);
       } else if (data.type === 'update' && data.gameId) {
         console.log("UPDATE RECEIVED PLAYERS:", Object.keys(data.state?.players || {}));
 console.log("CURRENT SERVER PLAYERS:", Object.keys(ensureGameState(data.gameId).players || {}));
