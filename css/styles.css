@@ -159,6 +159,18 @@ button:focus-visible {
 .plot.ready { background: linear-gradient(130deg, #2e9445, #55c172); border-color: #1c4f22; box-shadow: 0 0 16px rgba(88,216,131,.34); }
 .plot.withered { background: linear-gradient(130deg, #7b4f42, #8d5c52); border-color: rgba(255,255,255,.18); }
 .plot.locked { background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.3); border-style: dashed; cursor: not-allowed; }
+
+.tool-plant .plot { cursor: crosshair; }
+.tool-water .plot { cursor: progress; }
+.tool-harvest .plot { cursor: grab; }
+.tool-fertilize .plot { cursor: alias; }
+
+.tool-plant .toolbar .btn.active,
+.tool-water .toolbar .btn.active,
+.tool-harvest .toolbar .btn.active,
+.tool-fertilize .toolbar .btn.active {
+  box-shadow: 0 0 0 2px rgba(255,255,255,.45), 0 0 0 4px rgba(245,203,62,.22);
+}
 .plot-icon { font-size: 28px; }
 .plot-time { font-size: 10px; }
 .badges { position: absolute; top: 3px; left: 4px; font-size: 11px; }

@@ -1674,46 +1674,56 @@ function actPlot(idx) {
     return;
   }
 
-  if (S.tool === "plant") {
-    if (st !== "empty") return;
-    const c = CROPS[S.seed];
-    if (me.gold < c.cost) return notice(tr("noGold"), "err");
-    me.gold -= c.cost;
-    p.crop = S.seed;
-    p.plantedAt = now;
-    p.wateredAt = 0;
-    p.fertilizedAt = 0;
-    addLog("🌱 " + tr("planted") + " " + c.icon + " " + cropName(S.seed));
-    notice(tr("planted"));
-  }
-
-  if (S.tool === "water") {
-    if (st !== "growing") return;
-    if (p.wateredAt > p.plantedAt) return;
-    p.wateredAt = now;
-    addLog("💧 " + tr("watered"));
-    notice(tr("watered"));
-  }
-
-  if (S.tool === "fertilize") {
-    if (st !== "growing") return;
-    if (p.fertilizedAt > p.plantedAt) return;
-    if (me.gold < 20) return notice(tr("noGold"), "err");
-    me.gold -= 20;
-    p.fertilizedAt = now;
-    addLog("🧪 " + tr("fertilized"));
-    notice(tr("fertilized"));
-  }
-
-  if (S.tool === "harvest") {
-    if (st !== "ready" && st !== "withered") return;
+  if (st === "ready") {
     const c = CROPS[p.crop];
-    const gain = st === "withered" ? Math.floor(c.sell * 0.3) : c.sell;
+    const gain = c.sell;
     me.gold += gain;
-    if (st === "ready") me.xp += c.xp;
+    me.xp += c.xp;
     clearPlot(p);
     addLog("🌾 " + tr("harvested") + " +" + gain + "🪙");
     notice(tr("harvested"));
+  } else {
+    if (S.tool === "plant") {
+      if (st !== "empty") return;
+      const c = CROPS[S.seed];
+      if (me.gold < c.cost) return notice(tr("noGold"), "err");
+      me.gold -= c.cost;
+      p.crop = S.seed;
+      p.plantedAt = now;
+      p.wateredAt = 0;
+      p.fertilizedAt = 0;
+      addLog("🌱 " + tr("planted") + " " + c.icon + " " + cropName(S.seed));
+      notice(tr("planted"));
+    }
+
+    if (S.tool === "water") {
+      if (st !== "growing") return;
+      if (p.wateredAt > p.plantedAt) return;
+      p.wateredAt = now;
+      addLog("💧 " + tr("watered"));
+      notice(tr("watered"));
+    }
+
+    if (S.tool === "fertilize") {
+      if (st !== "growing") return;
+      if (p.fertilizedAt > p.plantedAt) return;
+      if (me.gold < 20) return notice(tr("noGold"), "err");
+      me.gold -= 20;
+      p.fertilizedAt = now;
+      addLog("🧪 " + tr("fertilized"));
+      notice(tr("fertilized"));
+    }
+
+    if (S.tool === "harvest") {
+      if (st !== "ready" && st !== "withered") return;
+      const c = CROPS[p.crop];
+      const gain = st === "withered" ? Math.floor(c.sell * 0.3) : c.sell;
+      me.gold += gain;
+      if (st === "ready") me.xp += c.xp;
+      clearPlot(p);
+      addLog("🌾 " + tr("harvested") + " +" + gain + "🪙");
+      notice(tr("harvested"));
+    }
   }
 
   me.updatedAt = now;
@@ -1873,6 +1883,8 @@ function renderToolbar() {
   const bar = document.getElementById("toolbar");
   bar.innerHTML = "";
   if (!S.currentId) return;
+  document.body.classList.remove("tool-plant", "tool-water", "tool-harvest", "tool-fertilize");
+  document.body.classList.add("tool-" + S.tool);
   const visiting = !!S.viewId && S.viewId !== S.currentId;
   if (visiting) {
     const day = new Date().toDateString();
@@ -2527,10 +2539,3 @@ boot();
 })();
 
 
-const playMusicBtn = document.getElementById("playMusicBtn");
-if (playMusicBtn) {
-  playMusicBtn.addEventListener("click", () => {
-    const bgMusic = document.getElementById("bgMusic");
-    if (bgMusic) bgMusic.play();
-  });
-}
