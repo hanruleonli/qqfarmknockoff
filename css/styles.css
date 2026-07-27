@@ -455,11 +455,11 @@ button:focus-visible {
 }
 .seed-book-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 8px;
-  max-height: 320px;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  max-height: 420px;
   overflow-y: auto;
-  padding: 4px 0;
+  padding: 6px 0;
 }
 .seed-book-item {
   display: flex;
@@ -476,10 +476,24 @@ button:focus-visible {
   background: rgba(114, 255, 148, .08);
 }
 .seed-book-icon {
-  font-size: 28px;
-  width: 40px;
+  font-size: 20px;
+  width: 44px;
   text-align: center;
 }
+
+/* Make crop sprites more visible while growing */
+.plot .plot-icon img.sprite { box-shadow: 0 1px 0 rgba(0,0,0,.6) inset; background: rgba(0,0,0,0.12); padding: 2px; border-radius: 3px; }
+.plot.growing .plot-icon img.sprite { transform: translateY(-2px) scale(1.05); opacity: 1; }
+
+/* Hide the extra crop book button (consolidating seed UI to a single book) */
+#cropBookBtn { display: none !important; }
+
+/* Larger seed book modal to fit full info */
+.modal.seed-book-modal { width: min(96vw, 760px); height: min(86vh, 640px); padding: 18px; display: flex; flex-direction: column; }
+.seed-book-grid { margin-top: 6px; }
+.seed-book-list-wrap { display: flex; gap: 12px; }
+.seed-book-list { flex: 1; overflow-y: auto; }
+.seed-book-detail { width: 320px; background: rgba(255,255,255,.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.06); }
 .seed-book-content {
   display: grid;
   gap: 4px;

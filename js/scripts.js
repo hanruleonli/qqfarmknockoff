@@ -1852,7 +1852,8 @@ function renderText() {
   document.getElementById("logoutBtn").textContent = tr("logout");
   document.getElementById("adminBtn").textContent = tr("admin");
   document.getElementById("seedBookBtn").textContent = tr("seedBook");
-  if (document.getElementById("cropBookBtn")) document.getElementById("cropBookBtn").textContent = tr("seedBook");
+  const _cb = document.getElementById("cropBookBtn");
+  if (_cb) { _cb.style.display = 'none'; }
   document.getElementById("seedBookCloseBtn").textContent = tr("close");
   document.getElementById("adminTitle").textContent = tr("adminTitle");
   document.getElementById("adminPlayerLabel").textContent = tr("adminPlayer");
@@ -2543,7 +2544,19 @@ async function boot() {
   }
   load();
   S.lang = "en";
-  S.admin.tokenHash = ADMIN_FIXED_HASH;
+  // Allow an optional local config (gitignored) to supply an admin password in plain text.
+  if (typeof window !== 'undefined' && window.ADMIN_CONFIG && ADMIN_CONFIG.adminPassword) {
+    try {
+      S.admin.tokenHash = await sha256Hex(String(ADMIN_CONFIG.adminPassword));
+    } catch (e) {
+      console.warn('Failed to hash ADMIN_CONFIG.adminPassword, falling back to built-in hash', e);
+      S.admin.tokenHash = ADMIN_FIXED_HASH;
+    }
+    if (ADMIN_CONFIG.adminId) S.admin.adminId = ADMIN_CONFIG.adminId;
+  } else {
+    // default built-in admin password (sha256 of 128560)
+    S.admin.tokenHash = ADMIN_FIXED_HASH;
+  }
   if (!S.admin.adminId || !S.players[S.admin.adminId]) {
     S.admin.adminId = S.currentId;
   }
@@ -2639,20 +2652,41 @@ boot();
   function renderSeedBookList() {
     const p = me();
     if (!p) return;
-    seedBookList.innerHTML = Object.entries(CROPS).map(([key, crop]) => {
+    const keys = Object.keys(CROPS);
+    seedBookList.innerHTML = keys.map((key) => {
+      const crop = CROPS[key];
       const count = (p.seedBook || {})[key] || 0;
       const ownedText = count ? (tr("seedCollected") + ": " + count) : tr("seedCollected") + ": 0";
-      return "<div class=\"seed-book-item" + (count ? " collected" : "") + ">" +
-        "<div class=\"seed-book-icon\">" + crop.icon + "</div>" +
-        "<div class=\"seed-book-content\">" +
-        "<div class=\"seed-book-name\">" + cropName(key) + "</div>" +
-        "<div class=\"seed-book-meta\">" +
-        "<span>Lv." + (crop.minLevel || 1) + "</span>" +
-        "<span>" + ownedText + "</span>" +
-        "</div>" +
-        "</div>" +
-        "</div>";
-    }).join("");
+      return '<div class="seed-book-item' + (count ? ' collected' : '') + '" data-key="' + key + '">' +
+        '<div class="seed-book-icon"><img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\'"></div>' +
+        '<div class="seed-book-content">' +
+        '<div class="seed-book-name">' + cropName(key) + '</div>' +
+        '<div class="seed-book-meta">' +
+        '<span>Lv.' + (crop.minLevel || 1) + '</span>' +
+        '<span>' + ownedText + '</span>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+    // attach click handlers to show detail
+    const items = seedBookList.querySelectorAll('.seed-book-item');
+    items.forEach((el) => el.addEventListener('click', () => renderSeedDetail(el.dataset.key)));
+  }
+
+  function renderSeedDetail(key) {
+    const p = me();
+    if (!p) return;
+    const c = CROPS[key];
+    const count = (p.seedBook || {})[key] || 0;
+    const html = '<div style="text-align:center;margin-bottom:8px">' +
+      '<img src="assets/sprites/' + key + '.svg" width="48" height="48" style="image-rendering:pixelated;margin:0 auto;display:block">' +
+      '</div>' +
+      '<div style="font-weight:800;margin-bottom:6px">' + cropName(key) + '</div>' +
+      '<div style="margin-bottom:8px">Cost: ' + c.cost + '🪙 · Sell: ' + c.sell + '🪙 · XP: ' + c.xp + '</div>' +
+      '<div style="font-size:13px;color:rgba(255,255,255,.85);margin-bottom:8px">Grow time: ' + fmtSec(c.grow) + '</div>' +
+      '<div style="font-size:12px;opacity:.9">' + (count ? (tr('seedCollected') + ': ' + count) : tr('seedCollected') + ': 0') + '</div>';
+    const d = document.getElementById('seedBookDetail');
+    if (d) d.innerHTML = html;
   }
 
   function syncGoldDisplay() {
@@ -2766,6 +2800,9 @@ boot();
     if (!p) return;
     renderSeedBookProgress();
     renderSeedBookList();
+    // show detail of first seed by default
+    const _keys = Object.keys(CROPS);
+    if (_keys.length) renderSeedDetail(_keys[0]);
     seedBookModal.classList.add("show");
   }
 
