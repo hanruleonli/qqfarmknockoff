@@ -214,31 +214,7 @@ const CROPS = {
   onion: { icon: "🧅", name: { zh: "洋葱", en: "Onion", ja: "たまねぎ" }, grow: 240, cost: 18, sell: 31, xp: 14, minLevel: 3 },
   garlic: { icon: "🧄", name: { zh: "大蒜", en: "Garlic", ja: "にんにく" }, grow: 270, cost: 20, sell: 36, xp: 16, minLevel: 4 },
   carrot: { icon: "🥕", name: { zh: "胡萝卜", en: "Carrot", ja: "にんじん" }, grow: 300, cost: 22, sell: 40, xp: 18, minLevel: 4 },
-  lettuce: { icon: "🥬", name: { zh: "生菜", en: "Lettuce", ja: "レタス" }, grow: 330, cost: 24, sell: 44, xp: 20, minLevel: 5 },
-  cabbage: { icon: "🥬", name: { zh: "卷心菜", en: "Cabbage", ja: "キャベツ" }, grow: 360, cost: 27, sell: 50, xp: 22, minLevel: 5 },
-  spinach: { icon: "🥬", name: { zh: "菠菜", en: "Spinach", ja: "ほうれん草" }, grow: 390, cost: 30, sell: 55, xp: 24, minLevel: 6 },
-  mushroom: { icon: "🍄", name: { zh: "蘑菇", en: "Mushroom", ja: "きのこ" }, grow: 420, cost: 34, sell: 62, xp: 28, minLevel: 6 },
-  tea: { icon: "🍵", name: { zh: "茶叶", en: "Tea", ja: "お茶" }, grow: 450, cost: 38, sell: 70, xp: 32, minLevel: 7 },
-  sunflower: { icon: "🌻", name: { zh: "向日葵", en: "Sunflower", ja: "ひまわり" }, grow: 480, cost: 42, sell: 78, xp: 36, minLevel: 7 },
-  lavender: { icon: "💜", name: { zh: "薰衣草", en: "Lavender", ja: "ラベンダー" }, grow: 520, cost: 46, sell: 88, xp: 42, minLevel: 8 },
-  rose: { icon: "🌹", name: { zh: "玫瑰", en: "Rose", ja: "バラ" }, grow: 560, cost: 50, sell: 98, xp: 48, minLevel: 8 },
-  coffee: { icon: "☕", name: { zh: "咖啡", en: "Coffee", ja: "コーヒー" }, grow: 600, cost: 54, sell: 108, xp: 54, minLevel: 9 },
-  cocoa: { icon: "🍫", name: { zh: "可可", en: "Cocoa", ja: "ココア" }, grow: 650, cost: 58, sell: 120, xp: 62, minLevel: 9 },
-  clover: { icon: "🍀", name: { zh: "三叶草", en: "Clover", ja: "クローバー" }, grow: 700, cost: 62, sell: 132, xp: 70, minLevel: 9 },
-  lotus: { icon: "🌸", name: { zh: "莲花", en: "Lotus", ja: "ハス" }, grow: 760, cost: 66, sell: 144, xp: 78, minLevel: 9 },
-  starfruit: { icon: "⭐", name: { zh: "杨桃", en: "Starfruit", ja: "スターフルーツ" }, grow: 820, cost: 72, sell: 160, xp: 88, minLevel: 9 },
-  dragonfruit: { icon: "🐉", name: { zh: "火龙果", en: "Dragonfruit", ja: "ドラゴンフルーツ" }, grow: 900, cost: 88, sell: 190, xp: 105, minLevel: 9 },
-  goldenapple: { icon: "🍏", name: { zh: "金苹果", en: "Golden Apple", ja: "ゴールデンアップル" }, grow: 980, cost: 110, sell: 230, xp: 125, minLevel: 9 },
-  bonsai: { icon: "🪴", name: { zh: "盆栽", en: "Bonsai", ja: "盆栽" }, grow: 1040, cost: 130, sell: 270, xp: 145, minLevel: 9 },
-  cactus: { icon: "🌵", name: { zh: "仙人掌", en: "Cactus", ja: "サボテン" }, grow: 1100, cost: 150, sell: 310, xp: 165, minLevel: 9 },
-  cherry: { icon: "🍒", name: { zh: "樱桃", en: "Cherry", ja: "さくらんぼ" }, grow: 1160, cost: 170, sell: 350, xp: 185, minLevel: 9 },
-  mint: { icon: "🌿", name: { zh: "薄荷", en: "Mint", ja: "ミント" }, grow: 1220, cost: 190, sell: 390, xp: 205, minLevel: 9 },
-  basil: { icon: "🌿", name: { zh: "罗勒", en: "Basil", ja: "バジル" }, grow: 1280, cost: 210, sell: 430, xp: 225, minLevel: 9 },
-  orchid: { icon: "🪻", name: { zh: "兰花", en: "Orchid", ja: "蘭" }, grow: 1340, cost: 240, sell: 480, xp: 250, minLevel: 9 },
-  dewberry: { icon: "🫐", name: { zh: "露莓", en: "Dewberry", ja: "デューベリー" }, grow: 1400, cost: 270, sell: 540, xp: 280, minLevel: 9 },
-  moongrass: { icon: "🌙", name: { zh: "月草", en: "Moongrass", ja: "ムーングラス" }, grow: 1460, cost: 300, sell: 600, xp: 310, minLevel: 9 },
-  aurorafruit: { icon: "🪐", name: { zh: "极光果", en: "Aurora Fruit", ja: "オーロラフルーツ" }, grow: 1520, cost: 340, sell: 680, xp: 340, minLevel: 9 },
-  skybean: { icon: "☁️", name: { zh: "天豆", en: "Sky Bean", ja: "スカイビーン" }, grow: 1580, cost: 380, sell: 760, xp: 380, minLevel: 9 }
+  lettuce: { icon: "🥬", name: { zh: "生菜", en: "Lettuce", ja: "レタス" }, grow: 330, cost: 24, sell: 44, xp: 20, minLevel: 5 }
 };
 
 const FERTILIZERS = {
@@ -2172,15 +2148,17 @@ function renderGrid() {
     if (locked) {
       btn.innerHTML = '<div class="plot-icon">🔒</div><div class="plot-time">Lv.</div>';
     } else if (st === "empty") {
-      btn.innerHTML = '<div class="plot-icon">🪹</div><div class="plot-time">' + tr("empty") + '</div>';
+      // show sprite placeholder for empty
+      btn.innerHTML = '<div class="plot-icon"><img class="sprite" src="assets/sprites/blank.svg" onerror="this.style.display=\'none\'">🪹</div><div class="plot-time">' + tr("empty") + '</div>';
     } else {
       const icon = st === "withered" ? "🥀" : CROPS[p.crop].icon;
       const badges = (p.wateredAt > p.plantedAt ? "💧" : "") + (p.fertilizedAt > p.plantedAt ? "🧪" : "");
+      const spriteImg = '<img class="sprite" src="assets/sprites/' + p.crop + '.svg" onerror="this.style.display=\'none\'">';
       const contested = Object.values(S.battles).some((b) => b.ownerId === owner.id && b.plotIndex === i && !b.resolved);
       btn.innerHTML =
-        (badges ? '<div class="badges">' + badges + '</div>' : "") +
-        (contested ? '<div class="plot-badge-battle">⚔️</div>' : "") +
-        '<div class="plot-icon">' + icon + '</div>' +
+        (badges ? '<div class="badges">' + badges + '</div>' : '') +
+        (contested ? '<div class="plot-badge-battle">⚔️</div>' : '') +
+        '<div class="plot-icon">' + spriteImg + '</div>' +
         '<div class="plot-time">' + pLabel(p, now) + '</div>' +
         '<div class="progress"><span style="width:' + Math.floor(pProgress(p, now) * 100) + '%"></span></div>';
     }
@@ -2215,6 +2193,17 @@ function renderSelector() {
   sel.style.left = Math.max(0, cellRect.left - wrapRect.left + borderOffset) + "px";
   sel.style.top = Math.max(0, cellRect.top - wrapRect.top + borderOffset) + "px";
   sel.style.transform = "none";
+  // move player sprite to selected plot center
+  const ps = document.getElementById('playerSprite');
+  if (ps) {
+    const cx = cellRect.left - wrapRect.left + cellRect.width / 2;
+    const cy = cellRect.top - wrapRect.top + cellRect.height / 2;
+    ps.style.left = cx + 'px';
+    ps.style.top = cy + 'px';
+    ps.classList.add('walk');
+    clearTimeout(ps._walkTimeout);
+    ps._walkTimeout = setTimeout(() => ps.classList.remove('walk'), 400);
+  }
 }
 
 function renderSwitchList() {
@@ -2567,6 +2556,9 @@ async function boot() {
     connectServer();
   }
   render();
+  // set initial player sprite image
+  const _ps = document.getElementById('playerSprite');
+  if (_ps) _ps.style.backgroundImage = "url('assets/sprites/player.svg')";
   openLoginPage();
   setInterval(loop, 1000);
   scheduleCloudPoll();
