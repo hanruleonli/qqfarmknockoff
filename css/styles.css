@@ -158,16 +158,11 @@ button:focus-visible {
 }
 .weather { font-size: 12px; background: rgba(0,0,0,.24); border-radius: 999px; padding: 5px 10px; }
 .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-.grid-wrap { position: relative; perspective: 1100px; transform-style: preserve-3d; }
-.grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px;
-  transform-origin: center top;
-  transform: rotateX(50deg) rotateZ(-12deg) translateY(-18px) scale(0.96);
-  transition: transform .18s ease;
-  filter: drop-shadow(0 12px 0 rgba(0,0,0,0.5));
-}
+.grid-wrap { position: relative; }
+.grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; transition: none; transform: none; filter: none; }
 .plot {
   aspect-ratio: 1;
-  min-height: 80px;
+  min-height: 64px;
   border-radius: 0;
   border: 2px solid rgba(255,255,255,.24);
   position: relative;
@@ -195,7 +190,7 @@ button:focus-visible {
 .tool-fertilize .toolbar .btn.active {
   box-shadow: 0 0 0 2px rgba(255,255,255,.45), 0 0 0 4px rgba(245,203,62,.22);
 }
-.plot-icon { font-size: 30px; }
+.plot-icon { font-size: 20px; }
 .plot-time { font-size: 11px; opacity: .88; margin-top: 4px; }
 .badges { position: absolute; top: 8px; left: 8px; font-size: 12px; }
 .plot-badge-battle { position: absolute; top: 8px; right: 8px; font-size: 12px; }
@@ -225,10 +220,10 @@ button:focus-visible {
 .seed.locked { opacity: 0.4; cursor: not-allowed; }
 
 /* sprite image rules */
-.sprite { width: 40px; height: 40px; image-rendering: pixelated; display:block; margin: 0 auto; }
-.player-sprite { position: absolute; width: 48px; height: 48px; pointer-events: none; z-index: 4; transition: transform 220ms cubic-bezier(.2,.9,.2,1), left 220ms, top 220ms; background-size: cover; background-repeat: no-repeat; transform: translate(-50%, -60%); }
+.sprite { width: 16px; height: 16px; image-rendering: pixelated; display:block; margin: 0 auto; }
+.player-sprite { position: absolute; width: 24px; height: 24px; pointer-events: none; z-index: 6; transition: left 220ms cubic-bezier(.2,.9,.2,1), top 220ms cubic-bezier(.2,.9,.2,1); background-size: contain; background-repeat: no-repeat; transform: translate(-50%, -50%); }
 .player-sprite.walk { animation: bob 350ms steps(2) infinite; }
-@keyframes bob { 0% { transform: translate(-50%, -62%); } 50% { transform: translate(-50%, -58%); } 100% { transform: translate(-50%, -62%); } }
+@keyframes bob { 0% { transform: translate(-50%, -52%); } 50% { transform: translate(-50%, -48%); } 100% { transform: translate(-50%, -52%); } }
 .shop-section { display: contents; }
 .shop-section-title { grid-column: 1 / -1; font-size: 12px; font-weight: 700; padding: 8px 0 4px; opacity: .85; }
 .fert-item { border: 1px solid rgba(255,255,255,.12); border-radius: 16px; background: rgba(255,255,255,.06); padding: 10px; display: grid; grid-template-columns: 28px 1fr auto; gap: 6px; align-items: center; }
