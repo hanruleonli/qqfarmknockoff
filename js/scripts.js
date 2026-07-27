@@ -8,6 +8,7 @@ const I18N = {
     weather: "天气", wsunny: "晴天", wrain: "下雨（加速）", wheat: "炎热（减速）", wcold: "寒潮（减速）",
     empty: "点击空地种植", ready: "可收获", withered: "枯萎", noGold: "金币不足",
     planted: "种下", watered: "浇水成功", fertilized: "施肥成功", harvested: "收获成功", stolen: "偷菜成功",
+    fertilizerShop: "肥料商店", fertilizer: "肥料", basic: "基础", advanced: "高级", premium: "顶级", noFertilizer: "没有可用肥料", buy: "购买", levelLocked: "需要等级",
     topRank: "排行榜第一",
     topUsers: "玩家排行",
     controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具, 5-9选择种子, 0打开老虎机。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
@@ -44,6 +45,7 @@ const I18N = {
     weather: "Weather", wsunny: "Sunny", wrain: "Rain (+speed)", wheat: "Hot (-speed)", wcold: "Cold wave (-speed)",
     empty: "Tap empty plot", ready: "Ready", withered: "Withered", noGold: "Not enough gold",
     planted: "Planted", watered: "Watered", fertilized: "Fertilized", harvested: "Harvested", stolen: "Stolen",
+    fertilizerShop: "Fertilizer Shop", fertilizer: "Fertilizer", noFertilizer: "No fertilizer available", buy: "Buy", levelLocked: "Requires Level",
     topRank: "Top Ranked",
     topUsers: "Leaderboard",
     controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 5-9 choose seed, 0 open slots. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
@@ -80,6 +82,7 @@ const I18N = {
     weather: "天気", wsunny: "晴れ", wrain: "雨（加速）", wheat: "猛暑（減速）", wcold: "寒波（減速）",
     empty: "空き地をタップ", ready: "収穫可能", withered: "枯れ", noGold: "コイン不足",
     planted: "植えた", watered: "水やり成功", fertilized: "肥料成功", harvested: "収穫成功", stolen: "盗み成功",
+    fertilizerShop: "肥料ショップ", fertilizer: "肥料", basic: "基本", advanced: "上級", premium: "プレミアム", noFertilizer: "肥料がありません", buy: "購入", levelLocked: "必要レベル",
     topRank: "ランキング1位",
     topUsers: "ランキング",
     controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替、5-9で種選択、0でスロット。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
@@ -116,6 +119,7 @@ const I18N = {
     weather: "Clima", wsunny: "Soleado", wrain: "Lluvia (+velocidad)", wheat: "Calor (-velocidad)", wcold: "Ola fria (-velocidad)",
     empty: "Toca una parcela vacia", ready: "Listo", withered: "Marchito", noGold: "No hay oro suficiente",
     planted: "Plantado", watered: "Regado", fertilized: "Fertilizado", harvested: "Cosechado", stolen: "Robado",
+    fertilizerShop: "Tienda de Fertilizante", fertilizer: "Fertilizante", basic: "Básico", advanced: "Avanzado", premium: "Premium", noFertilizer: "No hay fertilizante disponible", buy: "Comprar", levelLocked: "Requiere Nivel",
     topUsers: "Clasificacion",
     controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas, 5-9 elegir semilla, 0 slots. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth no compatible", btConn: "Conectando Bluetooth...", btOk: "Bluetooth conectado", btFail: "Fallo de Bluetooth", btDisc: "Bluetooth desconectado",
@@ -151,6 +155,7 @@ const I18N = {
     weather: "Погода", wsunny: "Солнечно", wrain: "Дождь (+скорость)", wheat: "Жара (-скорость)", wcold: "Холод (-скорость)",
     empty: "Нажмите на пустой участок", ready: "Готово", withered: "Завяло", noGold: "Недостаточно монет",
     planted: "Посажено", watered: "Полив выполнен", fertilized: "Удобрено", harvested: "Собрано", stolen: "Украдено",
+    fertilizerShop: "Магазин удобрений", fertilizer: "Удобрение", basic: "Базовый", advanced: "Продвинутый", premium: "Премиум", noFertilizer: "Удобрений нет", buy: "Купить", levelLocked: "Требуется уровень",
     topUsers: "Рейтинг",
     controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты, 5-9 - выбрать семена, 0 - слоты. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth не поддерживается", btConn: "Подключение Bluetooth...", btOk: "Bluetooth подключен", btFail: "Ошибка Bluetooth", btDisc: "Bluetooth отключен",
@@ -181,12 +186,24 @@ const I18N = {
 };
 
 const CROPS = {
-  radish: { icon: "🥕", name: { zh: "萝卜", en: "Radish", ja: "だいこん" }, grow: 55, cost: 6, sell: 10, xp: 5 },
-  berry: { icon: "🍓", name: { zh: "草莓", en: "Berry", ja: "いちご" }, grow: 95, cost: 10, sell: 17, xp: 10 },
-  tomato: { icon: "🍅", name: { zh: "番茄", en: "Tomato", ja: "トマト" }, grow: 150, cost: 14, sell: 25, xp: 14 },
-  corn: { icon: "🌽", name: { zh: "玉米", en: "Corn", ja: "とうもろこし" }, grow: 230, cost: 21, sell: 37, xp: 20 },
-  pumpkin: { icon: "🎃", name: { zh: "南瓜", en: "Pumpkin", ja: "かぼちゃ" }, grow: 360, cost: 30, sell: 56, xp: 30 }
+  radish: { icon: "🥕", name: { zh: "萝卜", en: "Radish", ja: "だいこん" }, grow: 55, cost: 6, sell: 10, xp: 5, minLevel: 1 },
+  berry: { icon: "🍓", name: { zh: "草莓", en: "Berry", ja: "いちご" }, grow: 95, cost: 10, sell: 17, xp: 10, minLevel: 2 },
+  tomato: { icon: "🍅", name: { zh: "番茄", en: "Tomato", ja: "トマト" }, grow: 150, cost: 14, sell: 25, xp: 14, minLevel: 3 },
+  corn: { icon: "🌽", name: { zh: "玉米", en: "Corn", ja: "とうもろこし" }, grow: 230, cost: 21, sell: 37, xp: 20, minLevel: 4 },
+  pumpkin: { icon: "🎃", name: { zh: "南瓜", en: "Pumpkin", ja: "かぼちゃ" }, grow: 360, cost: 30, sell: 56, xp: 30, minLevel: 5 },
+  eggplant: { icon: "🍆", name: { zh: "茄子", en: "Eggplant", ja: "ナス" }, grow: 420, cost: 45, sell: 75, xp: 36, minLevel: 6 },
+  melon: { icon: "🍈", name: { zh: "甜瓜", en: "Melon", ja: "メロン" }, grow: 520, cost: 60, sell: 95, xp: 50, minLevel: 7 },
+  pepper: { icon: "🌶️", name: { zh: "辣椒", en: "Pepper", ja: "唐辛子" }, grow: 640, cost: 80, sell: 130, xp: 72, minLevel: 8 },
+  pineapple: { icon: "🍍", name: { zh: "菠萝", en: "Pineapple", ja: "パイナップル" }, grow: 780, cost: 110, sell: 180, xp: 100, minLevel: 9 }
 };
+
+const FERTILIZERS = {
+  basic: { icon: "🧴", name: { zh: "基础肥料", en: "Basic Fertilizer", ja: "基本肥料" }, cost: 18, multiplier: 0.88, minLevel: 2 },
+  advanced: { icon: "🧪", name: { zh: "高级肥料", en: "Advanced Fertilizer", ja: "上級肥料" }, cost: 38, multiplier: 0.72, minLevel: 4 },
+  premium: { icon: "✨", name: { zh: "顶级肥料", en: "Premium Fertilizer", ja: "プレミアム肥料" }, cost: 78, multiplier: 0.55, minLevel: 6 }
+};
+
+const FERTILIZER_TIERS = ["basic", "advanced", "premium"];
 
 const WEATHER = [
   { key: "wsunny", icon: "☀️", mult: 1.0 },
@@ -475,6 +492,7 @@ function normalizePlot(plot) {
   if (plot.plantedAt > Date.now()) plot.plantedAt = Date.now();
   if (plot.wateredAt && plot.wateredAt < plot.plantedAt) plot.wateredAt = 0;
   if (plot.fertilizedAt && plot.fertilizedAt < plot.plantedAt) plot.fertilizedAt = 0;
+  if (!plot.fertilizedTier || !FERTILIZERS[plot.fertilizedTier]) plot.fertilizedTier = null;
   if (plot.crop === "carrot") {
     plot.crop = "radish";
   }
@@ -490,9 +508,13 @@ function normalizeState() {
   if (!Number.isInteger(S.cursor) || S.cursor < 0 || S.cursor >= MAX_PLOTS) S.cursor = 0;
   Object.values(S.players).forEach((player) => {
     if (!Array.isArray(player.plots)) {
-      player.plots = Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0 }));
+      player.plots = Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null }));
     }
     player.plots.forEach(normalizePlot);
+    if (!player.fertilizer || typeof player.fertilizer !== "object") player.fertilizer = { basic: 0, advanced: 0, premium: 0 };
+    FERTILIZER_TIERS.forEach((tier) => {
+      player.fertilizer[tier] = Math.max(0, Number(player.fertilizer[tier] || 0));
+    });
     player.updatedAt = normalizeTimestamp(player.updatedAt) || now;
     player.lastActiveAt = normalizeTimestamp(player.lastActiveAt) || now;
   });
@@ -573,7 +595,18 @@ async function sha256Hex(text) {
 
 function makePlayer(name, avatar, location = "") {
   const id = "p" + Date.now() + Math.random().toString(36).slice(2, 6);
-  return { id, name, avatar, location, gold: 120, xp: 0, updatedAt: Date.now(), lastActiveAt: Date.now(), plots: Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0 })) };
+  return {
+    id,
+    name,
+    avatar,
+    location,
+    gold: 120,
+    xp: 0,
+    updatedAt: Date.now(),
+    lastActiveAt: Date.now(),
+    plots: Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null })),
+    fertilizer: { basic: 0, advanced: 0, premium: 0 }
+  };
 }
 
 function levelInfo(xp) {
@@ -594,7 +627,10 @@ function growTime(plot) {
   const mult = Number(S.weather.mult) || 1;
   let t = c.grow / mult;
   if (plot.wateredAt > plot.plantedAt) t *= 0.8;
-  if (plot.fertilizedAt > plot.plantedAt) t *= 0.62;
+  if (plot.fertilizedAt > plot.plantedAt) {
+    const fert = FERTILIZERS[plot.fertilizedTier];
+    t *= fert ? fert.multiplier : 0.62;
+  }
   return Math.max(t, 1);
 }
 
@@ -636,6 +672,7 @@ function clearPlot(p) {
   p.plantedAt = 0;
   p.wateredAt = 0;
   p.fertilizedAt = 0;
+  p.fertilizedTier = null;
 }
 
 function notice(msg, type = "") {
@@ -1717,6 +1754,7 @@ function actPlot(idx) {
       p.plantedAt = now;
       p.wateredAt = 0;
       p.fertilizedAt = 0;
+      p.fertilizedTier = null;
       addLog("🌱 " + tr("planted") + " " + c.icon + " " + cropName(S.seed));
       notice(tr("planted"));
     }
@@ -1732,10 +1770,15 @@ function actPlot(idx) {
     if (S.tool === "fertilize") {
       if (st !== "growing") return;
       if (p.fertilizedAt > p.plantedAt) return;
-      if (me.gold < 20) return notice(tr("noGold"), "err");
-      me.gold -= 20;
+      const player = S.players[S.currentId];
+      const currentLevel = levelInfo(player.xp).level;
+      const tier = FERTILIZER_TIERS.slice().reverse().find((t) => player.fertilizer[t] > 0 && currentLevel >= FERTILIZERS[t].minLevel);
+      if (!tier) return notice(tr("noFertilizer"), "err");
+      const fertilizer = FERTILIZERS[tier];
+      player.fertilizer[tier] -= 1;
       p.fertilizedAt = now;
-      addLog("🧪 " + tr("fertilized"));
+      p.fertilizedTier = tier;
+      addLog(fertilizer.icon + " " + tr("fertilized") + " (" + tr(tier) + ")");
       notice(tr("fertilized"));
     }
 
@@ -1939,24 +1982,68 @@ function renderShop() {
   const shop = document.getElementById("shop");
   shop.innerHTML = "";
   if (!S.currentId) return;
+
+  const me = S.players[S.currentId];
+  const seedSection = document.createElement("div");
+  seedSection.className = "shop-section";
+  seedSection.innerHTML = '<div class="shop-section-title">' + tr("shop") + '</div>';
   Object.keys(CROPS).forEach((key) => {
     const c = CROPS[key];
+    const allowed = me.xp >= (c.minLevel || 1);
     const el = document.createElement("button");
     el.type = "button";
-    el.className = "seed" + (S.seed === key ? " on" : "");
+    el.className = "seed" + (S.seed === key ? " on" : "") + (allowed ? "" : " locked");
+    el.disabled = !allowed;
     el.innerHTML =
       '<div class="s1">' + c.icon + '</div>' +
       '<div class="s2">' + cropName(key) + '</div>' +
       '<div class="s3">' + c.cost + ' / ' + c.sell + '🪙</div>' +
-      '<div class="s3">⏱' + fmtSec(c.grow) + '</div>';
+      '<div class="s3">' + (allowed ? '⏱' + fmtSec(c.grow) : tr("levelLocked") + ' ' + (c.minLevel || 1)) + '</div>';
     el.addEventListener("click", () => {
+      if (!allowed) return;
       S.seed = key;
       S.tool = "plant";
       save();
       render();
     });
-    shop.appendChild(el);
+    seedSection.appendChild(el);
   });
+  shop.appendChild(seedSection);
+
+  const fertSection = document.createElement("div");
+  fertSection.className = "shop-section";
+  fertSection.innerHTML = '<div class="shop-section-title">' + tr("fertilizerShop") + '</div>';
+  const playerLevel = levelInfo(me.xp).level;
+  FERTILIZER_TIERS.forEach((tier) => {
+    const fert = FERTILIZERS[tier];
+    const allowed = playerLevel >= fert.minLevel;
+    const item = document.createElement("div");
+    item.className = "fert-item";
+    item.innerHTML =
+      '<div class="s1">' + fert.icon + '</div>' +
+      '<div class="s2">' + tr(tier) + ' ' + tr("fertilizer") + '</div>' +
+      '<div class="s3">' + tr("buy") + ': ' + fert.cost + '🪙</div>' +
+      '<div class="s3">' + String(me.fertilizer[tier] || 0) + ' ×</div>' +
+      '<div class="s3">' + (allowed ? '' : tr("levelLocked") + ' ' + fert.minLevel) + '</div>';
+
+    const buy = document.createElement("button");
+    buy.type = "button";
+    buy.className = "btn small" + (allowed ? "" : " disabled");
+    buy.textContent = tr("buy");
+    buy.disabled = !allowed || me.gold < fert.cost;
+    buy.addEventListener("click", () => {
+      if (!allowed) return;
+      if (me.gold < fert.cost) return notice(tr("noGold"), "err");
+      me.gold -= fert.cost;
+      me.fertilizer[tier] = (me.fertilizer[tier] || 0) + 1;
+      save();
+      render();
+      notice(tr("buy") + ' ' + tr(tier));
+    });
+    item.appendChild(buy);
+    fertSection.appendChild(item);
+  });
+  shop.appendChild(fertSection);
 }
 
 function friendReady(p) {
