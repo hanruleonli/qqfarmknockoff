@@ -1496,7 +1496,7 @@ function openAdminAuth() {
   document.getElementById("adminAuthSetup").textContent = tr("adminAuthSetup");
   document.getElementById("adminToken").placeholder = tr("adminTokenPh");
   document.getElementById("adminTokenConfirm").placeholder = tr("adminTokenConfirmPh");
-  document.getElementById("adminAuthHint").textContent = tr("adminFixedHint");
+  document.getElementById("adminAuthHint").textContent = tr("adminUnlockHint");
   document.getElementById("adminAuthSetup").classList.toggle("hidden", !setupMode);
   document.getElementById("adminAuthUnlock").classList.toggle("hidden", setupMode);
   document.getElementById("adminTokenConfirm").classList.toggle("hidden", !setupMode);
@@ -2135,10 +2135,12 @@ function renderSelector() {
   if (!target) return;
   const wrapRect = gridWrap.getBoundingClientRect();
   const cellRect = target.getBoundingClientRect();
-  sel.style.width = Math.max(0, cellRect.width) + "px";
-  sel.style.height = Math.max(0, cellRect.height) + "px";
-  sel.style.left = Math.max(0, cellRect.left - wrapRect.left) + "px";
-  sel.style.top = Math.max(0, cellRect.top - wrapRect.top) + "px";
+  const borderOffset = 2;
+  sel.style.boxSizing = "border-box";
+  sel.style.width = Math.max(0, cellRect.width - borderOffset * 2) + "px";
+  sel.style.height = Math.max(0, cellRect.height - borderOffset * 2) + "px";
+  sel.style.left = Math.max(0, cellRect.left - wrapRect.left + borderOffset) + "px";
+  sel.style.top = Math.max(0, cellRect.top - wrapRect.top + borderOffset) + "px";
   sel.style.transform = "none";
 }
 
