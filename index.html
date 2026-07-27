@@ -57,6 +57,7 @@
         <h3 id="shopTitle"></h3>
         <div id="shop" class="shop"></div>
         <button id="seedBookBtn" class="btn" style="width:100%;margin-top:10px"></button>
+        <button id="cropBookBtn" class="btn" style="width:100%;margin-top:8px"></button>
       </div>
       <div class="card">
         <h3 id="friendsTitle"></h3>
@@ -263,6 +264,25 @@
     <div id="seedBookList" class="seed-book-grid"></div>
     <div class="slot-actions">
       <button id="seedBookCloseBtn" class="btn">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<div id="cropBookModal" class="overlay">
+  <div class="modal crop-book-modal">
+    <div class="slot-modal-head">
+      <h2>📚 Crop Book</h2>
+      <button id="cropBookCloseX" class="slot-close" aria-label="Close">✕</button>
+    </div>
+    <div class="crop-book-body">
+      <div class="book">
+        <div id="cropBookPage" class="page">Loading...</div>
+      </div>
+    </div>
+    <div class="slot-actions">
+      <button id="cropPrevBtn" class="btn">◀ Prev</button>
+      <button id="cropNextBtn" class="btn">Next ▶</button>
+      <button id="cropBookCloseBtn" class="btn">CLOSE</button>
     </div>
   </div>
 </div>

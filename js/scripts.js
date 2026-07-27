@@ -1876,6 +1876,7 @@ function renderText() {
   document.getElementById("logoutBtn").textContent = tr("logout");
   document.getElementById("adminBtn").textContent = tr("admin");
   document.getElementById("seedBookBtn").textContent = tr("seedBook");
+  if (document.getElementById("cropBookBtn")) document.getElementById("cropBookBtn").textContent = tr("seedBook");
   document.getElementById("seedBookCloseBtn").textContent = tr("close");
   document.getElementById("adminTitle").textContent = tr("adminTitle");
   document.getElementById("adminPlayerLabel").textContent = tr("adminPlayer");
@@ -2049,7 +2050,9 @@ function renderShop() {
   const seedSection = document.createElement("div");
   seedSection.className = "shop-section";
   seedSection.innerHTML = '<div class="shop-section-title">' + tr("shop") + '</div>';
-  Object.keys(CROPS).forEach((key) => {
+  // Show a compact selection of featured seeds and link to full Crop Book
+  const seedKeys = Object.keys(CROPS);
+  seedKeys.slice(0, 6).forEach((key) => {
     const c = CROPS[key];
     const allowed = me.xp >= (c.minLevel || 1);
     const el = document.createElement("button");
@@ -2059,8 +2062,7 @@ function renderShop() {
     el.innerHTML =
       '<div class="s1">' + c.icon + '</div>' +
       '<div class="s2">' + cropName(key) + '</div>' +
-      '<div class="s3">' + c.cost + ' / ' + c.sell + '🪙</div>' +
-      '<div class="s3">' + (allowed ? '⏱' + fmtSec(c.grow) : tr("levelLocked") + ' ' + (c.minLevel || 1)) + '</div>';
+      '<div class="s3">' + c.cost + ' / ' + c.sell + '🪙</div>';
     el.addEventListener("click", () => {
       if (!allowed) return;
       S.seed = key;
@@ -2070,6 +2072,15 @@ function renderShop() {
     });
     seedSection.appendChild(el);
   });
+
+  // Add Crop Book quick button
+  const cb = document.createElement('button');
+  cb.className = 'btn';
+  cb.style.width = '100%';
+  cb.style.marginTop = '8px';
+  cb.textContent = tr('seedBook');
+  cb.addEventListener('click', () => { if (typeof openCropBook === 'function') openCropBook(); });
+  seedSection.appendChild(cb);
   shop.appendChild(seedSection);
 
   const fertSection = document.createElement("div");
@@ -2605,7 +2616,15 @@ boot();
   const seedBookCloseX = document.getElementById("seedBookCloseX");
   const seedBookList = document.getElementById("seedBookList");
   const seedBookProgress = document.getElementById("seedBookProgress");
+  const cropBookBtn = document.getElementById("cropBookBtn");
+  const cropBookModal = document.getElementById("cropBookModal");
+  const cropBookCloseBtn = document.getElementById("cropBookCloseBtn");
+  const cropBookCloseX = document.getElementById("cropBookCloseX");
+  const cropPrevBtn = document.getElementById("cropPrevBtn");
+  const cropNextBtn = document.getElementById("cropNextBtn");
+  const cropBookPage = document.getElementById("cropBookPage");
   let spinning = false;
+  let cropPageIndex = 0;
 
   function renderPaytable() {
     const box = document.getElementById("slotPaytable");
@@ -2758,6 +2777,45 @@ boot();
     seedBookModal.classList.add("show");
   }
 
+  function renderCropPage(idx) {
+    const keys = Object.keys(CROPS);
+    if (!keys.length) return;
+    idx = (idx + keys.length) % keys.length;
+    cropPageIndex = idx;
+    const key = keys[idx];
+    const c = CROPS[key];
+    const html = '<div class="crop-page-inner">' +
+      '<div class="crop-page-left">' +
+      '<div class="crop-icon">' + c.icon + '</div>' +
+      '<div class="crop-name">' + cropName(key) + '</div>' +
+      '<div class="crop-meta">Lv.' + (c.minLevel || 1) + ' · ⏱' + fmtSec(c.grow) + '</div>' +
+      '</div>' +
+      '<div class="crop-page-right">' +
+      '<div class="crop-desc">A mysterious crop. Tastes great in pixel stew.</div>' +
+      '<div class="crop-stats">Cost: ' + c.cost + '🪙 · Sell: ' + c.sell + '🪙 · XP: ' + c.xp + '</div>' +
+      '</div>' +
+      '</div>';
+    // page flip animation: add turning class then replace
+    cropBookPage.classList.add('turning');
+    setTimeout(() => {
+      cropBookPage.innerHTML = html;
+      cropBookPage.classList.remove('turning');
+    }, 260);
+  }
+
+  function openCropBook() {
+    const p = me();
+    if (!p) return;
+    cropPageIndex = 0;
+    renderCropPage(cropPageIndex);
+    cropBookModal.classList.add('show');
+  }
+
+  function closeCropBook() { cropBookModal.classList.remove('show'); }
+
+  function nextCropPage() { renderCropPage(cropPageIndex + 1); }
+  function prevCropPage() { renderCropPage(cropPageIndex - 1); }
+
   function closeSeedBook() {
     seedBookModal.classList.remove("show");
   }
@@ -2766,6 +2824,12 @@ boot();
   seedBookCloseBtn.addEventListener("click", closeSeedBook);
   seedBookCloseX.addEventListener("click", closeSeedBook);
   seedBookModal.addEventListener("click", (e) => { if (e.target === seedBookModal) closeSeedBook(); });
+  cropBookBtn.addEventListener('click', openCropBook);
+  cropBookCloseBtn.addEventListener('click', closeCropBook);
+  cropBookCloseX.addEventListener('click', closeCropBook);
+  cropPrevBtn.addEventListener('click', prevCropPage);
+  cropNextBtn.addEventListener('click', nextCropPage);
+  cropBookModal.addEventListener('click', (e) => { if (e.target === cropBookModal) closeCropBook(); });
   document.getElementById("slotButton").addEventListener("click", openSlots);
   document.getElementById("slotCloseBtn").addEventListener("click", closeSlots);
   document.getElementById("slotCloseX").addEventListener("click", closeSlots);
