@@ -217,9 +217,9 @@ const AUTO_CLOUD_RETRY_MS = 6000;
 // instead of an instant steal. Owner presence is a heartbeat, not a live
 // signal, so this window has to be generous enough to survive normal polling
 // gaps rather than flickering the owner "offline" between ticks.
-const BATTLE_ACTIVE_WINDOW_MS = 45000;
+const BATTLE_ACTIVE_WINDOW_MS = 20 * 60 * 1000;
 const BATTLE_HEARTBEAT_MS = 8000;
-const BATTLE_TIME_LIMIT_MS = 60000;
+const BATTLE_TIME_LIMIT_MS = 0;
 const BATTLE_MISTAKE_PENALTY_MS = 2000;
 const BATTLE_GRID_SIZE = 6;
 const BATTLE_PATH_LEN = 9;
@@ -735,7 +735,6 @@ function activateNextQueuedBattle(ownerId) {
   const now = Date.now();
   queued.status = "active";
   queued.activatedAt = now;
-  queued.expiresAt = now + BATTLE_TIME_LIMIT_MS;
   queued.updatedAt = now;
 }
 
@@ -784,8 +783,7 @@ function tryResolveBattle(battle) {
   const now = Date.now();
   const ownerScore = battle.scores[battle.ownerId];
   const challengerScore = battle.scores[battle.challengerId];
-  const expired = now > battle.expiresAt;
-  if (!expired && !(ownerScore && challengerScore)) return;
+  if (!(ownerScore && challengerScore)) return;
 
   const effective = (s) => (s ? s.score : Infinity);
   const ownerEff = effective(ownerScore);
@@ -1673,7 +1671,14 @@ function actPlot(idx) {
     S.steals[k] = S.steals[k] || 0;
     if (S.steals[k] >= 5) return;
 
+    const existingBattle = Object.values(S.battles).find((b) =>
+      b.ownerId === owner.id && b.plotIndex === idx && !b.resolved
+    );
     const ownerActive = (now - (owner.lastActiveAt || 0)) < BATTLE_ACTIVE_WINDOW_MS;
+    if (!ownerActive && existingBattle) {
+      requestBattle(owner, me, idx, p, now);
+      return;
+    }
     if (!ownerActive) {
       const c = CROPS[p.crop];
       const gain = Math.floor(c.sell * 0.62);
