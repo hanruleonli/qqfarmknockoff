@@ -27,6 +27,8 @@ const I18N = {
     adminTokenConfirmPh: "再次输入口令", adminSetupHint: "首次使用：设置管理员口令（仅保存SHA-256哈希）",
     adminUnlockHint: "输入管理员口令以解锁", adminFixedHint: "管理员口令固定为: 128560（仅存储SHA-256哈希）", adminTokenTooShort: "口令至少 4 位", adminTokenMismatch: "两次口令不一致",
     adminAuthBad: "管理员口令错误", adminAuthOk: "管理员已解锁", adminAuthSetOk: "管理员口令已设置",
+    seedBook: "种子图鉴",
+    seedCollected: "已收集",
     userAuthTitle: "玩家登录", userAuthUnlock: "登录", userAuthSetup: "设置玩家口令", userTokenPh: "输入玩家口令",
     userTokenConfirmPh: "再次输入玩家口令", userSetupHint: "首次登录此玩家：请设置口令（仅保存SHA-256哈希）",
     userUnlockHint: "输入玩家口令登录", userAuthBad: "玩家口令错误", userAuthOk: "登录成功", userAuthSetOk: "玩家口令已设置",
@@ -64,6 +66,8 @@ const I18N = {
     adminTokenConfirmPh: "Re-enter token", adminSetupHint: "First use: set admin token (only SHA-256 hash is stored)",
     adminUnlockHint: "Enter admin token to unlock", adminFixedHint: "Admin password is fixed: 128560 (SHA-256 hash stored only)", adminTokenTooShort: "Token must be at least 4 chars", adminTokenMismatch: "Tokens do not match",
     adminAuthBad: "Invalid admin token", adminAuthOk: "Admin unlocked", adminAuthSetOk: "Admin token configured",
+    seedBook: "Seed Book",
+    seedCollected: "Collected",
     userAuthTitle: "Player Login", userAuthUnlock: "Login", userAuthSetup: "Set Player Token", userTokenPh: "Enter player token",
     userTokenConfirmPh: "Re-enter player token", userSetupHint: "First login for this player: set token (SHA-256 hash only)",
     userUnlockHint: "Enter player token to login", userAuthBad: "Invalid player token", userAuthOk: "Login success", userAuthSetOk: "Player token configured",
@@ -194,7 +198,47 @@ const CROPS = {
   eggplant: { icon: "🍆", name: { zh: "茄子", en: "Eggplant", ja: "ナス" }, grow: 420, cost: 45, sell: 75, xp: 36, minLevel: 6 },
   melon: { icon: "🍈", name: { zh: "甜瓜", en: "Melon", ja: "メロン" }, grow: 520, cost: 60, sell: 95, xp: 50, minLevel: 7 },
   pepper: { icon: "🌶️", name: { zh: "辣椒", en: "Pepper", ja: "唐辛子" }, grow: 640, cost: 80, sell: 130, xp: 72, minLevel: 8 },
-  pineapple: { icon: "🍍", name: { zh: "菠萝", en: "Pineapple", ja: "パイナップル" }, grow: 780, cost: 110, sell: 180, xp: 100, minLevel: 9 }
+  pineapple: { icon: "🍍", name: { zh: "菠萝", en: "Pineapple", ja: "パイナップル" }, grow: 780, cost: 110, sell: 180, xp: 100, minLevel: 9 },
+  lemon: { icon: "🍋", name: { zh: "柠檬", en: "Lemon", ja: "レモン" }, grow: 840, cost: 125, sell: 205, xp: 110, minLevel: 9 },
+  peach: { icon: "🍑", name: { zh: "桃子", en: "Peach", ja: "もも" }, grow: 900, cost: 140, sell: 230, xp: 120, minLevel: 9 },
+  grape: { icon: "🍇", name: { zh: "葡萄", en: "Grape", ja: "ぶどう" }, grow: 950, cost: 155, sell: 260, xp: 130, minLevel: 9 },
+  orange: { icon: "🍊", name: { zh: "橙子", en: "Orange", ja: "オレンジ" }, grow: 1020, cost: 170, sell: 290, xp: 145, minLevel: 9 },
+  apple: { icon: "🍎", name: { zh: "苹果", en: "Apple", ja: "りんご" }, grow: 1080, cost: 190, sell: 330, xp: 160, minLevel: 9 },
+  banana: { icon: "🍌", name: { zh: "香蕉", en: "Banana", ja: "バナナ" }, grow: 1140, cost: 210, sell: 370, xp: 175, minLevel: 9 },
+  avocado: { icon: "🥑", name: { zh: "鳄梨", en: "Avocado", ja: "アボカド" }, grow: 1220, cost: 235, sell: 420, xp: 195, minLevel: 9 },
+  coconut: { icon: "🥥", name: { zh: "椰子", en: "Coconut", ja: "ココナッツ" }, grow: 1300, cost: 260, sell: 460, xp: 215, minLevel: 9 },
+  kiwi: { icon: "🥝", name: { zh: "猕猴桃", en: "Kiwi", ja: "キウイ" }, grow: 1380, cost: 285, sell: 510, xp: 235, minLevel: 9 },
+  pear: { icon: "🍐", name: { zh: "梨", en: "Pear", ja: "梨" }, grow: 1460, cost: 310, sell: 560, xp: 255, minLevel: 9 },
+  mango: { icon: "🥭", name: { zh: "芒果", en: "Mango", ja: "マンゴー" }, grow: 1540, cost: 340, sell: 620, xp: 280, minLevel: 9 },
+  potato: { icon: "🥔", name: { zh: "土豆", en: "Potato", ja: "じゃがいも" }, grow: 210, cost: 16, sell: 26, xp: 12, minLevel: 3 },
+  onion: { icon: "🧅", name: { zh: "洋葱", en: "Onion", ja: "たまねぎ" }, grow: 240, cost: 18, sell: 31, xp: 14, minLevel: 3 },
+  garlic: { icon: "🧄", name: { zh: "大蒜", en: "Garlic", ja: "にんにく" }, grow: 270, cost: 20, sell: 36, xp: 16, minLevel: 4 },
+  carrot: { icon: "🥕", name: { zh: "胡萝卜", en: "Carrot", ja: "にんじん" }, grow: 300, cost: 22, sell: 40, xp: 18, minLevel: 4 },
+  lettuce: { icon: "🥬", name: { zh: "生菜", en: "Lettuce", ja: "レタス" }, grow: 330, cost: 24, sell: 44, xp: 20, minLevel: 5 },
+  cabbage: { icon: "🥬", name: { zh: "卷心菜", en: "Cabbage", ja: "キャベツ" }, grow: 360, cost: 27, sell: 50, xp: 22, minLevel: 5 },
+  spinach: { icon: "🥬", name: { zh: "菠菜", en: "Spinach", ja: "ほうれん草" }, grow: 390, cost: 30, sell: 55, xp: 24, minLevel: 6 },
+  mushroom: { icon: "🍄", name: { zh: "蘑菇", en: "Mushroom", ja: "きのこ" }, grow: 420, cost: 34, sell: 62, xp: 28, minLevel: 6 },
+  tea: { icon: "🍵", name: { zh: "茶叶", en: "Tea", ja: "お茶" }, grow: 450, cost: 38, sell: 70, xp: 32, minLevel: 7 },
+  sunflower: { icon: "🌻", name: { zh: "向日葵", en: "Sunflower", ja: "ひまわり" }, grow: 480, cost: 42, sell: 78, xp: 36, minLevel: 7 },
+  lavender: { icon: "💜", name: { zh: "薰衣草", en: "Lavender", ja: "ラベンダー" }, grow: 520, cost: 46, sell: 88, xp: 42, minLevel: 8 },
+  rose: { icon: "🌹", name: { zh: "玫瑰", en: "Rose", ja: "バラ" }, grow: 560, cost: 50, sell: 98, xp: 48, minLevel: 8 },
+  coffee: { icon: "☕", name: { zh: "咖啡", en: "Coffee", ja: "コーヒー" }, grow: 600, cost: 54, sell: 108, xp: 54, minLevel: 9 },
+  cocoa: { icon: "🍫", name: { zh: "可可", en: "Cocoa", ja: "ココア" }, grow: 650, cost: 58, sell: 120, xp: 62, minLevel: 9 },
+  clover: { icon: "🍀", name: { zh: "三叶草", en: "Clover", ja: "クローバー" }, grow: 700, cost: 62, sell: 132, xp: 70, minLevel: 9 },
+  lotus: { icon: "🌸", name: { zh: "莲花", en: "Lotus", ja: "ハス" }, grow: 760, cost: 66, sell: 144, xp: 78, minLevel: 9 },
+  starfruit: { icon: "⭐", name: { zh: "杨桃", en: "Starfruit", ja: "スターフルーツ" }, grow: 820, cost: 72, sell: 160, xp: 88, minLevel: 9 },
+  dragonfruit: { icon: "🐉", name: { zh: "火龙果", en: "Dragonfruit", ja: "ドラゴンフルーツ" }, grow: 900, cost: 88, sell: 190, xp: 105, minLevel: 9 },
+  goldenapple: { icon: "🍏", name: { zh: "金苹果", en: "Golden Apple", ja: "ゴールデンアップル" }, grow: 980, cost: 110, sell: 230, xp: 125, minLevel: 9 },
+  bonsai: { icon: "🪴", name: { zh: "盆栽", en: "Bonsai", ja: "盆栽" }, grow: 1040, cost: 130, sell: 270, xp: 145, minLevel: 9 },
+  cactus: { icon: "🌵", name: { zh: "仙人掌", en: "Cactus", ja: "サボテン" }, grow: 1100, cost: 150, sell: 310, xp: 165, minLevel: 9 },
+  cherry: { icon: "🍒", name: { zh: "樱桃", en: "Cherry", ja: "さくらんぼ" }, grow: 1160, cost: 170, sell: 350, xp: 185, minLevel: 9 },
+  mint: { icon: "🌿", name: { zh: "薄荷", en: "Mint", ja: "ミント" }, grow: 1220, cost: 190, sell: 390, xp: 205, minLevel: 9 },
+  basil: { icon: "🌿", name: { zh: "罗勒", en: "Basil", ja: "バジル" }, grow: 1280, cost: 210, sell: 430, xp: 225, minLevel: 9 },
+  orchid: { icon: "🪻", name: { zh: "兰花", en: "Orchid", ja: "蘭" }, grow: 1340, cost: 240, sell: 480, xp: 250, minLevel: 9 },
+  dewberry: { icon: "🫐", name: { zh: "露莓", en: "Dewberry", ja: "デューベリー" }, grow: 1400, cost: 270, sell: 540, xp: 280, minLevel: 9 },
+  moongrass: { icon: "🌙", name: { zh: "月草", en: "Moongrass", ja: "ムーングラス" }, grow: 1460, cost: 300, sell: 600, xp: 310, minLevel: 9 },
+  aurorafruit: { icon: "🪐", name: { zh: "极光果", en: "Aurora Fruit", ja: "オーロラフルーツ" }, grow: 1520, cost: 340, sell: 680, xp: 340, minLevel: 9 },
+  skybean: { icon: "☁️", name: { zh: "天豆", en: "Sky Bean", ja: "スカイビーン" }, grow: 1580, cost: 380, sell: 760, xp: 380, minLevel: 9 }
 };
 
 const FERTILIZERS = {
@@ -204,6 +248,21 @@ const FERTILIZERS = {
 };
 
 const FERTILIZER_TIERS = ["basic", "advanced", "premium"];
+const SEED_REWARDS = {
+  "🍒": "berry",
+  "🍋": "lemon",
+  "🍀": "clover",
+  "⭐": "starfruit",
+  "💎": "dragonfruit",
+  "7️⃣": "goldenapple"
+};
+
+function seedRewardForSymbol(sym) {
+  const keys = Object.keys(CROPS);
+  if (!keys.length) return null;
+  const code = String(sym).codePointAt(0) || 0;
+  return keys[code % keys.length];
+}
 
 const WEATHER = [
   { key: "wsunny", icon: "☀️", mult: 1.0 },
@@ -605,7 +664,8 @@ function makePlayer(name, avatar, location = "") {
     updatedAt: Date.now(),
     lastActiveAt: Date.now(),
     plots: Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null })),
-    fertilizer: { basic: 0, advanced: 0, premium: 0 }
+    fertilizer: { basic: 0, advanced: 0, premium: 0 },
+    seedBook: {}
   };
 }
 
@@ -1815,6 +1875,8 @@ function renderText() {
   document.getElementById("addConfirm").textContent = tr("create");
   document.getElementById("logoutBtn").textContent = tr("logout");
   document.getElementById("adminBtn").textContent = tr("admin");
+  document.getElementById("seedBookBtn").textContent = tr("seedBook");
+  document.getElementById("seedBookCloseBtn").textContent = tr("close");
   document.getElementById("adminTitle").textContent = tr("adminTitle");
   document.getElementById("adminPlayerLabel").textContent = tr("adminPlayer");
   document.getElementById("adminGoldLabel").textContent = tr("adminGold");
@@ -2537,13 +2599,49 @@ boot();
   const textEl = document.getElementById("slotText");
   const goldEl = document.getElementById("slotGoldDisplay");
   const spinBtn = document.getElementById("spinBtn");
+  const seedBookBtn = document.getElementById("seedBookBtn");
+  const seedBookModal = document.getElementById("seedBookModal");
+  const seedBookCloseBtn = document.getElementById("seedBookCloseBtn");
+  const seedBookCloseX = document.getElementById("seedBookCloseX");
+  const seedBookList = document.getElementById("seedBookList");
+  const seedBookProgress = document.getElementById("seedBookProgress");
   let spinning = false;
 
   function renderPaytable() {
     const box = document.getElementById("slotPaytable");
-    box.innerHTML = SLOT_SYMBOLS.map((s) =>
-      "<div>" + s.sym + s.sym + s.sym + " ×" + s.mult + "</div>"
-    ).join("");
+    box.innerHTML = SLOT_SYMBOLS.map((s) => {
+      const rewardKey = SEED_REWARDS[s.sym] || seedRewardForSymbol(s.sym);
+      const rewardLabel = rewardKey ? cropName(rewardKey) : tr("seedBook");
+      return "<div>" + s.sym + s.sym + s.sym + " → " + rewardLabel + "</div>";
+    }).join("");
+  }
+
+  function renderSeedBookProgress() {
+    const p = me();
+    if (!p) return;
+    const allSeeds = Object.keys(CROPS).length;
+    const discovered = Object.keys(CROPS).filter((key) => (p.seedBook || {})[key] > 0).length;
+    const percent = allSeeds ? Math.round((discovered / allSeeds) * 100) : 0;
+    seedBookProgress.textContent = tr("seedCollected") + ": " + discovered + "/" + allSeeds + " (" + percent + "%" + ")";
+  }
+
+  function renderSeedBookList() {
+    const p = me();
+    if (!p) return;
+    seedBookList.innerHTML = Object.entries(CROPS).map(([key, crop]) => {
+      const count = (p.seedBook || {})[key] || 0;
+      const ownedText = count ? (tr("seedCollected") + ": " + count) : tr("seedCollected") + ": 0";
+      return "<div class=\"seed-book-item" + (count ? " collected" : "") + ">" +
+        "<div class=\"seed-book-icon\">" + crop.icon + "</div>" +
+        "<div class=\"seed-book-content\">" +
+        "<div class=\"seed-book-name\">" + cropName(key) + "</div>" +
+        "<div class=\"seed-book-meta\">" +
+        "<span>Lv." + (crop.minLevel || 1) + "</span>" +
+        "<span>" + ownedText + "</span>" +
+        "</div>" +
+        "</div>" +
+        "</div>";
+    }).join("");
   }
 
   function syncGoldDisplay() {
@@ -2560,7 +2658,7 @@ boot();
     }
     renderPaytable();
     syncGoldDisplay();
-    textEl.textContent = "Match all 3 reels to win. Good luck!";
+    textEl.textContent = "Match all 3 reels to win a rare seed!";
     overlay.classList.add("show");
   }
 
@@ -2624,14 +2722,19 @@ boot();
     let symbolWon = null;
     if (finalResult[0].sym === finalResult[1].sym && finalResult[1].sym === finalResult[2].sym) {
       symbolWon = finalResult[0];
-      win = SLOT_COST * symbolWon.mult;
+      const seedKey = SEED_REWARDS[symbolWon.sym] || seedRewardForSymbol(symbolWon.sym);
+      if (seedKey && CROPS[seedKey]) {
+        p.seedBook = p.seedBook || {};
+        p.seedBook[seedKey] = (p.seedBook[seedKey] || 0) + 1;
+      }
     }
 
-    if (win > 0) {
-      p.gold += win;
-      textEl.textContent = "🎉 Triple " + symbolWon.sym + "! You won " + win + " 🪙!";
-      if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + win + "🪙 on the slots");
-      if (typeof notice === "function") notice("You won " + win + " 🪙!", "");
+    if (symbolWon) {
+      const seedKey = SEED_REWARDS[symbolWon.sym] || seedRewardForSymbol(symbolWon.sym);
+      const seedName = seedKey ? cropName(seedKey) : symbolWon.sym;
+      textEl.textContent = "🎉 Triple " + symbolWon.sym + "! You earned " + seedName + " seed!";
+      if (typeof addLog === "function") addLog("🎰 " + p.name + " won " + seedName + " seed on the slots");
+      if (typeof notice === "function") notice("You earned " + seedName + " seed!", "");
     } else if (nearMiss) {
       textEl.textContent = "😅 Almost had it! Try again!";
       if (typeof addLog === "function") addLog("🎰 " + p.name + " had a near-miss on the slots");
@@ -2642,10 +2745,27 @@ boot();
 
     if (typeof save === "function") save();
     syncGoldDisplay();
+    renderSeedBookProgress();
     spinBtn.disabled = false;
     spinning = false;
   }
 
+  function openSeedBook() {
+    const p = me();
+    if (!p) return;
+    renderSeedBookProgress();
+    renderSeedBookList();
+    seedBookModal.classList.add("show");
+  }
+
+  function closeSeedBook() {
+    seedBookModal.classList.remove("show");
+  }
+
+  seedBookBtn.addEventListener("click", openSeedBook);
+  seedBookCloseBtn.addEventListener("click", closeSeedBook);
+  seedBookCloseX.addEventListener("click", closeSeedBook);
+  seedBookModal.addEventListener("click", (e) => { if (e.target === seedBookModal) closeSeedBook(); });
   document.getElementById("slotButton").addEventListener("click", openSlots);
   document.getElementById("slotCloseBtn").addEventListener("click", closeSlots);
   document.getElementById("slotCloseX").addEventListener("click", closeSlots);

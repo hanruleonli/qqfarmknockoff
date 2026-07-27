@@ -56,6 +56,7 @@
       <div class="card">
         <h3 id="shopTitle"></h3>
         <div id="shop" class="shop"></div>
+        <button id="seedBookBtn" class="btn" style="width:100%;margin-top:10px"></button>
       </div>
       <div class="card">
         <h3 id="friendsTitle"></h3>
@@ -248,6 +249,20 @@
     <div class="slot-actions">
       <button id="spinBtn" class="btn slot-spin">SPIN (50 🪙)</button>
       <button id="slotCloseBtn" class="btn">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<div id="seedBookModal" class="overlay">
+  <div class="modal seed-book-modal">
+    <div class="slot-modal-head">
+      <h2>📖 Seed Book</h2>
+      <button id="seedBookCloseX" class="slot-close" aria-label="Close">✕</button>
+    </div>
+    <div id="seedBookProgress" class="seed-book-progress"></div>
+    <div id="seedBookList" class="seed-book-grid"></div>
+    <div class="slot-actions">
+      <button id="seedBookCloseBtn" class="btn">CLOSE</button>
     </div>
   </div>
 </div>
