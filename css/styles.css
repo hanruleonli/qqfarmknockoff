@@ -476,6 +476,19 @@ button:focus-visible {
   border-color: rgba(114, 255, 148, .7);
   background: rgba(114, 255, 148, .08);
 }
+.seed-shop-item {
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background .16s ease, border-color .16s ease;
+}
+.seed-shop-item:hover { background: rgba(255,255,255,.12); }
+.seed-shop-item.on {
+  border-color: rgba(245,203,62,.9);
+  background: rgba(245,203,62,.14);
+}
 .seed-book-icon {
   font-size: 20px;
   width: 44px;

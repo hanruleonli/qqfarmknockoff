@@ -247,7 +247,7 @@ const WEATHER = [
   { key: "wcold", icon: "❄️", mult: 0.68 }
 ];
 
-const XP = [0, 100, 260, 520, 900, 1450, 2200, 3200, 4500];
+const XP = [0, 60, 140, 260, 430, 660, 980, 1400, 1900];
 const PLOTS = [8, 10, 12, 14, 16, 18, 20, 20, 20];
 const MAX_PLOTS = 20;
 // designate two plots as in-world shops (last two plots)
@@ -2030,18 +2030,25 @@ function renderShop() {
   const seedSection = document.createElement("div");
   seedSection.className = "shop-section";
   seedSection.innerHTML = '<div class="shop-section-title">' + tr("shop") + '</div>';
-  // Show a compact selection of featured seeds and link to full Crop Book
+  // Show a compact selection of featured seeds using the same card texture as the seed book.
   const seedKeys = Object.keys(CROPS);
   seedKeys.slice(0, 6).forEach((key) => {
     const c = CROPS[key];
-    const allowed = true;
     const el = document.createElement("button");
     el.type = "button";
-    el.className = "seed" + (S.seed === key ? " on" : "");
+    el.className = "seed-book-item seed-shop-item" + (S.seed === key ? " on" : "");
     el.innerHTML =
-      '<div class="s1">' + c.icon + '</div>' +
-      '<div class="s2">' + cropName(key) + '</div>' +
-      '<div class="s3">' + c.cost + ' / ' + c.sell + '🪙</div>';
+      '<div class="seed-book-icon">' +
+        '<img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+        '<div class="seed-fallback" style="display:none">' + c.icon + '</div>' +
+      '</div>' +
+      '<div class="seed-book-content">' +
+        '<div class="seed-book-name">' + cropName(key) + '</div>' +
+        '<div class="seed-book-meta">' +
+          '<span>Lv.' + (c.minLevel || 1) + '</span>' +
+          '<span>' + c.cost + '🪙 / ' + c.sell + '🪙</span>' +
+        '</div>' +
+      '</div>';
     el.addEventListener("click", () => {
       S.seed = key;
       S.tool = "plant";
@@ -2050,15 +2057,6 @@ function renderShop() {
     });
     seedSection.appendChild(el);
   });
-
-  // Add Crop Book quick button
-  const cb = document.createElement('button');
-  cb.className = 'btn';
-  cb.style.width = '100%';
-  cb.style.marginTop = '8px';
-  cb.textContent = tr('seedBook');
-  cb.addEventListener('click', () => { if (typeof openCropBook === 'function') openCropBook(); });
-  seedSection.appendChild(cb);
   shop.appendChild(seedSection);
 
   const fertSection = document.createElement("div");
