@@ -47,7 +47,7 @@ const I18N = {
     weather: "Weather", wsunny: "Sunny", wrain: "Rain (+speed)", wheat: "Hot (-speed)", wcold: "Cold wave (-speed)",
     empty: "Tap empty plot", ready: "Ready", withered: "Withered", noGold: "Not enough gold",
     planted: "Planted", watered: "Watered", fertilized: "Fertilized", harvested: "Harvested", stolen: "Stolen",
-    fertilizerShop: "Fertilizer Shop", fertilizer: "Fertilizer", noFertilizer: "No fertilizer available", buy: "Buy", levelLocked: "Requires Level",
+    fertilizerShop: "Fertilizer Shop", fertilizer: "Fertilizer", basic: "Basic", advanced: "Advanced", premium: "Premium", noFertilizer: "No fertilizer available", buy: "Buy", levelLocked: "Requires Level",
     topRank: "Top Ranked",
     topUsers: "Leaderboard",
     controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 5-9 choose seed, 0 open slots. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
@@ -331,6 +331,20 @@ let battleTickTimer = null;
 
 function tr(k) { return I18N[S.lang][k] || I18N.zh[k] || k; }
 function cropName(k) { return CROPS[k].name[S.lang] || CROPS[k].name.zh; }
+
+function cropAccent(key) {
+  let hash = 0;
+  const text = String(key || "");
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  const hue = Math.abs(hash) % 360;
+  return {
+    border: "hsla(" + hue + ", 72%, 64%, .58)",
+    soft: "hsla(" + hue + ", 72%, 55%, .16)"
+  };
+}
 function clearSavedGameData() {
   localStorage.removeItem(GAME_STATE_KEY);
   localStorage.removeItem(ADMIN_AUTH_KEY);
@@ -735,12 +749,10 @@ function addLog(txt) {
 }
 
 // --- Steal battles -----------------------------------------------------
-// When a would-be thief targets a plot whose owner is currently active, the
-// steal becomes an async fence challenge instead of an instant grab: the owner
-// first draws the fence path by tracing it, then the challenger later traces
-// the same fence before time runs out. Whoever completes the trace with the
-// better speed+accuracy score wins. There is no live/simultaneous channel in
-// this game (state only moves via periodic cloud polling), so the challenge is
+// Ready crops on another farm always become an asynchronous fence challenge.
+// The owner traces the fence first to set the preset time, then the thief
+// later traces the same fence and has to beat that score to steal the crop.
+// Because state sync happens through periodic cloud polling, the whole flow is
 // inherently asynchronous -- see mergeBattles() for how two independent score
 // submissions get reconciled without clobbering each other.
 
@@ -1746,31 +1758,7 @@ function actPlot(idx) {
     const k = S.currentId + ":" + ownerId + ":" + day;
     S.steals[k] = S.steals[k] || 0;
     if (S.steals[k] >= 5) return;
-
-    const existingBattle = Object.values(S.battles).find((b) =>
-      b.ownerId === owner.id && b.plotIndex === idx && !b.resolved
-    );
-    const ownerActive = (now - (owner.lastActiveAt || 0)) < BATTLE_ACTIVE_WINDOW_MS;
-    if (!ownerActive && existingBattle) {
-      requestBattle(owner, me, idx, p, now);
-      return;
-    }
-    if (!ownerActive) {
-      const c = CROPS[p.crop];
-      const gain = Math.floor(c.sell * 0.62);
-      me.gold += gain;
-      me.xp += Math.floor(c.xp * 0.4);
-      S.steals[k] += 1;
-      clearPlot(p);
-      me.updatedAt = now;
-      owner.updatedAt = now;
-      addLog("🦊 " + me.name + " " + tr("stolen") + " " + c.icon + " +" + gain + "🪙");
-      notice(tr("stolen"));
-      save();
-      render();
-      return;
-    }
-
+    // Ready crops on another farm always become a fence challenge now.
     requestBattle(owner, me, idx, p, now);
     return;
   }
@@ -2034,9 +2022,12 @@ function renderShop() {
   const seedKeys = Object.keys(CROPS);
   seedKeys.slice(0, 6).forEach((key) => {
     const c = CROPS[key];
+    const accent = cropAccent(key);
     const el = document.createElement("button");
     el.type = "button";
     el.className = "seed-book-item seed-shop-item" + (S.seed === key ? " on" : "");
+    el.style.setProperty("--seed-accent", accent.border);
+    el.style.setProperty("--seed-accent-soft", accent.soft);
     el.innerHTML =
       '<div class="seed-book-icon">' +
         '<img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
@@ -2161,6 +2152,8 @@ function renderGrid() {
       const icon = st === "withered" ? "🥀" : CROPS[p.crop].icon;
       const badges = (p.wateredAt > p.plantedAt ? "💧" : "") + (p.fertilizedAt > p.plantedAt ? "🧪" : "");
       const spriteImg = '<img class="sprite" src="assets/sprites/' + p.crop + '.svg" onerror="this.style.display=\'none\'">';
+      const accent = cropAccent(p.crop);
+      btn.style.setProperty("--plot-accent", accent.soft);
       const contested = Object.values(S.battles).some((b) => b.ownerId === owner.id && b.plotIndex === i && !b.resolved);
       btn.innerHTML =
         (badges ? '<div class="badges">' + badges + '</div>' : '') +
@@ -2686,7 +2679,8 @@ boot();
       const crop = CROPS[key];
       const count = (p.seedBook || {})[key] || 0;
       const ownedText = count ? (tr("seedCollected") + ": " + count) : tr("seedCollected") + ": 0";
-      return '<div class="seed-book-item' + (count ? ' collected' : '') + '" data-key="' + key + '">' +
+      const accent = cropAccent(key);
+      return '<div class="seed-book-item' + (count ? ' collected' : '') + '" data-key="' + key + '" style="--seed-accent:' + accent.border + ';--seed-accent-soft:' + accent.soft + ';">' +
         '<div class="seed-book-icon">' +
           '<img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
           '<div class="seed-fallback" style="display:none">' + crop.icon + '</div>' +
