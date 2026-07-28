@@ -2032,9 +2032,10 @@ function renderShop() {
   seedSection.innerHTML = '<div class="shop-section-title">' + tr("shop") + '</div>';
   // Show a compact selection of featured seeds and link to full Crop Book
   const seedKeys = Object.keys(CROPS);
+  const seedPlayerLevel = levelInfo(me.xp).level;
   seedKeys.slice(0, 6).forEach((key) => {
     const c = CROPS[key];
-    const allowed = me.xp >= (c.minLevel || 1);
+    const allowed = seedPlayerLevel >= (c.minLevel || 1);
     const el = document.createElement("button");
     el.type = "button";
     el.className = "seed" + (S.seed === key ? " on" : "") + (allowed ? "" : " locked");
