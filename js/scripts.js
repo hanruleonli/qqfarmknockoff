@@ -250,6 +250,9 @@ const WEATHER = [
 const XP = [0, 100, 260, 520, 900, 1450, 2200, 3200, 4500];
 const PLOTS = [8, 10, 12, 14, 16, 18, 20, 20, 20];
 const MAX_PLOTS = 20;
+// designate two plots as in-world shops (last two plots)
+const SHOP_SEED_INDEX = Math.max(0, MAX_PLOTS - 1);
+const SHOP_FERT_INDEX = Math.max(0, MAX_PLOTS - 2);
 const TOOLS = ["plant", "water", "harvest", "fertilize"];
 const AVATARS = ["👨‍🌾", "👩‍🌾", "🧑‍🌾", "🐱", "🐶", "🐼", "🦊", "🦝", "🧙"];
 const GAME_STATE_KEY = "qqfarm_game_v5";
@@ -2144,13 +2147,20 @@ function renderGrid() {
     const st = locked ? "locked" : pState(p, now);
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "plot " + st;
+    btn.className = "plot " + st + (i === SHOP_SEED_INDEX || i === SHOP_FERT_INDEX ? ' shop' : '');
 
     if (locked) {
       btn.innerHTML = '<div class="plot-icon">🔒</div><div class="plot-time">Lv.</div>';
     } else if (st === "empty") {
-      // show sprite placeholder for empty
-      btn.innerHTML = '<div class="plot-icon"><img class="sprite" src="assets/sprites/blank.svg" onerror="this.style.display=\'none\'">🪹</div><div class="plot-time">' + tr("empty") + '</div>';
+      // shop tiles override empty state
+      if (i === SHOP_SEED_INDEX) {
+        btn.innerHTML = '<div class="plot-icon">🏬</div><div class="plot-time">' + tr('seedShop') + '</div>';
+      } else if (i === SHOP_FERT_INDEX) {
+        btn.innerHTML = '<div class="plot-icon">🏬</div><div class="plot-time">' + tr('fertilizerShop') + '</div>';
+      } else {
+        // show sprite placeholder for empty
+        btn.innerHTML = '<div class="plot-icon"><img class="sprite" src="assets/sprites/blank.svg" onerror="this.style.display=\'none\'">🪹</div><div class="plot-time">' + tr("empty") + '</div>';
+      }
     } else {
       const icon = st === "withered" ? "🥀" : CROPS[p.crop].icon;
       const badges = (p.wateredAt > p.plantedAt ? "💧" : "") + (p.fertilizedAt > p.plantedAt ? "🧪" : "");
@@ -2165,9 +2175,12 @@ function renderGrid() {
     }
 
     btn.addEventListener("click", () => {
-      S.cursor = i;
-      actPlot(i);
-      renderSelector();
+        S.cursor = i;
+        // if clicked on shop, open the corresponding shop modal
+        if (i === SHOP_SEED_INDEX) return openWorldShop('seed');
+        if (i === SHOP_FERT_INDEX) return openWorldShop('fert');
+        actPlot(i);
+        renderSelector();
     });
 
     grid.appendChild(btn);
@@ -2194,17 +2207,37 @@ function renderSelector() {
   sel.style.left = Math.max(0, cellRect.left - wrapRect.left + borderOffset) + "px";
   sel.style.top = Math.max(0, cellRect.top - wrapRect.top + borderOffset) + "px";
   sel.style.transform = "none";
-  // move player sprite to selected plot center
+  // move player sprite to selected plot center (smoothly)
   const ps = document.getElementById('playerSprite');
   if (ps) {
     const cx = cellRect.left - wrapRect.left + cellRect.width / 2;
     const cy = cellRect.top - wrapRect.top + cellRect.height / 2;
-    ps.style.left = cx + 'px';
-    ps.style.top = cy + 'px';
-    ps.classList.add('walk');
-    clearTimeout(ps._walkTimeout);
-    ps._walkTimeout = setTimeout(() => ps.classList.remove('walk'), 400);
+    animatePlayerTo(ps, cx, cy, 280);
   }
+}
+
+function animatePlayerTo(el, x, y, duration = 240) {
+  if (!el) return;
+  const startX = parseFloat(el.style.left) || 0;
+  const startY = parseFloat(el.style.top) || 0;
+  const dx = x - startX;
+  const dy = y - startY;
+  const start = performance.now();
+  el.classList.add('walk');
+  cancelAnimationFrame(el._animFrame || 0);
+  function step(ts) {
+    const t = Math.min(1, (ts - start) / duration);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.style.left = (startX + dx * ease) + 'px';
+    el.style.top = (startY + dy * ease) + 'px';
+    if (t < 1) {
+      el._animFrame = requestAnimationFrame(step);
+    } else {
+      el.classList.remove('walk');
+      el._animFrame = null;
+    }
+  }
+  el._animFrame = requestAnimationFrame(step);
 }
 
 function renderSwitchList() {
@@ -2658,7 +2691,10 @@ boot();
       const count = (p.seedBook || {})[key] || 0;
       const ownedText = count ? (tr("seedCollected") + ": " + count) : tr("seedCollected") + ": 0";
       return '<div class="seed-book-item' + (count ? ' collected' : '') + '" data-key="' + key + '">' +
-        '<div class="seed-book-icon"><img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\'"></div>' +
+        '<div class="seed-book-icon">' +
+          '<img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+          '<div class="seed-fallback" style="display:none">' + crop.icon + '</div>' +
+        '</div>' +
         '<div class="seed-book-content">' +
         '<div class="seed-book-name">' + cropName(key) + '</div>' +
         '<div class="seed-book-meta">' +
@@ -2806,44 +2842,53 @@ boot();
     seedBookModal.classList.add("show");
   }
 
-  function renderCropPage(idx) {
-    const keys = Object.keys(CROPS);
-    if (!keys.length) return;
-    idx = (idx + keys.length) % keys.length;
-    cropPageIndex = idx;
-    const key = keys[idx];
-    const c = CROPS[key];
-    const html = '<div class="crop-page-inner">' +
-      '<div class="crop-page-left">' +
-      '<div class="crop-icon">' + c.icon + '</div>' +
-      '<div class="crop-name">' + cropName(key) + '</div>' +
-      '<div class="crop-meta">Lv.' + (c.minLevel || 1) + ' · ⏱' + fmtSec(c.grow) + '</div>' +
-      '</div>' +
-      '<div class="crop-page-right">' +
-      '<div class="crop-desc">A mysterious crop. Tastes great in pixel stew.</div>' +
-      '<div class="crop-stats">Cost: ' + c.cost + '🪙 · Sell: ' + c.sell + '🪙 · XP: ' + c.xp + '</div>' +
-      '</div>' +
-      '</div>';
-    // page flip animation: add turning class then replace
-    cropBookPage.classList.add('turning');
-    setTimeout(() => {
-      cropBookPage.innerHTML = html;
-      cropBookPage.classList.remove('turning');
-    }, 260);
+  // Crop book UI is optional/removed in this build; only wire if elements exist
+  if (cropBookBtn && cropBookModal && cropBookPage) {
+    function renderCropPage(idx) {
+      const keys = Object.keys(CROPS);
+      if (!keys.length) return;
+      idx = (idx + keys.length) % keys.length;
+      cropPageIndex = idx;
+      const key = keys[idx];
+      const c = CROPS[key];
+      const html = '<div class="crop-page-inner">' +
+        '<div class="crop-page-left">' +
+        '<div class="crop-icon">' + c.icon + '</div>' +
+        '<div class="crop-name">' + cropName(key) + '</div>' +
+        '<div class="crop-meta">Lv.' + (c.minLevel || 1) + ' · ⏱' + fmtSec(c.grow) + '</div>' +
+        '</div>' +
+        '<div class="crop-page-right">' +
+        '<div class="crop-desc">A mysterious crop. Tastes great in pixel stew.</div>' +
+        '<div class="crop-stats">Cost: ' + c.cost + '🪙 · Sell: ' + c.sell + '🪙 · XP: ' + c.xp + '</div>' +
+        '</div>' +
+        '</div>';
+      // page flip animation: add turning class then replace
+      cropBookPage.classList.add('turning');
+      setTimeout(() => {
+        cropBookPage.innerHTML = html;
+        cropBookPage.classList.remove('turning');
+      }, 260);
+    }
+
+    function openCropBook() {
+      const p = me();
+      if (!p) return;
+      cropPageIndex = 0;
+      renderCropPage(cropPageIndex);
+      cropBookModal.classList.add('show');
+    }
+
+    function closeCropBook() { cropBookModal.classList.remove('show'); }
+
+    function nextCropPage() { renderCropPage(cropPageIndex + 1); }
+    function prevCropPage() { renderCropPage(cropPageIndex - 1); }
+    cropBookBtn.addEventListener('click', openCropBook);
+    cropBookCloseBtn.addEventListener('click', closeCropBook);
+    cropBookCloseX.addEventListener('click', closeCropBook);
+    cropPrevBtn.addEventListener('click', prevCropPage);
+    cropNextBtn.addEventListener('click', nextCropPage);
+    cropBookModal.addEventListener('click', (e) => { if (e.target === cropBookModal) closeCropBook(); });
   }
-
-  function openCropBook() {
-    const p = me();
-    if (!p) return;
-    cropPageIndex = 0;
-    renderCropPage(cropPageIndex);
-    cropBookModal.classList.add('show');
-  }
-
-  function closeCropBook() { cropBookModal.classList.remove('show'); }
-
-  function nextCropPage() { renderCropPage(cropPageIndex + 1); }
-  function prevCropPage() { renderCropPage(cropPageIndex - 1); }
 
   function closeSeedBook() {
     seedBookModal.classList.remove("show");
@@ -2864,6 +2909,70 @@ boot();
   document.getElementById("slotCloseX").addEventListener("click", closeSlots);
   document.getElementById("spinBtn").addEventListener("click", spinSlots);
   overlay.addEventListener("click", (e) => { if (e.target === overlay) closeSlots(); });
+  // World shop modal handlers
+  const worldShopModal = document.getElementById('worldShopModal');
+  const worldShopClose = document.getElementById('worldShopClose');
+  if (worldShopClose && worldShopModal) worldShopClose.addEventListener('click', () => worldShopModal.classList.remove('show'));
+  if (worldShopModal) worldShopModal.addEventListener('click', (e) => { if (e.target === worldShopModal) worldShopModal.classList.remove('show'); });
+
+  function openWorldShop(type) {
+    const modal = document.getElementById('worldShopModal');
+    const title = document.getElementById('worldShopTitle');
+    const content = document.getElementById('worldShopContent');
+    if (!modal || !title || !content) return;
+    const me = me();
+    if (!me) return;
+    if (type === 'seed') {
+      title.textContent = tr('seedShop');
+      // show a few seeds and a button to open full shop
+      content.innerHTML = '';
+      const seedKeys = Object.keys(CROPS).slice(0, 8);
+      seedKeys.forEach((key) => {
+        const c = CROPS[key];
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.innerHTML = '<div style="display:inline-block;margin-right:8px">' + c.icon + '</div>' + cropName(key) + ' · ' + c.cost + '🪙';
+        btn.addEventListener('click', () => {
+          if (me.gold < c.cost) return notice(tr('noGold'), 'err');
+          me.gold -= c.cost;
+          me.inventory = me.inventory || {};
+          me.inventory[key] = (me.inventory[key] || 0) + 1;
+          save(); render(); notice(tr('buy') + ' ' + cropName(key));
+        });
+        content.appendChild(btn);
+      });
+      const more = document.createElement('button');
+      more.className = 'btn';
+      more.style.marginTop = '8px';
+      more.textContent = tr('openShop');
+      more.addEventListener('click', () => { modal.classList.remove('show'); document.getElementById('seedBookBtn').click(); });
+      content.appendChild(more);
+    } else if (type === 'fert') {
+      title.textContent = tr('fertilizerShop');
+      content.innerHTML = '';
+      FERTILIZER_TIERS.forEach((tier) => {
+        const fert = FERTILIZERS[tier];
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+        row.style.margin = '6px 0';
+        row.innerHTML = '<div>' + fert.icon + ' ' + tr(tier) + '</div><div>' + fert.cost + '🪙</div>';
+        const buy = document.createElement('button');
+        buy.className = 'btn small';
+        buy.textContent = tr('buy');
+        buy.addEventListener('click', () => {
+          if (me.gold < fert.cost) return notice(tr('noGold'), 'err');
+          me.gold -= fert.cost;
+          me.fertilizer[tier] = (me.fertilizer[tier] || 0) + 1;
+          save(); render(); notice(tr('buy') + ' ' + tr(tier));
+        });
+        row.appendChild(buy);
+        content.appendChild(row);
+      });
+    }
+    modal.classList.add('show');
+  }
 })();
 
 

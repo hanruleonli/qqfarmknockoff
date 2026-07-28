@@ -172,7 +172,8 @@ button:focus-visible {
   justify-content: center;
   transition: none;
 }
-.plot:hover { }
+.plot.shop { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.06)); border-style: solid; }
+.plot.shop .plot-icon { font-size: 22px; }
 .plot.empty { background: repeating-linear-gradient(135deg, #2f2f2f 0 4px, #383838 4px 8px); }
 .plot.growing { background: repeating-linear-gradient(135deg, #1f3f1f 0 4px, #264b26 4px 8px); }
 .plot.ready { background: repeating-linear-gradient(135deg, #213e2e 0 4px, #2c5a43 4px 8px); border-color: rgba(255,255,255,.3); }
