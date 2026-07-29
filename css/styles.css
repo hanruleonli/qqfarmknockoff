@@ -21,6 +21,12 @@ button {
   color: inherit;
   cursor: pointer;
 }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .btn, .plot, .seed, .friend, .leader-row, .lang-btn, .pad-btn {
   cursor: pointer;
 
@@ -99,9 +105,9 @@ button:focus-visible {
   box-shadow: none;
 }
 .farm { padding: 16px; }
-.farm-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.farm-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
 .farm-title { font-size: 18px; font-weight: 800; letter-spacing: .03em; }
-.farm-body { display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: 12px; align-items: center; }
+.farm-body { display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: 12px; align-items: start; }
 .farm-meta { display: grid; gap: 4px; }
 .leader-panel {
   border: none;
