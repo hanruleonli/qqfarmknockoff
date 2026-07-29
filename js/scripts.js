@@ -1081,13 +1081,12 @@ function openFenceTraceModal(plotIndex) {
   battleRuntime = { mode: "setup", plotIndex, seed, startedAt: Date.now(), stepIndex: 0, mistakes: 0 };
   battleRuntime.path = generateBattlePath(seed);
   document.getElementById("battleTitle").textContent = tr("fenceSetup");
-  renderBattleTrack({ seed }, 0);
-  document.getElementById("battleTitle").textContent = tr("fenceSetup");
   document.getElementById("battleSubtitle").textContent = cropName(plot.crop);
   document.getElementById("battleInstructions").textContent = tr("battleDrawFence");
   document.getElementById("battleTimer").textContent = "0.0s";
   document.getElementById("battleMistakes").textContent = "0";
   document.getElementById("battleGiveUp").textContent = tr("battleClose");
+  renderBattleTrack({ seed }, 0);
   document.getElementById("battleModal").classList.add("show");
   clearInterval(battleTickTimer);
   battleTickTimer = setInterval(updateBattleTimerDisplay, 100);
@@ -2032,6 +2031,14 @@ function renderText() {
       render();
     });
     langs.appendChild(b);
+  });
+
+  document.addEventListener("mousedown", (e) => {
+    if (S.tool === "plant" && e.buttons === 1) {
+      const [cx, cy] = worldToGrid(e.clientX, e.clientY);
+      if (!isNaN(cx) && !isNaN(cy)) actPlot(S.cursor);
+      e.preventDefault();
+    }
   });
 }
 
