@@ -4,7 +4,7 @@ const I18N = {
     title: "🌱 QQ农场", tabMine: "我的农场", tabVisit: "拜访好友", bt: "蓝牙控制",
     shop: "种子商店", friends: "好友农场", add: "添加玩家", log: "农场日志",
     switchP: "切换玩家", close: "关闭", logout: "退出登录", deleteAccount: "删除账户", newP: "创建玩家", cancel: "取消", ok: "确定", create: "创建", namePh: "输入昵称（最多10字）", locPh: "输入地区（如: 上海）", passPh: "设置登录密码（至少4位）",
-    farmMine: "的农场", farmVisit: "正在拜访", tools: ["🌱 种植", "💧 浇水", "🌾 收获", "🧪 施肥"],
+    farmMine: "的农场", farmVisit: "正在拜访", tools: ["🌱 种植", "💧 浇水", "🌾 收获", "🧪 施肥", "🛡️ 栅栏"],
     weather: "天气", wsunny: "晴天", wrain: "下雨（加速）", wheat: "炎热（减速）", wcold: "寒潮（减速）",
     empty: "点击空地种植", ready: "可收获", withered: "枯萎", noGold: "金币不足",
     planted: "种下", watered: "浇水成功", fertilized: "施肥成功", harvested: "收获成功", stolen: "偷菜成功",
@@ -37,13 +37,14 @@ const I18N = {
     battleIncoming: "{name} 向你发起偷菜挑战，争夺你的{crop}！", battleChallenge: "挑战 {name}，偷取{crop}！", battleWaitingOpponent: "等待 {name} 完成挑战...",
     battleStarted: "对战开始！描摹路径以取胜。", battleQueued: "挑战已排队，等待轮到你。", battleAlreadyQueued: "你已经对该地块发起过挑战。",
     battleWon: "你赢得了对决！", battleLost: "你输掉了对决。", battleSubmitted: "已提交你的成绩，等待结果。",
-    battleInstructions: "用方向键/WASD 沿发光路径描摹，越快越准越好！", battleDrawFence: "用方向键/WASD 绘制栅栏路径，时间用完则失败！", battleMistakesLabel: "失误", battleTimeLabel: "用时", battleClose: "放弃"
+    battleInstructions: "用方向键/WASD 沿发光路径描摹，越快越准越好！", battleDrawFence: "用方向键/WASD 绘制栅栏路径，时间用完则失败！", battleMistakesLabel: "失误", battleTimeLabel: "用时", battleClose: "放弃",
+    fenceSetup: "栅栏设置", fenceOpen: "设置栅栏", fencePick: "选择一个成熟作物来描摹栅栏。", fenceNeedReady: "请先选择一个成熟作物。", fenceNeedSetup: "这个作物需要先设置栅栏。", fenceSaved: "栅栏已保存", fenceTarget: "栅栏时间"
   },
   en: {
     title: "🌱 QQ Farm", tabMine: "My Farm", tabVisit: "Visit Friend", bt: "Bluetooth",
     shop: "Seed Shop", friends: "Friends", add: "Add Player", log: "Farm Log",
     switchP: "Switch Player", close: "Close", logout: "Logout", deleteAccount: "Delete Account", newP: "Create Player", cancel: "Cancel", ok: "OK", create: "Create", namePh: "Nickname (max 10)", locPh: "Location (e.g. Tokyo)", passPh: "Set login password (min 4)",
-    farmMine: "'s Farm", farmVisit: "Visiting", tools: ["🌱 Plant", "💧 Water", "🌾 Harvest", "🧪 Fertilize"],
+    farmMine: "'s Farm", farmVisit: "Visiting", tools: ["🌱 Plant", "💧 Water", "🌾 Harvest", "🧪 Fertilize", "🛡️ Fence"],
     weather: "Weather", wsunny: "Sunny", wrain: "Rain (+speed)", wheat: "Hot (-speed)", wcold: "Cold wave (-speed)",
     empty: "Tap empty plot", ready: "Ready", withered: "Withered", noGold: "Not enough gold",
     planted: "Planted", watered: "Watered", fertilized: "Fertilized", harvested: "Harvested", stolen: "Stolen",
@@ -76,13 +77,14 @@ const I18N = {
     battleIncoming: "{name} challenges you for your {crop}!", battleChallenge: "Battle {name} to steal their {crop}!", battleWaitingOpponent: "Waiting for {name} to finish...",
     battleStarted: "Battle started! Trace the path to win.", battleQueued: "Challenge queued — waiting for your turn.", battleAlreadyQueued: "You already have a pending challenge for this plot.",
     battleWon: "You won the trace race!", battleLost: "You lost the trace race.", battleSubmitted: "Attempt submitted, waiting for result.",
-    battleInstructions: "Trace the glowing path with arrows/WASD before time runs out!", battleDrawFence: "Draw the fence path with arrows/WASD before time runs out!", battleMistakesLabel: "Mistakes", battleTimeLabel: "Time", battleClose: "Forfeit"
+    battleInstructions: "Trace the glowing path with arrows/WASD before time runs out!", battleDrawFence: "Draw the fence path with arrows/WASD before time runs out!", battleMistakesLabel: "Mistakes", battleTimeLabel: "Time", battleClose: "Forfeit",
+    fenceSetup: "Fence Setup", fenceOpen: "Set Fence", fencePick: "Pick a ready crop to trace a fence.", fenceNeedReady: "Pick a ready crop first.", fenceNeedSetup: "This crop needs a fence before it can be stolen.", fenceSaved: "Fence saved", fenceTarget: "Fence time"
   },
   ja: {
     title: "🌱 QQファーム", tabMine: "自分の農場", tabVisit: "友だち訪問", bt: "Bluetooth",
     shop: "種ショップ", friends: "友だち農場", add: "プレイヤー追加", log: "農場ログ",
     switchP: "プレイヤー切替", close: "閉じる", logout: "ログアウト", deleteAccount: "アカウント削除", newP: "新規プレイヤー", cancel: "キャンセル", ok: "OK", create: "作成", namePh: "ニックネーム（最大10）", locPh: "地域を入力（例: 東京）", passPh: "ログイン用パスワード（4文字以上）",
-    farmMine: "の農場", farmVisit: "訪問中", tools: ["🌱 植える", "💧 水やり", "🌾 収穫", "🧪 肥料"],
+    farmMine: "の農場", farmVisit: "訪問中", tools: ["🌱 植える", "💧 水やり", "🌾 収穫", "🧪 肥料", "🛡️ フェンス"],
     weather: "天気", wsunny: "晴れ", wrain: "雨（加速）", wheat: "猛暑（減速）", wcold: "寒波（減速）",
     empty: "空き地をタップ", ready: "収穫可能", withered: "枯れ", noGold: "コイン不足",
     planted: "植えた", watered: "水やり成功", fertilized: "肥料成功", harvested: "収穫成功", stolen: "盗み成功",
@@ -113,13 +115,14 @@ const I18N = {
     battleIncoming: "{name} があなたの{crop}を狙って挑戦してきました！", battleChallenge: "{name} に挑戦して{crop}を盗もう！", battleWaitingOpponent: "{name} の結果を待っています...",
     battleStarted: "対戦開始！パスをなぞって勝利しよう。", battleQueued: "挑戦を登録しました。順番をお待ちください。", battleAlreadyQueued: "この畑にはすでに挑戦済みです。",
     battleWon: "対決に勝利しました！", battleLost: "対決に敗れました。", battleSubmitted: "結果を送信しました。判定をお待ちください。",
-    battleInstructions: "矢印キー/WASDで光る道をなぞろう！速く正確に！", battleDrawFence: "矢印キー/WASDでフェンスの道を描こう。時間内に描き切れなければ失敗！", battleMistakesLabel: "ミス", battleTimeLabel: "タイム", battleClose: "棄権"
+    battleInstructions: "矢印キー/WASDで光る道をなぞろう！速く正確に！", battleDrawFence: "矢印キー/WASDでフェンスの道を描こう。時間内に描き切れなければ失敗！", battleMistakesLabel: "ミス", battleTimeLabel: "タイム", battleClose: "棄権",
+    fenceSetup: "フェンス設定", fenceOpen: "フェンスを設定", fencePick: "成熟した作物を選んでフェンスを描こう。", fenceNeedReady: "まず成熟した作物を選んでください。", fenceNeedSetup: "この作物には先にフェンスが必要です。", fenceSaved: "フェンスを保存しました", fenceTarget: "フェンスタイム"
   },
   es: {
     title: "🌱 Granja QQ", tabMine: "Mi Granja", tabVisit: "Visitar Amigo", bt: "Bluetooth",
     shop: "Tienda de Semillas", friends: "Amigos", add: "Agregar Jugador", log: "Registro",
     switchP: "Cambiar Jugador", close: "Cerrar", logout: "Cerrar sesion", deleteAccount: "Eliminar Cuenta", newP: "Crear Jugador", cancel: "Cancelar", ok: "OK", create: "Crear", namePh: "Apodo (max 10)", locPh: "Ubicacion (ej. Madrid)", passPh: "Contrasena de acceso (min 4)",
-    farmMine: " - granja", farmVisit: "Visitando", tools: ["🌱 Plantar", "💧 Regar", "🌾 Cosechar", "🧪 Fertilizar"],
+    farmMine: " - granja", farmVisit: "Visitando", tools: ["🌱 Plantar", "💧 Regar", "🌾 Cosechar", "🧪 Fertilizar", "🛡️ Valla"],
     weather: "Clima", wsunny: "Soleado", wrain: "Lluvia (+velocidad)", wheat: "Calor (-velocidad)", wcold: "Ola fria (-velocidad)",
     empty: "Toca una parcela vacia", ready: "Listo", withered: "Marchito", noGold: "No hay oro suficiente",
     planted: "Plantado", watered: "Regado", fertilized: "Fertilizado", harvested: "Cosechado", stolen: "Robado",
@@ -149,13 +152,14 @@ const I18N = {
     battleIncoming: "¡{name} te desafía por tu {crop}!", battleChallenge: "¡Desafía a {name} para robar su {crop}!", battleWaitingOpponent: "Esperando a que {name} termine...",
     battleStarted: "¡Batalla iniciada! Traza el camino para ganar.", battleQueued: "Desafío en cola, espera tu turno.", battleAlreadyQueued: "Ya tienes un desafío pendiente para esta parcela.",
     battleWon: "¡Ganaste el duelo!", battleLost: "Perdiste el duelo.", battleSubmitted: "Intento enviado, esperando resultado.",
-    battleInstructions: "¡Traza el camino con flechas/WASD antes de que se acabe el tiempo!", battleDrawFence: "Dibuja la valla con flechas/WASD antes de que se acabe el tiempo!", battleMistakesLabel: "Errores", battleTimeLabel: "Tiempo", battleClose: "Rendirse"
+    battleInstructions: "¡Traza el camino con flechas/WASD antes de que se acabe el tiempo!", battleDrawFence: "Dibuja la valla con flechas/WASD antes de que se acabe el tiempo!", battleMistakesLabel: "Errores", battleTimeLabel: "Tiempo", battleClose: "Rendirse",
+    fenceSetup: "Configurar valla", fenceOpen: "Poner valla", fencePick: "Elige un cultivo listo para trazar la valla.", fenceNeedReady: "Primero elige un cultivo listo.", fenceNeedSetup: "Este cultivo necesita una valla antes de robarlo.", fenceSaved: "Valla guardada", fenceTarget: "Tiempo de valla"
   },
   ru: {
     title: "🌱 QQ Ферма", tabMine: "Моя ферма", tabVisit: "В гости", bt: "Bluetooth",
     shop: "Магазин семян", friends: "Друзья", add: "Добавить игрока", log: "Журнал",
     switchP: "Сменить игрока", close: "Закрыть", logout: "Выйти", deleteAccount: "Удалить аккаунт", newP: "Создать игрока", cancel: "Отмена", ok: "OK", create: "Создать", namePh: "Ник (до 10)", locPh: "Локация (напр. Москва)", passPh: "Пароль входа (мин. 4)",
-    farmMine: " ферма", farmVisit: "В гостях у", tools: ["🌱 Посадить", "💧 Полить", "🌾 Собрать", "🧪 Удобрить"],
+    farmMine: " ферма", farmVisit: "В гостях у", tools: ["🌱 Посадить", "💧 Полить", "🌾 Собрать", "🧪 Удобрить", "🛡️ Забор"],
     weather: "Погода", wsunny: "Солнечно", wrain: "Дождь (+скорость)", wheat: "Жара (-скорость)", wcold: "Холод (-скорость)",
     empty: "Нажмите на пустой участок", ready: "Готово", withered: "Завяло", noGold: "Недостаточно монет",
     planted: "Посажено", watered: "Полив выполнен", fertilized: "Удобрено", harvested: "Собрано", stolen: "Украдено",
@@ -185,7 +189,8 @@ const I18N = {
     battleIncoming: "{name} вызывает вас на бой за ваш {crop}!", battleChallenge: "Вызовите {name} на бой, чтобы украсть {crop}!", battleWaitingOpponent: "Ожидание завершения хода {name}...",
     battleStarted: "Бой начался! Обведите путь, чтобы победить.", battleQueued: "Вызов в очереди, ожидайте своего хода.", battleAlreadyQueued: "У вас уже есть вызов для этого участка.",
     battleWon: "Вы выиграли дуэль!", battleLost: "Вы проиграли дуэль.", battleSubmitted: "Попытка отправлена, ожидайте результат.",
-    battleInstructions: "Обведите светящийся путь стрелками/WASD, пока не закончилось время!", battleDrawFence: "Нарисуйте забор стрелками/WASD, пока не кончилось время!", battleMistakesLabel: "Ошибки", battleTimeLabel: "Время", battleClose: "Сдаться"
+    battleInstructions: "Обведите светящийся путь стрелками/WASD, пока не закончилось время!", battleDrawFence: "Нарисуйте забор стрелками/WASD, пока не кончилось время!", battleMistakesLabel: "Ошибки", battleTimeLabel: "Время", battleClose: "Сдаться",
+    fenceSetup: "Настройка забора", fenceOpen: "Поставить забор", fencePick: "Выберите готовый урожай для забора.", fenceNeedReady: "Сначала выберите готовый урожай.", fenceNeedSetup: "Для этого урожая сначала нужен забор.", fenceSaved: "Забор сохранен", fenceTarget: "Время забора"
   }
 };
 
@@ -253,7 +258,7 @@ const MAX_PLOTS = 20;
 // designate two plots as in-world shops (last two plots)
 const SHOP_SEED_INDEX = Math.max(0, MAX_PLOTS - 1);
 const SHOP_FERT_INDEX = Math.max(0, MAX_PLOTS - 2);
-const TOOLS = ["plant", "water", "harvest", "fertilize"];
+const TOOLS = ["plant", "water", "harvest", "fertilize", "fence"];
 const AVATARS = ["👨‍🌾", "👩‍🌾", "🧑‍🌾", "🐱", "🐶", "🐼", "🦊", "🦝", "🧙"];
 const GAME_STATE_KEY = "qqfarm_game_v5";
 const ADMIN_AUTH_KEY = "qqfarm_admin_auth_v1";
@@ -328,6 +333,7 @@ let serverResetSent = false;
 let lastHeartbeatPush = 0;
 let battleRuntime = null;
 let battleTickTimer = null;
+let fenceSetupPlotIndex = null;
 
 function tr(k) { return I18N[S.lang][k] || I18N.zh[k] || k; }
 function cropName(k) { return CROPS[k].name[S.lang] || CROPS[k].name.zh; }
@@ -541,10 +547,13 @@ function normalizePlot(plot) {
   plot.plantedAt = normalizeTimestamp(plot.plantedAt);
   plot.wateredAt = normalizeTimestamp(plot.wateredAt);
   plot.fertilizedAt = normalizeTimestamp(plot.fertilizedAt);
+  plot.fenceSetAt = normalizeTimestamp(plot.fenceSetAt);
   if (plot.plantedAt > Date.now()) plot.plantedAt = Date.now();
   if (plot.wateredAt && plot.wateredAt < plot.plantedAt) plot.wateredAt = 0;
   if (plot.fertilizedAt && plot.fertilizedAt < plot.plantedAt) plot.fertilizedAt = 0;
   if (!plot.fertilizedTier || !FERTILIZERS[plot.fertilizedTier]) plot.fertilizedTier = null;
+  if (!Number.isFinite(Number(plot.fenceSeed))) plot.fenceSeed = 0;
+  if (!Number.isFinite(Number(plot.fenceScore))) plot.fenceScore = 0;
   if (plot.crop === "carrot") {
     plot.crop = "radish";
   }
@@ -560,7 +569,7 @@ function normalizeState() {
   if (!Number.isInteger(S.cursor) || S.cursor < 0 || S.cursor >= MAX_PLOTS) S.cursor = 0;
   Object.values(S.players).forEach((player) => {
     if (!Array.isArray(player.plots)) {
-      player.plots = Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null }));
+      player.plots = Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null, fenceSeed: 0, fenceScore: 0, fenceSetAt: 0 }));
     }
     player.plots.forEach(normalizePlot);
     if (!player.fertilizer || typeof player.fertilizer !== "object") player.fertilizer = { basic: 0, advanced: 0, premium: 0 };
@@ -656,7 +665,7 @@ function makePlayer(name, avatar, location = "") {
     xp: 0,
     updatedAt: Date.now(),
     lastActiveAt: Date.now(),
-    plots: Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null })),
+    plots: Array.from({ length: MAX_PLOTS }, () => ({ crop: null, plantedAt: 0, wateredAt: 0, fertilizedAt: 0, fertilizedTier: null, fenceSeed: 0, fenceScore: 0, fenceSetAt: 0 })),
     fertilizer: { basic: 0, advanced: 0, premium: 0 },
     seedBook: {}
   };
@@ -726,6 +735,9 @@ function clearPlot(p) {
   p.wateredAt = 0;
   p.fertilizedAt = 0;
   p.fertilizedTier = null;
+  p.fenceSeed = 0;
+  p.fenceScore = 0;
+  p.fenceSetAt = 0;
 }
 
 function notice(msg, type = "") {
@@ -827,6 +839,10 @@ function activateNextQueuedBattle(ownerId) {
 }
 
 function requestBattle(owner, challenger, plotIndex, plot, now) {
+  if (!plot.fenceScore) {
+    notice(tr("fenceNeedSetup"), "err");
+    return;
+  }
   const existing = findExistingBattle(owner.id, plotIndex, challenger.id);
   if (existing) {
     notice(tr("battleAlreadyQueued"), "info");
@@ -846,21 +862,20 @@ function requestBattle(owner, challenger, plotIndex, plot, now) {
     queuedAt: now,
     activatedAt: 0,
     expiresAt: 0,
-    scores: {},
+    scores: {
+      [owner.id]: { elapsedMs: plot.fenceScore, mistakes: 0, score: plot.fenceScore, submittedAt: plot.fenceSetAt || now }
+    },
     resolved: false,
     winnerId: null,
     resolvedAt: 0,
     updatedAt: now
   };
   S.battles[id] = battle;
-  activateNextQueuedBattle(owner.id);
+  battle.status = "active";
+  battle.activatedAt = now;
   save();
   render();
-  if (battle.status === "active" || S.battles[id].status === "active") {
-    notice(tr("battleStarted"), "info");
-  } else {
-    notice(tr("battleQueued"), "info");
-  }
+  notice(tr("battleStarted"), "info");
 }
 
 // Runs a plain function of (scores, expiry) so both participants compute the
@@ -1034,18 +1049,45 @@ function openBattleModal(battle) {
   const isOwner = battle.ownerId === S.currentId;
   if (battle.scores[S.currentId] || battle.resolved) return;
   if (!isOwner && !battle.scores[battle.ownerId]) {
-    const ownerName = S.players[battle.ownerId] ? S.players[battle.ownerId].name : "?";
-    notice(tr("battleWaitingOpponent").replace("{name}", ownerName), "info");
+    notice(tr("fenceNeedSetup"), "info");
     return;
   }
-  battleRuntime = { battleId: battle.id, startedAt: Date.now(), stepIndex: 0, mistakes: 0 };
+  battleRuntime = { mode: "challenge", battleId: battle.id, startedAt: Date.now(), stepIndex: 0, mistakes: 0 };
   battleRuntime.path = generateBattlePath(battle.seed);
+  document.getElementById("battleTitle").textContent = tr("battleTitle");
   renderBattleTrack(battle, 0);
   document.getElementById("battleTimer").textContent = "0.0s";
   document.getElementById("battleMistakes").textContent = "0";
   const opponent = S.players[isOwner ? battle.challengerId : battle.ownerId];
-  document.getElementById("battleSubtitle").textContent = tr("battleVs") + " " + ((opponent && opponent.name) || "?");
-  document.getElementById("battleInstructions").textContent = isOwner ? tr("battleDrawFence") : tr("battleInstructions");
+  const ownerScore = battle.scores[battle.ownerId] ? battle.scores[battle.ownerId].score : 0;
+  document.getElementById("battleSubtitle").textContent = tr("battleVs") + " " + ((opponent && opponent.name) || "?") + (ownerScore ? " · " + tr("fenceTarget") + ": " + fmtSec(ownerScore / 1000) : "");
+  document.getElementById("battleInstructions").textContent = tr("battleDrawFence");
+  document.getElementById("battleGiveUp").textContent = tr("battleClose");
+  document.getElementById("battleModal").classList.add("show");
+  clearInterval(battleTickTimer);
+  battleTickTimer = setInterval(updateBattleTimerDisplay, 100);
+}
+
+function openFenceTraceModal(plotIndex) {
+  const me = S.players[S.currentId];
+  if (!me) return;
+  const plot = me.plots[plotIndex];
+  if (!plot || pState(plot, Date.now()) !== "ready") {
+    notice(tr("fenceNeedReady"), "err");
+    return;
+  }
+  fenceSetupPlotIndex = plotIndex;
+  const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
+  battleRuntime = { mode: "setup", plotIndex, seed, startedAt: Date.now(), stepIndex: 0, mistakes: 0 };
+  battleRuntime.path = generateBattlePath(seed);
+  document.getElementById("battleTitle").textContent = tr("fenceSetup");
+  renderBattleTrack({ seed }, 0);
+  document.getElementById("battleTitle").textContent = tr("fenceSetup");
+  document.getElementById("battleSubtitle").textContent = cropName(plot.crop);
+  document.getElementById("battleInstructions").textContent = tr("battleDrawFence");
+  document.getElementById("battleTimer").textContent = "0.0s";
+  document.getElementById("battleMistakes").textContent = "0";
+  document.getElementById("battleGiveUp").textContent = tr("battleClose");
   document.getElementById("battleModal").classList.add("show");
   clearInterval(battleTickTimer);
   battleTickTimer = setInterval(updateBattleTimerDisplay, 100);
@@ -1056,6 +1098,7 @@ function closeBattleModal() {
   clearInterval(battleTickTimer);
   battleTickTimer = null;
   battleRuntime = null;
+  fenceSetupPlotIndex = null;
 }
 
 function finishBattleAttempt(battle) {
@@ -1063,6 +1106,20 @@ function finishBattleAttempt(battle) {
   const mistakes = battleRuntime.mistakes;
   const score = elapsedMs + mistakes * BATTLE_MISTAKE_PENALTY_MS;
   const now = Date.now();
+  if (battleRuntime.mode === "setup") {
+    const me = S.players[S.currentId];
+    const plot = me && me.plots[battleRuntime.plotIndex];
+    if (!plot) return closeBattleModal();
+    plot.fenceSeed = battleRuntime.seed;
+    plot.fenceScore = score;
+    plot.fenceSetAt = now;
+    me.updatedAt = now;
+    closeBattleModal();
+    notice(tr("fenceSaved"), "info");
+    save();
+    render();
+    return;
+  }
   battle.scores[S.currentId] = { elapsedMs, mistakes, score, submittedAt: now };
   battle.updatedAt = now;
   closeBattleModal();
@@ -1075,14 +1132,15 @@ function finishBattleAttempt(battle) {
 
 function battleTryMove(dir) {
   if (!battleRuntime) return;
-  const battle = S.battles[battleRuntime.battleId];
-  if (!battle || battle.resolved) { closeBattleModal(); return; }
+  const battle = battleRuntime.mode === "challenge" ? S.battles[battleRuntime.battleId] : null;
+  if (battleRuntime.mode === "challenge" && (!battle || battle.resolved)) { closeBattleModal(); return; }
   const path = battleRuntime.path;
   if (!path) return;
   const expected = path.moves[battleRuntime.stepIndex];
   if (dir === expected) {
     battleRuntime.stepIndex++;
-    renderBattleTrack(battle, battleRuntime.stepIndex);
+    if (battleRuntime.mode === "challenge") renderBattleTrack(battle, battleRuntime.stepIndex);
+    else renderBattleTrack({ seed: battleRuntime.seed }, battleRuntime.stepIndex);
     if (battleRuntime.stepIndex >= path.moves.length) {
       finishBattleAttempt(battle);
     }
@@ -1107,6 +1165,41 @@ function dirInput(dir) {
 function actInput() {
   if (isBattleModalOpen()) return;
   actPlot(S.cursor);
+}
+
+function renderFenceSetupList() {
+  const list = document.getElementById("fenceSetupList");
+  const hint = document.getElementById("fenceSetupHint");
+  if (!list || !hint) return;
+  const me = S.players[S.currentId];
+  if (!me) return;
+  const readyPlots = me.plots
+    .map((plot, idx) => ({ plot, idx }))
+    .filter(({ plot }) => plot && plot.crop && pState(plot, Date.now()) === "ready");
+  hint.textContent = readyPlots.length ? tr("fencePick") : tr("fenceNeedReady");
+  list.innerHTML = readyPlots.map(({ plot, idx }) => {
+    const crop = CROPS[plot.crop];
+    const target = plot.fenceScore ? fmtSec(plot.fenceScore / 1000) : "—";
+    return '<div class="fence-setup-item">' +
+      '<div class="fence-setup-main">' +
+        '<div class="fence-setup-name">' + crop.icon + ' ' + cropName(plot.crop) + ' · #' + (idx + 1) + '</div>' +
+        '<div class="fence-setup-meta">' + tr("fenceTarget") + ': ' + target + '</div>' +
+      '</div>' +
+      '<button type="button" class="btn active" data-plot="' + idx + '">' + tr("fenceOpen") + '</button>' +
+    '</div>';
+  }).join("");
+  list.querySelectorAll("button[data-plot]").forEach((btn) => {
+    btn.addEventListener("click", () => openFenceTraceModal(Number(btn.dataset.plot)));
+  });
+}
+
+function openFenceSetupModal() {
+  renderFenceSetupList();
+  document.getElementById("fenceSetupModal").classList.add("show");
+}
+
+function closeFenceSetupModal() {
+  document.getElementById("fenceSetupModal").classList.remove("show");
 }
 
 async function cloudRequest(action) {
@@ -1763,6 +1856,12 @@ function actPlot(idx) {
     return;
   }
 
+  if (S.tool === "fence") {
+    if (st !== "ready") return notice(tr("fenceNeedReady"), "err");
+    openFenceTraceModal(idx);
+    return;
+  }
+
   if (st === "ready") {
     const c = CROPS[p.crop];
     const gain = c.sell;
@@ -1891,17 +1990,30 @@ function renderText() {
   document.getElementById("battleTitle").textContent = tr("battleTitle");
   document.getElementById("battleTimeLabel").textContent = tr("battleTimeLabel");
   document.getElementById("battleMistakesLabel").textContent = tr("battleMistakesLabel");
+  const fenceSetupBtn = document.getElementById("fenceSetupBtn");
+  if (fenceSetupBtn) fenceSetupBtn.textContent = tr("fenceSetup");
+  const fenceSetupTitle = document.getElementById("fenceSetupTitle");
+  if (fenceSetupTitle) fenceSetupTitle.textContent = tr("fenceSetup");
+  const fenceSetupHint = document.getElementById("fenceSetupHint");
+  if (fenceSetupHint && !fenceSetupHint.textContent) fenceSetupHint.textContent = tr("fencePick");
+  const fenceSetupCloseBtn = document.getElementById("fenceSetupCloseBtn");
+  if (fenceSetupCloseBtn) fenceSetupCloseBtn.textContent = tr("close");
   const battleInstructionsEl = document.getElementById("battleInstructions");
   if (battleInstructionsEl) {
     if (isBattleModalOpen() && battleRuntime) {
-      const battle = S.battles[battleRuntime.battleId];
-      const isOwner = battle && battle.ownerId === S.currentId;
-      battleInstructionsEl.textContent = isOwner ? tr("battleDrawFence") : tr("battleInstructions");
+      if (battleRuntime.mode === "setup") {
+        battleInstructionsEl.textContent = tr("battleDrawFence");
+      } else {
+        const battle = S.battles[battleRuntime.battleId];
+        const isOwner = battle && battle.ownerId === S.currentId;
+        battleInstructionsEl.textContent = isOwner ? tr("battleDrawFence") : tr("battleInstructions");
+      }
     } else {
       battleInstructionsEl.textContent = tr("battleInstructions");
     }
   }
   document.getElementById("battleGiveUp").textContent = tr("battleClose");
+  if (document.getElementById("fenceSetupModal")?.classList.contains("show")) renderFenceSetupList();
 
   const btBtn = document.getElementById("btBtn");
   const connected = btDevice && btDevice.gatt && btDevice.gatt.connected;
@@ -1982,7 +2094,7 @@ function renderToolbar() {
   const bar = document.getElementById("toolbar");
   bar.innerHTML = "";
   if (!S.currentId) return;
-  document.body.classList.remove("tool-plant", "tool-water", "tool-harvest", "tool-fertilize");
+  document.body.classList.remove("tool-plant", "tool-water", "tool-harvest", "tool-fertilize", "tool-fence");
   document.body.classList.add("tool-" + S.tool);
   const visiting = !!S.viewId && S.viewId !== S.currentId;
   if (visiting) {
@@ -2154,9 +2266,11 @@ function renderGrid() {
       const spriteImg = '<img class="sprite" src="assets/sprites/' + p.crop + '.svg" onerror="this.style.display=\'none\'">';
       const accent = cropAccent(p.crop);
       btn.style.setProperty("--plot-accent", accent.soft);
+      const fenceBadge = p.fenceScore ? '<div class="plot-badge-fence">🛡️</div>' : '';
       const contested = Object.values(S.battles).some((b) => b.ownerId === owner.id && b.plotIndex === i && !b.resolved);
       btn.innerHTML =
         (badges ? '<div class="badges">' + badges + '</div>' : '') +
+        fenceBadge +
         (contested ? '<div class="plot-badge-battle">⚔️</div>' : '') +
         '<div class="plot-icon">' + spriteImg + '</div>' +
         '<div class="plot-time">' + pLabel(p, now) + '</div>' +
@@ -2894,6 +3008,10 @@ boot();
   cropPrevBtn.addEventListener('click', prevCropPage);
   cropNextBtn.addEventListener('click', nextCropPage);
   cropBookModal.addEventListener('click', (e) => { if (e.target === cropBookModal) closeCropBook(); });
+  document.getElementById("fenceSetupBtn").addEventListener("click", openFenceSetupModal);
+  document.getElementById("fenceSetupCloseBtn").addEventListener("click", closeFenceSetupModal);
+  document.getElementById("fenceSetupCloseX").addEventListener("click", closeFenceSetupModal);
+  document.getElementById("fenceSetupModal").addEventListener("click", (e) => { if (e.target === document.getElementById("fenceSetupModal")) closeFenceSetupModal(); });
   document.getElementById("slotButton").addEventListener("click", openSlots);
   document.getElementById("slotCloseBtn").addEventListener("click", closeSlots);
   document.getElementById("slotCloseX").addEventListener("click", closeSlots);
