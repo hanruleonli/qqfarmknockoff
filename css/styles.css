@@ -142,7 +142,6 @@ button:focus-visible {
 .leader-row.on {
   background: rgba(245,203,62,.14);
   border-color: rgba(245,203,62,.4);
-
   border-color: rgba(245,203,62,.9);
 }
 .leader-rank {
@@ -199,7 +198,7 @@ button:focus-visible {
   box-shadow: 0 0 0 2px rgba(255,255,255,.45), 0 0 0 4px rgba(245,203,62,.22);
 }
 .plot-icon { font-size: 20px; width: 32px; min-height: 32px; display: grid; place-items: center; border-radius: 7px; background: var(--plot-accent, rgba(255,255,255,.04)); border: 1px solid rgba(255,255,255,.12); line-height: 0; overflow: hidden; }
-.plot-icon .sprite { width: 22px; height: 22px; margin: 0; display: block; object-fit: contain; object-position: center center; }
+.plot-icon .sprite { width: 24px; height: 24px; margin: 0; display: block; object-fit: contain; object-position: center center; }
 .plot-time { font-size: 11px; opacity: .88; margin-top: 4px; }
 .badges { position: absolute; top: 8px; left: 8px; font-size: 12px; }
 .plot-badge-fence { position: absolute; top: 8px; right: 24px; font-size: 12px; }
@@ -232,7 +231,7 @@ button:focus-visible {
 
 /* sprite image rules */
 .sprite { width: 16px; height: 16px; image-rendering: pixelated; display:block; margin: 0 auto; }
-.player-sprite { position: absolute; width: 24px; height: 24px; pointer-events: none; z-index: 6; transition: left 220ms cubic-bezier(.2,.9,.2,1), top 220ms cubic-bezier(.2,.9,.2,1); background-size: contain; background-repeat: no-repeat; transform: translate(-50%, -50%); }
+.player-sprite { display: none; position: absolute; width: 24px; height: 24px; pointer-events: none; z-index: 6; transition: left 220ms cubic-bezier(.2,.9,.2,1), top 220ms cubic-bezier(.2,.9,.2,1); background-size: contain; background-repeat: no-repeat; transform: translate(-50%, -50%); }
 .player-sprite.walk { animation: bob 350ms steps(2) infinite; }
 @keyframes bob { 0% { transform: translate(-50%, -52%); } 50% { transform: translate(-50%, -48%); } 100% { transform: translate(-50%, -52%); } }
 .shop-section { display: contents; }
@@ -535,7 +534,7 @@ button:focus-visible {
 .fence-setup-name { font-weight: 800; }
 
 /* Make crop sprites more visible while growing */
-.plot .plot-icon img.sprite { box-shadow: 0 1px 0 rgba(0,0,0,.6) inset; background: rgba(0,0,0,0.12); padding: 2px; border-radius: 3px; }
+.plot .plot-icon img.sprite { box-shadow: none; background: transparent; padding: 0; border-radius: 0; }
 .plot.growing .plot-icon img.sprite { opacity: 1; }
 
 /* Hide the extra crop book button (consolidating seed UI to a single book) */

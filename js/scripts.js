@@ -586,6 +586,8 @@ function normalizeState() {
     player.lastActiveAt = normalizeTimestamp(player.lastActiveAt) || now;
   });
   if (!S.weather || typeof S.weather !== "object") S.weather = { ...WEATHER[0], until: now + 120000, setAt: now };
+  if (!S.weather.key || !WEATHER.some((w) => w.key === S.weather.key)) S.weather.key = WEATHER[0].key;
+  if (!S.weather.icon) S.weather.icon = WEATHER.find((w) => w.key === S.weather.key)?.icon || WEATHER[0].icon;
   S.weather.until = normalizeTimestamp(S.weather.until) || now + 120000;
   S.weather.setAt = normalizeTimestamp(S.weather.setAt) || now;
   if (typeof S.weather.mult !== "number" || S.weather.mult <= 0) S.weather.mult = 1;
@@ -2332,13 +2334,18 @@ function renderSelector() {
   sel.style.left = Math.max(0, cellRect.left - wrapRect.left + borderOffset) + "px";
   sel.style.top = Math.max(0, cellRect.top - wrapRect.top + borderOffset) + "px";
   sel.style.transform = "none";
-  // move player sprite to selected plot center (smoothly)
-  const ps = document.getElementById('playerSprite');
-  if (ps) {
-    const cx = cellRect.left - wrapRect.left + cellRect.width / 2;
-    const cy = cellRect.top - wrapRect.top + cellRect.height / 2;
-    animatePlayerTo(ps, cx, cy, 280);
-  }
+}
+
+function worldToGrid(clientX, clientY) {
+  const grid = document.getElementById("grid");
+  if (!grid || !grid.children.length) return [NaN, NaN];
+  const target = document.elementFromPoint(clientX, clientY);
+  const plotEl = target && target.closest ? target.closest(".plot") : null;
+  if (!plotEl || !grid.contains(plotEl)) return [NaN, NaN];
+  const idx = Array.prototype.indexOf.call(grid.children, plotEl);
+  if (idx < 0) return [NaN, NaN];
+  const cols = window.innerWidth <= 780 ? 4 : 5;
+  return [idx % cols, Math.floor(idx / cols)];
 }
 
 function animatePlayerTo(el, x, y, duration = 240) {
