@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect width="16" height="16" fill="#071421"/><ellipse cx="8" cy="8" rx="4" ry="5" fill="#2ecc71"/><circle cx="8" cy="9" r="1" fill="#7f3fbf"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <rect width="16" height="16" fill="none"/>
+  <rect x="6" y="2" width="4" height="2" fill="#5fcf5f"/>
+  <rect x="5" y="4" width="6" height="1" fill="#3d7b3a"/>
+  <rect x="5" y="5" width="6" height="6" fill="#5ca24b"/>
+  <rect x="6" y="6" width="4" height="4" fill="#74c35c"/>
+  <rect x="7" y="7" width="2" height="2" fill="#6b4423"/>
+  <rect x="8" y="10" width="1" height="1" fill="#d8a56f"/>
+</svg>

@@ -38,7 +38,7 @@ const I18N = {
     battleStarted: "对战开始！描摹路径以取胜。", battleQueued: "挑战已排队，等待轮到你。", battleAlreadyQueued: "你已经对该地块发起过挑战。",
     battleWon: "你赢得了对决！", battleLost: "你输掉了对决。", battleSubmitted: "已提交你的成绩，等待结果。",
     battleInstructions: "用方向键/WASD 沿发光路径描摹，越快越准越好！", battleDrawFence: "用方向键/WASD 绘制栅栏路径，时间用完则失败！", battleMistakesLabel: "失误", battleTimeLabel: "用时", battleClose: "放弃",
-    fenceSetup: "栅栏设置", fenceOpen: "设置栅栏", fencePick: "选择一个成熟作物来描摹栅栏。", fenceNeedReady: "请先选择一个成熟作物。", fenceNeedSetup: "这个作物需要先设置栅栏。", fenceSaved: "栅栏已保存", fenceTarget: "栅栏时间"
+    fenceSetup: "栅栏设置", fenceOpen: "设置栅栏", fencePick: "选择一个地块来描摹栅栏。", fenceNeedReady: "请先选择一个地块。", fenceNeedSetup: "这个地块需要先设置栅栏。", fenceSaved: "栅栏已保存", fenceTarget: "栅栏时间"
   },
   en: {
     title: "🌱 QQ Farm", tabMine: "My Farm", tabVisit: "Visit Friend", bt: "Bluetooth",
@@ -78,7 +78,7 @@ const I18N = {
     battleStarted: "Battle started! Trace the path to win.", battleQueued: "Challenge queued — waiting for your turn.", battleAlreadyQueued: "You already have a pending challenge for this plot.",
     battleWon: "You won the trace race!", battleLost: "You lost the trace race.", battleSubmitted: "Attempt submitted, waiting for result.",
     battleInstructions: "Trace the glowing path with arrows/WASD before time runs out!", battleDrawFence: "Draw the fence path with arrows/WASD before time runs out!", battleMistakesLabel: "Mistakes", battleTimeLabel: "Time", battleClose: "Forfeit",
-    fenceSetup: "Fence Setup", fenceOpen: "Set Fence", fencePick: "Pick a ready crop to trace a fence.", fenceNeedReady: "Pick a ready crop first.", fenceNeedSetup: "This crop needs a fence before it can be stolen.", fenceSaved: "Fence saved", fenceTarget: "Fence time"
+    fenceSetup: "Fence Setup", fenceOpen: "Set Fence", fencePick: "Pick a plot to trace a fence.", fenceNeedReady: "Pick a plot first.", fenceNeedSetup: "This plot needs a fence before it can be stolen.", fenceSaved: "Fence saved", fenceTarget: "Fence time"
   },
   ja: {
     title: "🌱 QQファーム", tabMine: "自分の農場", tabVisit: "友だち訪問", bt: "Bluetooth",
@@ -116,7 +116,7 @@ const I18N = {
     battleStarted: "対戦開始！パスをなぞって勝利しよう。", battleQueued: "挑戦を登録しました。順番をお待ちください。", battleAlreadyQueued: "この畑にはすでに挑戦済みです。",
     battleWon: "対決に勝利しました！", battleLost: "対決に敗れました。", battleSubmitted: "結果を送信しました。判定をお待ちください。",
     battleInstructions: "矢印キー/WASDで光る道をなぞろう！速く正確に！", battleDrawFence: "矢印キー/WASDでフェンスの道を描こう。時間内に描き切れなければ失敗！", battleMistakesLabel: "ミス", battleTimeLabel: "タイム", battleClose: "棄権",
-    fenceSetup: "フェンス設定", fenceOpen: "フェンスを設定", fencePick: "成熟した作物を選んでフェンスを描こう。", fenceNeedReady: "まず成熟した作物を選んでください。", fenceNeedSetup: "この作物には先にフェンスが必要です。", fenceSaved: "フェンスを保存しました", fenceTarget: "フェンスタイム"
+    fenceSetup: "フェンス設定", fenceOpen: "フェンスを設定", fencePick: "区画を選んでフェンスを描こう。", fenceNeedReady: "まず区画を選んでください。", fenceNeedSetup: "この区画には先にフェンスが必要です。", fenceSaved: "フェンスを保存しました", fenceTarget: "フェンスタイム"
   },
   es: {
     title: "🌱 Granja QQ", tabMine: "Mi Granja", tabVisit: "Visitar Amigo", bt: "Bluetooth",
@@ -153,7 +153,7 @@ const I18N = {
     battleStarted: "¡Batalla iniciada! Traza el camino para ganar.", battleQueued: "Desafío en cola, espera tu turno.", battleAlreadyQueued: "Ya tienes un desafío pendiente para esta parcela.",
     battleWon: "¡Ganaste el duelo!", battleLost: "Perdiste el duelo.", battleSubmitted: "Intento enviado, esperando resultado.",
     battleInstructions: "¡Traza el camino con flechas/WASD antes de que se acabe el tiempo!", battleDrawFence: "Dibuja la valla con flechas/WASD antes de que se acabe el tiempo!", battleMistakesLabel: "Errores", battleTimeLabel: "Tiempo", battleClose: "Rendirse",
-    fenceSetup: "Configurar valla", fenceOpen: "Poner valla", fencePick: "Elige un cultivo listo para trazar la valla.", fenceNeedReady: "Primero elige un cultivo listo.", fenceNeedSetup: "Este cultivo necesita una valla antes de robarlo.", fenceSaved: "Valla guardada", fenceTarget: "Tiempo de valla"
+    fenceSetup: "Configurar valla", fenceOpen: "Poner valla", fencePick: "Elige una parcela para trazar la valla.", fenceNeedReady: "Primero elige una parcela.", fenceNeedSetup: "Esta parcela necesita una valla antes de robarla.", fenceSaved: "Valla guardada", fenceTarget: "Tiempo de valla"
   },
   ru: {
     title: "🌱 QQ Ферма", tabMine: "Моя ферма", tabVisit: "В гости", bt: "Bluetooth",
@@ -190,7 +190,7 @@ const I18N = {
     battleStarted: "Бой начался! Обведите путь, чтобы победить.", battleQueued: "Вызов в очереди, ожидайте своего хода.", battleAlreadyQueued: "У вас уже есть вызов для этого участка.",
     battleWon: "Вы выиграли дуэль!", battleLost: "Вы проиграли дуэль.", battleSubmitted: "Попытка отправлена, ожидайте результат.",
     battleInstructions: "Обведите светящийся путь стрелками/WASD, пока не закончилось время!", battleDrawFence: "Нарисуйте забор стрелками/WASD, пока не кончилось время!", battleMistakesLabel: "Ошибки", battleTimeLabel: "Время", battleClose: "Сдаться",
-    fenceSetup: "Настройка забора", fenceOpen: "Поставить забор", fencePick: "Выберите готовый урожай для забора.", fenceNeedReady: "Сначала выберите готовый урожай.", fenceNeedSetup: "Для этого урожая сначала нужен забор.", fenceSaved: "Забор сохранен", fenceTarget: "Время забора"
+    fenceSetup: "Настройка забора", fenceOpen: "Поставить забор", fencePick: "Выберите участок для забора.", fenceNeedReady: "Сначала выберите участок.", fenceNeedSetup: "Для этого участка сначала нужен забор.", fenceSaved: "Забор сохранен", fenceTarget: "Время забора"
   }
 };
 
@@ -736,9 +736,6 @@ function clearPlot(p) {
   p.wateredAt = 0;
   p.fertilizedAt = 0;
   p.fertilizedTier = null;
-  p.fenceSeed = 0;
-  p.fenceScore = 0;
-  p.fenceSetAt = 0;
 }
 
 function notice(msg, type = "") {
@@ -1073,7 +1070,7 @@ function openFenceTraceModal(plotIndex) {
   const me = S.players[S.currentId];
   if (!me) return;
   const plot = me.plots[plotIndex];
-  if (!plot || pState(plot, Date.now()) !== "ready") {
+  if (!plot) {
     notice(tr("fenceNeedReady"), "err");
     return;
   }
@@ -1082,7 +1079,7 @@ function openFenceTraceModal(plotIndex) {
   battleRuntime = { mode: "setup", plotIndex, seed, startedAt: Date.now(), stepIndex: 0, mistakes: 0 };
   battleRuntime.path = generateBattlePath(seed);
   document.getElementById("battleTitle").textContent = tr("fenceSetup");
-  document.getElementById("battleSubtitle").textContent = cropName(plot.crop);
+  document.getElementById("battleSubtitle").textContent = plot.crop ? cropName(plot.crop) : tr("empty");
   document.getElementById("battleInstructions").textContent = tr("battleDrawFence");
   document.getElementById("battleTimer").textContent = "0.0s";
   document.getElementById("battleMistakes").textContent = "0";
@@ -1173,16 +1170,15 @@ function renderFenceSetupList() {
   if (!list || !hint) return;
   const me = S.players[S.currentId];
   if (!me) return;
-  const readyPlots = me.plots
-    .map((plot, idx) => ({ plot, idx }))
-    .filter(({ plot }) => plot && plot.crop && pState(plot, Date.now()) === "ready");
-  hint.textContent = readyPlots.length ? tr("fencePick") : tr("fenceNeedReady");
-  list.innerHTML = readyPlots.map(({ plot, idx }) => {
-    const crop = CROPS[plot.crop];
+  const plots = me.plots.map((plot, idx) => ({ plot, idx }));
+  hint.textContent = plots.length ? tr("fencePick") : tr("fenceNeedReady");
+  list.innerHTML = plots.map(({ plot, idx }) => {
+    const cropLabel = plot.crop ? cropName(plot.crop) : tr("empty");
     const target = plot.fenceScore ? fmtSec(plot.fenceScore / 1000) : "—";
+    const cropIcon = plot.crop && CROPS[plot.crop] ? CROPS[plot.crop].icon : "🟩";
     return '<div class="fence-setup-item">' +
       '<div class="fence-setup-main">' +
-        '<div class="fence-setup-name">' + crop.icon + ' ' + cropName(plot.crop) + ' · #' + (idx + 1) + '</div>' +
+        '<div class="fence-setup-name">' + cropIcon + ' ' + cropLabel + ' · #' + (idx + 1) + '</div>' +
         '<div class="fence-setup-meta">' + tr("fenceTarget") + ': ' + target + '</div>' +
       '</div>' +
       '<button type="button" class="btn active" data-plot="' + idx + '">' + tr("fenceOpen") + '</button>' +
@@ -1871,7 +1867,6 @@ function actPlot(idx) {
   }
 
   if (S.tool === "fence") {
-    if (st !== "ready") return notice(tr("fenceNeedReady"), "err");
     openFenceTraceModal(idx);
     return;
   }
