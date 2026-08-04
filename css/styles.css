@@ -198,8 +198,8 @@ button:focus-visible {
 .tool-fertilize .toolbar .btn.active {
   box-shadow: 0 0 0 2px rgba(255,255,255,.45), 0 0 0 4px rgba(245,203,62,.22);
 }
-.plot-icon { font-size: 20px; width: 32px; min-height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 7px; background: var(--plot-accent, rgba(255,255,255,.04)); border: 1px solid rgba(255,255,255,.12); line-height: 0; overflow: hidden; }
-.plot-icon .sprite { width: 20px; height: 20px; margin: 0; display: block; object-fit: contain; }
+.plot-icon { font-size: 20px; width: 32px; min-height: 32px; display: grid; place-items: center; border-radius: 7px; background: var(--plot-accent, rgba(255,255,255,.04)); border: 1px solid rgba(255,255,255,.12); line-height: 0; overflow: hidden; }
+.plot-icon .sprite { width: 22px; height: 22px; margin: 0; display: block; object-fit: contain; object-position: center center; }
 .plot-time { font-size: 11px; opacity: .88; margin-top: 4px; }
 .badges { position: absolute; top: 8px; left: 8px; font-size: 12px; }
 .plot-badge-fence { position: absolute; top: 8px; right: 24px; font-size: 12px; }
@@ -536,7 +536,7 @@ button:focus-visible {
 
 /* Make crop sprites more visible while growing */
 .plot .plot-icon img.sprite { box-shadow: 0 1px 0 rgba(0,0,0,.6) inset; background: rgba(0,0,0,0.12); padding: 2px; border-radius: 3px; }
-.plot.growing .plot-icon img.sprite { transform: translateY(-2px) scale(1.05); opacity: 1; }
+.plot.growing .plot-icon img.sprite { opacity: 1; }
 
 /* Hide the extra crop book button (consolidating seed UI to a single book) */
 #cropBookBtn { display: none !important; }

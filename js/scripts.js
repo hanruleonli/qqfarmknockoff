@@ -265,6 +265,7 @@ const ADMIN_AUTH_KEY = "qqfarm_admin_auth_v1";
 const RESET_DONE_KEY = "qqfarm_reset_v1";
 const ADMIN_FIXED_PASSWORD = "hanru";
 const ADMIN_FIXED_HASH = "4c4fe8dcdbe87b4309b773d25cb0c9eaaf5512566626b85d75117dc3ddc9ec86";
+const SPRITE_CACHE_BUST = "20260804a";
 // Populated by config.js (gitignored locally, generated from repo secrets on
 // GitHub Pages deploy). Falls back to empty/disabled if config.js is absent.
 const CLOUD_CONFIG = (typeof window !== "undefined" && window.CLOUD_CONFIG) || {};
@@ -273,6 +274,10 @@ const DEFAULT_CLOUD_WRITE_TOKEN = CLOUD_CONFIG.token || "";
 const DEFAULT_CLOUD_GAME_ID = CLOUD_CONFIG.gameId || "qqfarm_default";
 const AUTO_CLOUD_SYNC_MS = 2200;
 const AUTO_CLOUD_RETRY_MS = 6000;
+
+function spriteUrl(key) {
+  return "assets/sprites/" + key + ".svg?v=" + SPRITE_CACHE_BUST;
+}
 
 // A steal against an "active" owner turns into an async trace-race battle
 // instead of an instant steal. Owner presence is a heartbeat, not a live
@@ -2159,7 +2164,7 @@ function renderShop() {
     el.style.setProperty("--seed-accent-soft", accent.soft);
     el.innerHTML =
       '<div class="seed-book-icon">' +
-        '<img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+        '<img class="sprite" src="' + spriteUrl(key) + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
         '<div class="seed-fallback" style="display:none">' + c.icon + '</div>' +
       '</div>' +
       '<div class="seed-book-content">' +
@@ -2275,12 +2280,12 @@ function renderGrid() {
         btn.innerHTML = '<div class="plot-icon">🏬</div><div class="plot-time">' + tr('fertilizerShop') + '</div>';
       } else {
         // show sprite placeholder for empty
-        btn.innerHTML = '<div class="plot-icon"><img class="sprite" src="assets/sprites/blank.svg" onerror="this.style.display=\'none\'">🪹</div><div class="plot-time">' + tr("empty") + '</div>';
+        btn.innerHTML = '<div class="plot-icon"><img class="sprite" src="' + spriteUrl("blank") + '" onerror="this.style.display=\'none\'">🪹</div><div class="plot-time">' + tr("empty") + '</div>';
       }
     } else {
       const icon = st === "withered" ? "🥀" : CROPS[p.crop].icon;
       const badges = (p.wateredAt > p.plantedAt ? "💧" : "") + (p.fertilizedAt > p.plantedAt ? "🧪" : "");
-      const spriteImg = '<img class="sprite" src="assets/sprites/' + p.crop + '.svg" onerror="this.style.display=\'none\'">';
+      const spriteImg = '<img class="sprite" src="' + spriteUrl(p.crop) + '" onerror="this.style.display=\'none\'">';
       const accent = cropAccent(p.crop);
       btn.style.setProperty("--plot-accent", accent.soft);
       const fenceBadge = p.fenceScore ? '<div class="plot-badge-fence">🛡️</div>' : '';
@@ -2719,7 +2724,7 @@ async function boot() {
   render();
   // set initial player sprite image
   const _ps = document.getElementById('playerSprite');
-  if (_ps) _ps.style.backgroundImage = "url('assets/sprites/player.svg')";
+  if (_ps) _ps.style.backgroundImage = "url('" + spriteUrl("player") + "')";
   openLoginPage();
   setInterval(loop, 1000);
   scheduleCloudPoll();
@@ -2808,7 +2813,7 @@ boot();
       const accent = cropAccent(key);
       return '<div class="seed-book-item' + (count ? ' collected' : '') + '" data-key="' + key + '" style="--seed-accent:' + accent.border + ';--seed-accent-soft:' + accent.soft + ';">' +
         '<div class="seed-book-icon">' +
-          '<img class="sprite" src="assets/sprites/' + key + '.svg" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+          '<img class="sprite" src="' + spriteUrl(key) + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
           '<div class="seed-fallback" style="display:none">' + crop.icon + '</div>' +
         '</div>' +
         '<div class="seed-book-content">' +
@@ -2831,7 +2836,7 @@ boot();
     const c = CROPS[key];
     const count = (p.seedBook || {})[key] || 0;
     const html = '<div style="text-align:center;margin-bottom:8px">' +
-      '<img src="assets/sprites/' + key + '.svg" width="48" height="48" style="image-rendering:pixelated;margin:0 auto;display:block">' +
+      '<img src="' + spriteUrl(key) + '" width="48" height="48" style="image-rendering:pixelated;margin:0 auto;display:block">' +
       '</div>' +
       '<div style="font-weight:800;margin-bottom:6px">' + cropName(key) + '</div>' +
       '<div style="margin-bottom:8px">Cost: ' + c.cost + '🪙 · Sell: ' + c.sell + '🪙 · XP: ' + c.xp + '</div>' +
