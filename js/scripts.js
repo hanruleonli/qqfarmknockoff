@@ -11,7 +11,7 @@ const I18N = {
     fertilizerShop: "肥料商店", fertilizer: "肥料", basic: "基础", advanced: "高级", premium: "顶级", noFertilizer: "没有可用肥料", buy: "购买", levelLocked: "需要等级",
     topRank: "排行榜第一",
     topUsers: "玩家排行",
-    controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具, 5-9选择种子, 0打开老虎机。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
+    controlHint: "键盘: WASD/方向键移动, 空格执行, 1-4切换工具, 5-9选择种子。蓝牙命令文本: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
     btUnsup: "浏览器不支持 Web Bluetooth", btConn: "蓝牙连接中...", btOk: "蓝牙已连接", btFail: "蓝牙连接失败", btDisc: "蓝牙已断开",
     cloudSave: "云端保存", cloudLoad: "云端读取", cloudTest: "连接测试", cloudCfg: "云端设置", cloudTitle: "Google Sheets 云端设置",
     cloudCfgSaved: "云端配置已保存", cloudNeedUrl: "请先配置云端 URL", cloudSaveOk: "云端保存成功", cloudLoadOk: "云端读取成功", cloudNoData: "云端暂无存档", cloudPingOk: "云连接正常", cloudFail: "云端请求失败", cloudBadUrl: "云端 URL 无效", cloudUnauthorized: "云端令牌无效或无权限", cloudBadResp: "云端返回格式异常", cloudFileMode: "请通过 http://localhost 打开游戏，不要使用 file://",
@@ -51,7 +51,7 @@ const I18N = {
     fertilizerShop: "Fertilizer Shop", fertilizer: "Fertilizer", basic: "Basic", advanced: "Advanced", premium: "Premium", noFertilizer: "No fertilizer available", buy: "Buy", levelLocked: "Requires Level",
     topRank: "Top Ranked",
     topUsers: "Leaderboard",
-    controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 5-9 choose seed, 0 open slots. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Keyboard: WASD/Arrows move, Space act, 1-4 tools, 5-9 choose seed. Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth not supported", btConn: "Connecting Bluetooth...", btOk: "Bluetooth connected", btFail: "Bluetooth failed", btDisc: "Bluetooth disconnected",
     cloudSave: "Cloud Save", cloudLoad: "Cloud Load", cloudTest: "Test Connection", cloudCfg: "Cloud Setup", cloudTitle: "Google Sheets Cloud Settings",
     cloudCfgSaved: "Cloud config saved", cloudNeedUrl: "Set cloud URL first", cloudSaveOk: "Cloud save success", cloudLoadOk: "Cloud load success", cloudNoData: "No cloud save found yet", cloudPingOk: "Cloud connection OK", cloudFail: "Cloud request failed", cloudBadUrl: "Invalid cloud URL", cloudUnauthorized: "Cloud token invalid or unauthorized", cloudBadResp: "Unexpected cloud response format", cloudFileMode: "Open the game via http://localhost, not file://",
@@ -91,7 +91,7 @@ const I18N = {
     fertilizerShop: "肥料ショップ", fertilizer: "肥料", basic: "基本", advanced: "上級", premium: "プレミアム", noFertilizer: "肥料がありません", buy: "購入", levelLocked: "必要レベル",
     topRank: "ランキング1位",
     topUsers: "ランキング",
-    controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替、5-9で種選択、0でスロット。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
+    controlHint: "キーボード: WASD/矢印で移動、Spaceで実行、1-4でツール切替、5-9で種選択。Bluetooth文字コマンド: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4。",
     btUnsup: "Web Bluetooth未対応", btConn: "Bluetooth接続中...", btOk: "Bluetooth接続済み", btFail: "Bluetooth接続失敗", btDisc: "Bluetooth切断",
     cloudSave: "クラウド保存", cloudLoad: "クラウド読込", cloudTest: "接続テスト", cloudCfg: "クラウド設定", cloudTitle: "Google Sheets クラウド設定",
     cloudCfgSaved: "クラウド設定を保存", cloudNeedUrl: "先にURLを設定してください", cloudSaveOk: "クラウド保存成功", cloudLoadOk: "クラウド読込成功", cloudNoData: "クラウドに保存データがありません", cloudPingOk: "クラウド接続OK", cloudFail: "クラウド通信失敗", cloudBadUrl: "クラウドURLが無効です", cloudUnauthorized: "トークン無効または権限がありません", cloudBadResp: "クラウド応答形式が不正です", cloudFileMode: "file:// ではなく http://localhost で開いてください",
@@ -128,7 +128,7 @@ const I18N = {
     planted: "Plantado", watered: "Regado", fertilized: "Fertilizado", harvested: "Cosechado", stolen: "Robado",
     fertilizerShop: "Tienda de Fertilizante", fertilizer: "Fertilizante", basic: "Básico", advanced: "Avanzado", premium: "Premium", noFertilizer: "No hay fertilizante disponible", buy: "Comprar", levelLocked: "Requiere Nivel",
     topUsers: "Clasificacion",
-    controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas, 5-9 elegir semilla, 0 slots. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Teclado: WASD/Flechas mover, Espacio actuar, 1-4 herramientas, 5-9 elegir semilla. Comandos Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth no compatible", btConn: "Conectando Bluetooth...", btOk: "Bluetooth conectado", btFail: "Fallo de Bluetooth", btDisc: "Bluetooth desconectado",
     cloudSave: "Guardar en Nube", cloudLoad: "Cargar de Nube", cloudTest: "Probar Conexion", cloudCfg: "Configurar Nube", cloudTitle: "Configuracion de Google Sheets",
     cloudCfgSaved: "Configuracion guardada", cloudNeedUrl: "Primero configura la URL", cloudSaveOk: "Guardado en nube exitoso", cloudLoadOk: "Carga en nube exitosa", cloudNoData: "Aun no hay guardado en nube", cloudPingOk: "Conexion de nube correcta", cloudFail: "Fallo de solicitud en nube", cloudBadUrl: "URL de nube invalida", cloudUnauthorized: "Token invalido o sin permisos", cloudBadResp: "Formato de respuesta inesperado", cloudFileMode: "Abre el juego con http://localhost, no con file://",
@@ -165,7 +165,7 @@ const I18N = {
     planted: "Посажено", watered: "Полив выполнен", fertilized: "Удобрено", harvested: "Собрано", stolen: "Украдено",
     fertilizerShop: "Магазин удобрений", fertilizer: "Удобрение", basic: "Базовый", advanced: "Продвинутый", premium: "Премиум", noFertilizer: "Удобрений нет", buy: "Купить", levelLocked: "Требуется уровень",
     topUsers: "Рейтинг",
-    controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты, 5-9 - выбрать семена, 0 - слоты. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
+    controlHint: "Клавиатура: WASD/стрелки - движение, Space - действие, 1-4 - инструменты, 5-9 - выбрать семена. Команды Bluetooth: UP DOWN LEFT RIGHT ACT TOOL1 TOOL2 TOOL3 TOOL4.",
     btUnsup: "Web Bluetooth не поддерживается", btConn: "Подключение Bluetooth...", btOk: "Bluetooth подключен", btFail: "Ошибка Bluetooth", btDisc: "Bluetooth отключен",
     cloudSave: "Сохранить в облако", cloudLoad: "Загрузить из облака", cloudTest: "Проверить связь", cloudCfg: "Облако", cloudTitle: "Настройки Google Sheets",
     cloudCfgSaved: "Настройки облака сохранены", cloudNeedUrl: "Сначала укажите URL", cloudSaveOk: "Сохранено в облаке", cloudLoadOk: "Загружено из облака", cloudNoData: "В облаке пока нет сохранения", cloudPingOk: "Облачное соединение ОК", cloudFail: "Ошибка запроса к облаку", cloudBadUrl: "Некорректный URL облака", cloudUnauthorized: "Неверный токен или нет доступа", cloudBadResp: "Некорректный формат ответа облака", cloudFileMode: "Откройте игру через http://localhost, а не file://",
@@ -2633,11 +2633,6 @@ function bindUI() {
       if (k === "7") setSeedByIndex(2);
       if (k === "8") setSeedByIndex(3);
       if (k === "9") setSeedByIndex(4);
-      if (k === "0") {
-        e.preventDefault();
-        const btn = document.getElementById("slotButton");
-        if (btn) btn.click();
-      }
     }
   });
 
