@@ -25,7 +25,7 @@ const I18N = {
     signupSubmitted: "注册申请已提交，等待管理员审批", signupNameExists: "昵称已存在或待审批中", adminOnly: "仅管理员可操作",
     adminAuthTitle: "管理员验证", adminAuthUnlock: "解锁", adminAuthSetup: "设置口令", adminTokenPh: "输入管理员口令",
     adminTokenConfirmPh: "再次输入口令", adminSetupHint: "首次使用：设置管理员口令（仅保存SHA-256哈希）",
-    adminUnlockHint: "输入管理员口令以解锁", adminFixedHint: "管理员口令固定为: 128560（仅存储SHA-256哈希）", adminTokenTooShort: "口令至少 4 位", adminTokenMismatch: "两次口令不一致",
+    adminUnlockHint: "输入管理员口令以解锁", adminFixedHint: "管理员口令固定为: hanru（仅存储SHA-256哈希）", adminTokenTooShort: "口令至少 4 位", adminTokenMismatch: "两次口令不一致",
     adminAuthBad: "管理员口令错误", adminAuthOk: "管理员已解锁", adminAuthSetOk: "管理员口令已设置",
     seedBook: "种子图鉴",
     seedCollected: "已收集",
@@ -65,7 +65,7 @@ const I18N = {
     signupSubmitted: "Signup submitted and waiting for admin approval", signupNameExists: "Name already exists or pending", adminOnly: "Admin only",
     adminAuthTitle: "Admin Access", adminAuthUnlock: "Unlock", adminAuthSetup: "Set Token", adminTokenPh: "Enter admin token",
     adminTokenConfirmPh: "Re-enter token", adminSetupHint: "First use: set admin token (only SHA-256 hash is stored)",
-    adminUnlockHint: "Enter admin token to unlock", adminFixedHint: "Admin password is fixed: 128560 (SHA-256 hash stored only)", adminTokenTooShort: "Token must be at least 4 chars", adminTokenMismatch: "Tokens do not match",
+    adminUnlockHint: "Enter admin token to unlock", adminFixedHint: "Admin password is fixed: hanru (SHA-256 hash stored only)", adminTokenTooShort: "Token must be at least 4 chars", adminTokenMismatch: "Tokens do not match",
     adminAuthBad: "Invalid admin token", adminAuthOk: "Admin unlocked", adminAuthSetOk: "Admin token configured",
     seedBook: "Seed Book",
     seedCollected: "Collected",
@@ -105,7 +105,7 @@ const I18N = {
     signupSubmitted: "登録申請を送信しました（管理者承認待ち）", signupNameExists: "名前は既に存在するか承認待ちです", adminOnly: "管理者のみ操作できます",
     adminAuthTitle: "管理者認証", adminAuthUnlock: "解除", adminAuthSetup: "トークン設定", adminTokenPh: "管理者トークンを入力",
     adminTokenConfirmPh: "トークンを再入力", adminSetupHint: "初回: 管理者トークンを設定（SHA-256ハッシュのみ保存）",
-    adminUnlockHint: "管理者トークンを入力して解除", adminFixedHint: "管理者パスワードは固定: 128560（SHA-256ハッシュのみ保存）", adminTokenTooShort: "トークンは4文字以上", adminTokenMismatch: "トークンが一致しません",
+    adminUnlockHint: "管理者トークンを入力して解除", adminFixedHint: "管理者パスワードは固定: hanru（SHA-256ハッシュのみ保存）", adminTokenTooShort: "トークンは4文字以上", adminTokenMismatch: "トークンが一致しません",
     adminAuthBad: "管理者トークンが無効", adminAuthOk: "管理者を解除しました", adminAuthSetOk: "管理者トークンを設定しました",
     userAuthTitle: "プレイヤーログイン", userAuthUnlock: "ログイン", userAuthSetup: "プレイヤートークン設定", userTokenPh: "プレイヤートークンを入力",
     userTokenConfirmPh: "トークンを再入力", userSetupHint: "このプレイヤー初回ログイン: トークン設定（SHA-256ハッシュのみ保存）",
@@ -142,7 +142,7 @@ const I18N = {
     signupSubmitted: "Solicitud enviada, esperando aprobacion del admin", signupNameExists: "El nombre ya existe o esta pendiente", adminOnly: "Solo admin",
     adminAuthTitle: "Acceso Admin", adminAuthUnlock: "Desbloquear", adminAuthSetup: "Configurar token", adminTokenPh: "Ingresa token admin",
     adminTokenConfirmPh: "Repite el token", adminSetupHint: "Primer uso: configura token admin (solo se guarda hash SHA-256)",
-    adminUnlockHint: "Ingresa token admin para desbloquear", adminFixedHint: "La clave admin es fija: 128560 (solo hash SHA-256)", adminTokenTooShort: "El token debe tener al menos 4 caracteres", adminTokenMismatch: "Los tokens no coinciden",
+    adminUnlockHint: "Ingresa token admin para desbloquear", adminFixedHint: "La clave admin es fija: hanru (solo hash SHA-256)", adminTokenTooShort: "El token debe tener al menos 4 caracteres", adminTokenMismatch: "Los tokens no coinciden",
     adminAuthBad: "Token admin invalido", adminAuthOk: "Admin desbloqueado", adminAuthSetOk: "Token admin configurado",
     userAuthTitle: "Inicio de Jugador", userAuthUnlock: "Entrar", userAuthSetup: "Configurar token", userTokenPh: "Ingresa token de jugador",
     userTokenConfirmPh: "Repite el token", userSetupHint: "Primer acceso de este jugador: configura token (solo hash SHA-256)",
@@ -179,7 +179,7 @@ const I18N = {
     signupSubmitted: "Заявка отправлена и ждет одобрения админа", signupNameExists: "Имя уже существует или ожидает одобрения", adminOnly: "Только админ",
     adminAuthTitle: "Доступ админа", adminAuthUnlock: "Разблокировать", adminAuthSetup: "Задать токен", adminTokenPh: "Введите токен админа",
     adminTokenConfirmPh: "Повторите токен", adminSetupHint: "Первый запуск: задайте токен (сохраняется только SHA-256 хеш)",
-    adminUnlockHint: "Введите токен для разблокировки", adminFixedHint: "Пароль админа фиксирован: 128560 (хранится только SHA-256)", adminTokenTooShort: "Токен минимум 4 символа", adminTokenMismatch: "Токены не совпадают",
+    adminUnlockHint: "Введите токен для разблокировки", adminFixedHint: "Пароль админа фиксирован: hanru (хранится только SHA-256)", adminTokenTooShort: "Токен минимум 4 символа", adminTokenMismatch: "Токены не совпадают",
     adminAuthBad: "Неверный токен админа", adminAuthOk: "Админ разблокирован", adminAuthSetOk: "Токен админа сохранен",
     userAuthTitle: "Вход игрока", userAuthUnlock: "Войти", userAuthSetup: "Задать токен", userTokenPh: "Введите токен игрока",
     userTokenConfirmPh: "Повторите токен", userSetupHint: "Первый вход игрока: задайте токен (только SHA-256 хеш)",
@@ -263,8 +263,8 @@ const AVATARS = ["👨‍🌾", "👩‍🌾", "🧑‍🌾", "🐱", "🐶", "�
 const GAME_STATE_KEY = "qqfarm_game_v5";
 const ADMIN_AUTH_KEY = "qqfarm_admin_auth_v1";
 const RESET_DONE_KEY = "qqfarm_reset_v1";
-const ADMIN_FIXED_PASSWORD = "128560";
-const ADMIN_FIXED_HASH = "d2e1deebf088928120eec37a4277e13ff6826114a05c5bfa5df0395723596148";
+const ADMIN_FIXED_PASSWORD = "hanru";
+const ADMIN_FIXED_HASH = "4c4fe8dcdbe87b4309b773d25cb0c9eaaf5512566626b85d75117dc3ddc9ec86";
 // Populated by config.js (gitignored locally, generated from repo secrets on
 // GitHub Pages deploy). Falls back to empty/disabled if config.js is absent.
 const CLOUD_CONFIG = (typeof window !== "undefined" && window.CLOUD_CONFIG) || {};
@@ -2707,7 +2707,7 @@ async function boot() {
     }
     if (ADMIN_CONFIG.adminId) S.admin.adminId = ADMIN_CONFIG.adminId;
   } else {
-    // default built-in admin password (sha256 of 128560)
+    // default built-in admin password (sha256 of hanru)
     S.admin.tokenHash = ADMIN_FIXED_HASH;
   }
   if (!S.admin.adminId || !S.players[S.admin.adminId]) {

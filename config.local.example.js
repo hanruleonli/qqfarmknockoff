@@ -3,7 +3,7 @@
 
 window.ADMIN_CONFIG = {
   // Plain admin password — the app will hash this on startup.
-  adminPassword: "128560",
+  adminPassword: "hanru",
   // Optional: set which player id is the admin (e.g., "p1234").
   // adminId: "p..."
 };
