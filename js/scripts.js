@@ -263,6 +263,7 @@ const AVATARS = ["👨‍🌾", "👩‍🌾", "🧑‍🌾", "🐱", "🐶", "�
 const GAME_STATE_KEY = "qqfarm_game_v5";
 const ADMIN_AUTH_KEY = "qqfarm_admin_auth_v1";
 const RESET_DONE_KEY = "qqfarm_reset_v1";
+const ADMIN_FIXED_PASSWORD = "128560";
 const ADMIN_FIXED_HASH = "d2e1deebf088928120eec37a4277e13ff6826114a05c5bfa5df0395723596148";
 // Populated by config.js (gitignored locally, generated from repo secrets on
 // GitHub Pages deploy). Falls back to empty/disabled if config.js is absent.
@@ -1668,7 +1669,19 @@ async function setupAdminToken() {
 }
 
 async function unlockAdmin() {
-  const token = document.getElementById("adminToken").value;
+  const token = document.getElementById("adminToken").value.trim();
+  if (token === ADMIN_FIXED_PASSWORD) {
+    S.admin.tokenHash = ADMIN_FIXED_HASH;
+    if (!S.admin.adminId || !S.players[S.admin.adminId]) {
+      S.admin.adminId = S.currentId;
+    }
+    adminUnlocked = true;
+    saveAdminAuthLocal();
+    closeAdminAuth();
+    notice(tr("adminAuthOk"), "info");
+    openAdmin();
+    return;
+  }
   const hash = await sha256Hex(token);
   if (hash !== S.admin.tokenHash) return notice(tr("adminAuthBad"), "err");
   adminUnlocked = true;
@@ -1742,14 +1755,14 @@ async function submitLoginPage() {
   const sel = document.getElementById("loginPlayer");
   const playerId = sel.value;
   if (!playerId || !S.players[playerId]) return;
-  if (!S.userAuth.userHashes[playerId]) {
-    S.userAuth.userHashes[playerId] = "";
-  }
   const token = document.getElementById("loginPassword").value;
   const hash = await sha256Hex(token);
-  if (S.userAuth.userHashes[playerId] && hash !== S.userAuth.userHashes[playerId]) {
-    return notice(tr("userAuthBad"), "err");
+  const storedHash = S.userAuth.userHashes[playerId];
+
+  if (storedHash && storedHash !== "") {
+    if (hash !== storedHash) return notice(tr("userAuthBad"), "err");
   }
+
   S.currentId = playerId;
   S.viewId = null;
   userUnlockedId = playerId;
@@ -1808,12 +1821,14 @@ async function setupUserToken() {
 async function unlockUser() {
   const playerId = S.currentId;
   if (!playerId) return;
-  if (!S.userAuth.userHashes[playerId]) {
-  S.userAuth.userHashes[playerId] = "";
-}
+  const storedHash = S.userAuth.userHashes[playerId];
   const token = document.getElementById("userToken").value;
   const hash = await sha256Hex(token);
-  if (hash !== S.userAuth.userHashes[playerId]) return notice(tr("userAuthBad"), "err");
+
+  if (storedHash && storedHash !== "") {
+    if (hash !== storedHash) return notice(tr("userAuthBad"), "err");
+  }
+
   userUnlockedId = playerId;
   closeUserAuth();
   notice(tr("userAuthOk"), "info");
@@ -3009,12 +3024,6 @@ boot();
   seedBookCloseBtn.addEventListener("click", closeSeedBook);
   seedBookCloseX.addEventListener("click", closeSeedBook);
   seedBookModal.addEventListener("click", (e) => { if (e.target === seedBookModal) closeSeedBook(); });
-  cropBookBtn.addEventListener('click', openCropBook);
-  cropBookCloseBtn.addEventListener('click', closeCropBook);
-  cropBookCloseX.addEventListener('click', closeCropBook);
-  cropPrevBtn.addEventListener('click', prevCropPage);
-  cropNextBtn.addEventListener('click', nextCropPage);
-  cropBookModal.addEventListener('click', (e) => { if (e.target === cropBookModal) closeCropBook(); });
   document.getElementById("fenceSetupBtn").addEventListener("click", openFenceSetupModal);
   document.getElementById("fenceSetupCloseBtn").addEventListener("click", closeFenceSetupModal);
   document.getElementById("fenceSetupCloseX").addEventListener("click", closeFenceSetupModal);

@@ -79,7 +79,7 @@ button:focus-visible {
   gap: 7px;
 }
 .player-chip { cursor: default; }
-.actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.actions { margin-left: auto; display: flex; gap: 8px; }
 .btn {
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 0;
